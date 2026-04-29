@@ -153,6 +153,13 @@ Examples:
     parser.add_argument('--training_jitter', type=float, default=None,
                         help='Std of Gaussian noise added to node features each forward pass during training. '
                              'Acts as a tiny tie-breaker for identical embeddings; set 0.0 to disable.')
+    parser.add_argument('--init_method', type=str, default=None,
+                        choices=['xavier_normal', 'xavier_uniform',
+                                 'kaiming_normal', 'kaiming_uniform',
+                                 'orthogonal', 'normal', 'uniform'],
+                        help='Weight initialization scheme passed to init_for_vamp. '
+                             'Default kaiming_normal is theoretically matched to ReLU; '
+                             'use xavier_normal for tanh-activation networks.')
     parser.add_argument('--val_split', type=float, default=None,
                         help='Validation fraction (e.g. 0.3 for 70/30).')
     parser.add_argument('--stride', type=int, default=None,

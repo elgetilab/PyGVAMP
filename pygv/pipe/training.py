@@ -328,7 +328,7 @@ def create_model(args):
         )
 
     # Apply to your model
-    init_for_vamp(model, method='kaiming_normal')
+    init_for_vamp(model, method=getattr(args, 'init_method', 'kaiming_normal'))
 
     # Move model to appropriate device
     device = torch.device("cpu" if args.cpu else "cuda" if torch.cuda.is_available() else "cpu")

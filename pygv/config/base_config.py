@@ -118,6 +118,9 @@ class BaseConfig:
     clf_activation: str = "relu"
     clf_norm: Optional[str] = "batch_norm"
 
+    # Weight initialization
+    init_method: str = "kaiming_normal"
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert config to dictionary"""
         return asdict(self)
