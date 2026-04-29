@@ -1138,6 +1138,8 @@ def main():
         config.lr = args.lr
     if args.weight_decay is not None:
         config.weight_decay = args.weight_decay
+    if args.training_jitter is not None:
+        config.training_jitter = args.training_jitter
     if args.val_split is not None:
         config.val_split = args.val_split
     if args.stride is not None:

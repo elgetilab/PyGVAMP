@@ -150,6 +150,9 @@ Examples:
                         help='Learning rate.')
     parser.add_argument('--weight_decay', type=float, default=None,
                         help='Weight decay / L2.')
+    parser.add_argument('--training_jitter', type=float, default=None,
+                        help='Std of Gaussian noise added to node features each forward pass during training. '
+                             'Acts as a tiny tie-breaker for identical embeddings; set 0.0 to disable.')
     parser.add_argument('--val_split', type=float, default=None,
                         help='Validation fraction (e.g. 0.3 for 70/30).')
     parser.add_argument('--stride', type=int, default=None,
