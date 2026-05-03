@@ -160,6 +160,12 @@ Examples:
                         help='Weight initialization scheme passed to init_for_vamp. '
                              'Default kaiming_normal is theoretically matched to ReLU; '
                              'use xavier_normal for tanh-activation networks.')
+    parser.add_argument('--encoder_variant', type=str, default=None,
+                        choices=['v1', 'v2'],
+                        help='SchNet encoder variant.  v1 (default): residual loop -> '
+                             'pool.  v2: residual loop -> per-atom ReLU -> pool, '
+                             'mirroring the Ghorbani 2022 reference.  See '
+                             'pygv/encoder/SCHNET_VERSIONS.md.')
     parser.add_argument('--val_split', type=float, default=None,
                         help='Validation fraction (e.g. 0.3 for 70/30).')
     parser.add_argument('--stride', type=int, default=None,

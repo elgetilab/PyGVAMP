@@ -121,6 +121,9 @@ class BaseConfig:
     # Weight initialization
     init_method: str = "kaiming_normal"
 
+    # Encoder variant — see pygv/encoder/SCHNET_VERSIONS.md
+    encoder_variant: str = "v1"
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert config to dictionary"""
         return asdict(self)

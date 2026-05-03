@@ -1142,6 +1142,8 @@ def main():
         config.training_jitter = args.training_jitter
     if args.init_method is not None:
         config.init_method = args.init_method
+    if args.encoder_variant is not None:
+        config.encoder_variant = args.encoder_variant
     if args.val_split is not None:
         config.val_split = args.val_split
     if args.stride is not None:

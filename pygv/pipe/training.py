@@ -28,6 +28,7 @@ from pygv.utils.nn_utils import init_for_vamp
 from pygv.vampnet import VAMPNet
 from pygv.vampnet.rev_vampnet import RevVAMPNet
 from pygv.encoder.schnet import SchNetEncoderNoEmbed
+from pygv.encoder.schnet_v2 import SchNetEncoderNoEmbedV2
 from pygv.encoder.meta_att import Meta
 from pygv.encoder.gin import GINEncoder
 from pygv.encoder.ml3 import ML3Encoder
@@ -187,7 +188,10 @@ def create_model(args):
     """Create VAMPNet model"""
     # Create encoder based on selected type
     if args.encoder_type.lower() == 'schnet':
-        encoder = SchNetEncoderNoEmbed(
+        encoder_cls = (SchNetEncoderNoEmbedV2
+                       if getattr(args, 'encoder_variant', 'v1') == 'v2'
+                       else SchNetEncoderNoEmbed)
+        encoder = encoder_cls(
             node_dim=args.node_dim,
             edge_dim=args.edge_dim,
             hidden_dim=args.hidden_dim,
