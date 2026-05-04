@@ -241,6 +241,8 @@ def create_and_analyze_dataset(args, paths):
         n_neighbors=args.n_neighbors,
         node_embedding_dim=args.node_embedding_dim,
         gaussian_expansion_dim=args.gaussian_expansion_dim,
+        distance_min=getattr(args, 'distance_min', None),
+        distance_max=getattr(args, 'distance_max', None),
         selection=args.selection,
         stride=args.stride,
         cache_dir=paths['cache_dir'],

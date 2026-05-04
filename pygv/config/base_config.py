@@ -26,6 +26,12 @@ class BaseConfig:
     n_neighbors: int = 4
     node_embedding_dim: int = 16
     gaussian_expansion_dim: int = 16
+    # RBF distance basis range (nm).  None = auto-derive from data per-protein
+    # (default).  Setting both fixes the basis range so multiple proteins or
+    # multiple seeds share a fixed basis — and lets us match the Ghorbani 2022
+    # reference's hardcoded dmin=0.0, dmax=3.0 (nm) for villin-style probes.
+    distance_min: Optional[float] = None
+    distance_max: Optional[float] = None
 
     # Training parameters
     epochs: int = 100

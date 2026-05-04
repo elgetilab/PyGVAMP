@@ -301,6 +301,8 @@ class PipelineOrchestrator:
         args.n_neighbors = self.config.n_neighbors
         args.node_embedding_dim = self.config.node_embedding_dim
         args.gaussian_expansion_dim = self.config.gaussian_expansion_dim
+        args.distance_min = self.config.distance_min
+        args.distance_max = self.config.distance_max
 
         # Output
         args.output_dir = str(dirs['preparation'])
@@ -409,6 +411,8 @@ class PipelineOrchestrator:
         args.n_neighbors = self.config.n_neighbors
         args.node_embedding_dim = self.config.node_embedding_dim
         args.gaussian_expansion_dim = self.config.gaussian_expansion_dim
+        args.distance_min = self.config.distance_min
+        args.distance_max = self.config.distance_max
 
         # Analysis parameters
         args.analysis_dir = str(analysis_dir)
@@ -1103,6 +1107,23 @@ def main():
         config.n_neighbors = args.n_neighbors
     if args.gaussian_expansion_dim is not None:
         config.gaussian_expansion_dim = args.gaussian_expansion_dim
+    if args.distance_min is not None:
+        config.distance_min = args.distance_min
+    if args.distance_max is not None:
+        config.distance_max = args.distance_max
+    # The dataset's RBF override path requires *both* bounds; passing only one
+    # silently falls back to data-derived for both (vampnet_dataset.py:155).
+    # Raise here so the CLI gives a clear error instead of silently ignoring.
+    if (config.distance_min is None) != (config.distance_max is None):
+        raise ValueError(
+            "--distance_min and --distance_max must be set together "
+            f"(got distance_min={config.distance_min}, distance_max={config.distance_max})"
+        )
+    if config.distance_min is not None and config.distance_min >= config.distance_max:
+        raise ValueError(
+            f"--distance_min ({config.distance_min}) must be < --distance_max "
+            f"({config.distance_max})"
+        )
     if args.use_attention is not None:
         config.use_attention = args.use_attention
     # Pre-encoder embedding MLP — paired toggle + per-field overrides.

@@ -108,6 +108,14 @@ Examples:
                         help='k-NN graph neighbors.')
     parser.add_argument('--gaussian_expansion_dim', type=int, default=None,
                         help='Number of RBF/Gaussian edge features.')
+    parser.add_argument('--distance_min', type=float, default=None,
+                        help='Lower bound (nm) of the Gaussian RBF basis range. '
+                             'Default: data-derived per-dataset.  Pass with --distance_max '
+                             'to pin the basis (e.g. 0.0 / 3.0 to match the Ghorbani 2022 '
+                             'reference).')
+    parser.add_argument('--distance_max', type=float, default=None,
+                        help='Upper bound (nm) of the Gaussian RBF basis range. '
+                             'See --distance_min.')
     parser.add_argument('--use_attention', dest='use_attention', action='store_const', const=True,
                         default=None, help='Enable attention in the encoder (default off depends on preset).')
     parser.add_argument('--no_use_attention', dest='use_attention', action='store_const', const=False,

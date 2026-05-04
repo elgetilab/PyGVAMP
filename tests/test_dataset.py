@@ -342,6 +342,134 @@ class TestGaussianExpansion:
 
 
 # =============================================================================
+# TestRBFAgainstGhorbaniReference - Pin RBF behavior vs Ghorbani 2022
+# =============================================================================
+#
+# Reference: github.com/ghorbanimahdi73/GraphVampNet
+#   src/args.py:        --dmin 0.0  --dmax 3.0  --step 0.2  (in nm)
+#   src/layers.py:      class GaussianDistance(object):
+#                           self.filter = torch.arange(dmin, dmax+step, step)
+#                           self.var    = step
+#                           expand(d) = exp(-(d - filter)^2 / var^2)
+#
+# Our impl: pygv/dataset/vampnet_dataset.py:_compute_gaussian_expanded_distances
+#                           mu    = torch.linspace(distance_min, distance_max, K)
+#                           sigma = (distance_max - distance_min) / K
+#                           expand(d) = exp(-(d - mu)^2 / sigma^2)
+#
+# These tests pin (a) where the two agree and (b) where they don't, so any
+# future change on either side surfaces explicitly.
+
+class TestRBFAgainstGhorbaniReference:
+    """Pin Gaussian RBF against the Ghorbani 2022 reference.
+
+    Probe target: villin reproduction residual ~0.094 VAMP-2 gap (v4
+    sweep mean 3.685 vs paper 3.78).  The σ formula is the only
+    numerical deviation under the reference's default ranges.
+    """
+
+    @staticmethod
+    def _reference_centers_and_var(dmin=0.0, dmax=3.0, step=0.2):
+        """Reproduce Ghorbani 2022 GaussianDistance fields exactly."""
+        centers = torch.arange(dmin, dmax + step, step)
+        var = step
+        return centers, var
+
+    @staticmethod
+    def _ours(distances, distance_min, distance_max, K):
+        """Call our method on a stub instance — no mdtraj, no fixtures."""
+        from pygv.dataset.vampnet_dataset import VAMPNetDataset
+        stub = VAMPNetDataset.__new__(VAMPNetDataset)
+        stub.distance_min = distance_min
+        stub.distance_max = distance_max
+        stub.gaussian_expansion_dim = K
+        return stub._compute_gaussian_expanded_distances(distances)
+
+    def test_centers_match_reference_at_canonical_settings(self):
+        """linspace(0, 3, 16) == arange(0, 3.2, 0.2). Pin the equivalence."""
+        ref_centers, _ = self._reference_centers_and_var()
+        our_centers = torch.linspace(0.0, 3.0, 16)
+
+        assert ref_centers.shape == (16,)
+        assert our_centers.shape == (16,)
+        assert torch.allclose(ref_centers, our_centers, atol=1e-6), (
+            f"Centers diverge:\n  ref={ref_centers}\n  ours={our_centers}"
+        )
+
+    def test_sigma_differs_by_K_over_K_minus_1(self):
+        """Our σ = (dmax-dmin)/K; reference var = step = (dmax-dmin)/(K-1).
+
+        Ratio: ours/ref = (K-1)/K = 15/16 = 0.9375 at K=16.  Our Gaussians
+        are ~6.7% narrower than the reference.  This is the single
+        numerical deviation under canonical (dmin=0, dmax=3, K=16) settings.
+        """
+        K = 16
+        dmin, dmax, step = 0.0, 3.0, 0.2
+        _, ref_var = self._reference_centers_and_var(dmin, dmax, step)
+        our_sigma = (dmax - dmin) / K
+
+        assert ref_var == pytest.approx(0.2)
+        assert our_sigma == pytest.approx(0.1875)
+        assert our_sigma / ref_var == pytest.approx((K - 1) / K)
+
+    def test_expansion_diverges_from_reference_under_canonical_settings(self):
+        """End-to-end pin: ours and reference produce *different* features
+        under the reference's own (dmin=0, dmax=3, step=0.2) — by σ alone.
+
+        If a future change makes them agree, that's a real semantic shift
+        and this test should be updated deliberately.
+        """
+        distances = torch.tensor([0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+        ours = self._ours(distances, distance_min=0.0, distance_max=3.0, K=16)
+
+        ref_centers, ref_var = self._reference_centers_and_var()
+        ref = torch.exp(-((distances.unsqueeze(-1) - ref_centers) ** 2) / ref_var ** 2)
+
+        assert ours.shape == ref.shape == (6, 16)
+        # Magnitudes are close but not equal.  Tightest divergence is in the
+        # tails: distance far from any center → ref=tiny, ours=tinier.
+        max_abs_diff = (ours - ref).abs().max().item()
+        assert max_abs_diff > 1e-3, (
+            f"Ours and reference now agree (max |Δ| = {max_abs_diff:.2e}). "
+            "If σ formula changed deliberately, update this test."
+        )
+        # But they should be in the same ballpark — same formula, σ-only diff.
+        assert max_abs_diff < 0.1
+
+    def test_expansion_known_values(self):
+        """Pin numeric outputs of *our* RBF for a fixed, hand-checkable case.
+
+        Distance d = μ exactly → output = 1.0 (Gaussian peak).
+        Distance d = μ + σ → output = exp(-1) ≈ 0.3679.
+        Distance d = μ + 2σ → output = exp(-4) ≈ 0.01832.
+        """
+        K = 16
+        dmin, dmax = 0.0, 3.0
+        sigma = (dmax - dmin) / K  # 0.1875
+        centers = torch.linspace(dmin, dmax, K)
+        # Center index 5 -> mu = 5 * 3/15 = 1.0
+        mu = centers[5].item()
+        assert mu == pytest.approx(1.0)
+
+        distances = torch.tensor([mu, mu + sigma, mu + 2 * sigma])
+        out = self._ours(distances, distance_min=dmin, distance_max=dmax, K=K)
+
+        # Each row's value at column 5 should match the analytic Gaussian.
+        assert out[0, 5].item() == pytest.approx(1.0, abs=1e-6)
+        assert out[1, 5].item() == pytest.approx(np.exp(-1), abs=1e-5)
+        assert out[2, 5].item() == pytest.approx(np.exp(-4), abs=1e-5)
+
+    def test_negative_distance_sentinel_zeroed(self):
+        """Sentinel -1 distances (used to flag invalid pairs) must produce
+        all-zero feature vectors, not exp(-((-1 - μ)/σ)²)."""
+        K = 16
+        distances = torch.tensor([-1.0, 1.0])
+        out = self._ours(distances, distance_min=0.0, distance_max=3.0, K=K)
+        assert torch.all(out[0] == 0.0), "Sentinel -1 must zero the row"
+        assert (out[1] > 0).any(), "Valid distance row must be non-zero"
+
+
+# =============================================================================
 # TestTimeLaggedPairs - Tests time-lagged pair creation in both modes
 # =============================================================================
 
