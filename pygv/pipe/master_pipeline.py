@@ -303,6 +303,7 @@ class PipelineOrchestrator:
         args.gaussian_expansion_dim = self.config.gaussian_expansion_dim
         args.distance_min = self.config.distance_min
         args.distance_max = self.config.distance_max
+        args.gaussian_var = self.config.gaussian_var
 
         # Output
         args.output_dir = str(dirs['preparation'])
@@ -413,6 +414,7 @@ class PipelineOrchestrator:
         args.gaussian_expansion_dim = self.config.gaussian_expansion_dim
         args.distance_min = self.config.distance_min
         args.distance_max = self.config.distance_max
+        args.gaussian_var = self.config.gaussian_var
 
         # Analysis parameters
         args.analysis_dir = str(analysis_dir)
@@ -1111,6 +1113,10 @@ def main():
         config.distance_min = args.distance_min
     if args.distance_max is not None:
         config.distance_max = args.distance_max
+    if args.gaussian_var is not None:
+        if args.gaussian_var <= 0:
+            raise ValueError(f"--gaussian_var must be > 0, got {args.gaussian_var}")
+        config.gaussian_var = args.gaussian_var
     # The dataset's RBF override path requires *both* bounds; passing only one
     # silently falls back to data-derived for both (vampnet_dataset.py:155).
     # Raise here so the CLI gives a clear error instead of silently ignoring.

@@ -32,6 +32,11 @@ class BaseConfig:
     # reference's hardcoded dmin=0.0, dmax=3.0 (nm) for villin-style probes.
     distance_min: Optional[float] = None
     distance_max: Optional[float] = None
+    # RBF Gaussian width σ (nm).  None = use (distance_max-distance_min)/K
+    # (current default).  Set explicitly to override — e.g. 0.2 to match the
+    # Ghorbani 2022 reference's σ = step.  Independent of distance_{min,max};
+    # all three can be set individually.
+    gaussian_var: Optional[float] = None
 
     # Training parameters
     epochs: int = 100

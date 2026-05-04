@@ -116,6 +116,11 @@ Examples:
     parser.add_argument('--distance_max', type=float, default=None,
                         help='Upper bound (nm) of the Gaussian RBF basis range. '
                              'See --distance_min.')
+    parser.add_argument('--gaussian_var', type=float, default=None,
+                        help='Gaussian width σ (nm) used in the RBF expansion. '
+                             'Default: (distance_max-distance_min)/K.  Set '
+                             'explicitly to match the Ghorbani 2022 reference '
+                             '(σ = 0.2, equal to the basis step).')
     parser.add_argument('--use_attention', dest='use_attention', action='store_const', const=True,
                         default=None, help='Enable attention in the encoder (default off depends on preset).')
     parser.add_argument('--no_use_attention', dest='use_attention', action='store_const', const=False,

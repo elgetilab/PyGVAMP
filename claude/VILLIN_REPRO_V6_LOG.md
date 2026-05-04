@@ -128,3 +128,43 @@ Single job (no `--array`).  Output:
 Best Val VAMP-2 in:
   `/mnt/hdd/experiments/villin_repro_v6/seed_00/exp_villin_<TIMESTAMP>/logs/log_*.txt`
 look for the last `New best model with score: <X.XXXX>` line.
+
+## Result (job 450, 2026-05-04 18:22 → 22:08 CEST, exit 0)
+
+**v6 seed_00 best Val VAMP-2 = 3.6158** — set around epoch 22, then 78
+consecutive epochs of no improvement (final epoch 100: train 3.6471,
+val 3.5433).
+
+| Run | seed_00 best | Δ vs v4 |
+|---|---|---|
+| v1 | 3.5685 | — |
+| v2 | 3.6057 | — |
+| v3 | 3.6124 | — |
+| v4 | 3.7126 | — |
+| v5 | 3.7074 | −0.005 |
+| **v6** | **3.6158** | **−0.097** |
+
+### Verdict
+
+≲ 3.72 → **RBF range fix doesn't help, abandon this lever.**
+
+Pinning the basis to Ghorbani's hardcoded `dmin=0, dmax=3` made things
+substantially worse than v4 (data-derived range), not better.  The most
+likely mechanism: the first ~2 reference centers (μ=0.0, 0.2 nm) sit
+below the physical Cα-Cα minimum (~0.38 nm) and produce near-zero
+features — wasting 2/16 = 12.5% of the basis dimensionality.  v4 packs
+all 16 centers densely into the populated distance range and gets a
+denser, more informative encoding.
+
+This **does not rule out the σ formula deviation** (ours K/(K-1)
+narrower than reference) — that lever is still untested in isolation
+because v6 changed both range and σ relative-to-spacing simultaneously.
+
+### Next probes (queued for v7 / v8)
+
+- **v7 (RBF — full reference match)**: range 0.0/3.0 (as v6) **+** new
+  `--gaussian_var 0.2` override to also fix σ to the reference's literal
+  value.  If still ≲ 3.72, RBF is conclusively ruled out and we move on.
+- **v8 (pooling-head structure)**: switch the classifier head to
+  multi-layer MLP (the other named suspect from the v5 log).  Independent
+  of RBF; safe to queue alongside v7.

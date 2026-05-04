@@ -376,13 +376,14 @@ class TestRBFAgainstGhorbaniReference:
         return centers, var
 
     @staticmethod
-    def _ours(distances, distance_min, distance_max, K):
+    def _ours(distances, distance_min, distance_max, K, gaussian_var=None):
         """Call our method on a stub instance — no mdtraj, no fixtures."""
         from pygv.dataset.vampnet_dataset import VAMPNetDataset
         stub = VAMPNetDataset.__new__(VAMPNetDataset)
         stub.distance_min = distance_min
         stub.distance_max = distance_max
         stub.gaussian_expansion_dim = K
+        stub.gaussian_var = gaussian_var
         return stub._compute_gaussian_expanded_distances(distances)
 
     def test_centers_match_reference_at_canonical_settings(self):
@@ -467,6 +468,35 @@ class TestRBFAgainstGhorbaniReference:
         out = self._ours(distances, distance_min=0.0, distance_max=3.0, K=K)
         assert torch.all(out[0] == 0.0), "Sentinel -1 must zero the row"
         assert (out[1] > 0).any(), "Valid distance row must be non-zero"
+
+    def test_gaussian_var_override_matches_reference(self):
+        """With dmin=0, dmax=3, K=16, AND gaussian_var=0.2, our expansion
+        must exactly match the Ghorbani 2022 reference (σ = step = 0.2)."""
+        K = 16
+        dmin, dmax = 0.0, 3.0
+        distances = torch.tensor([0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+
+        ours = self._ours(distances, distance_min=dmin, distance_max=dmax,
+                          K=K, gaussian_var=0.2)
+
+        ref_centers, ref_var = self._reference_centers_and_var()
+        ref = torch.exp(-((distances.unsqueeze(-1) - ref_centers) ** 2) / ref_var ** 2)
+
+        assert torch.allclose(ours, ref, atol=1e-6), (
+            f"Override path should reproduce reference exactly; "
+            f"max |Δ| = {(ours - ref).abs().max().item():.2e}"
+        )
+
+    def test_gaussian_var_default_unchanged(self):
+        """With gaussian_var=None, the formula stays (dmax-dmin)/K — pin
+        the back-compat path."""
+        K = 16
+        distances = torch.tensor([1.0, 2.0])
+        without = self._ours(distances, 0.0, 3.0, K, gaussian_var=None)
+        explicit = self._ours(distances, 0.0, 3.0, K, gaussian_var=3.0 / K)
+        assert torch.allclose(without, explicit, atol=1e-7), (
+            "gaussian_var=None must equal gaussian_var=(dmax-dmin)/K"
+        )
 
 
 # =============================================================================

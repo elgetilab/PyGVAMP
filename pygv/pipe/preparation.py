@@ -243,6 +243,7 @@ def create_and_analyze_dataset(args, paths):
         gaussian_expansion_dim=args.gaussian_expansion_dim,
         distance_min=getattr(args, 'distance_min', None),
         distance_max=getattr(args, 'distance_max', None),
+        gaussian_var=getattr(args, 'gaussian_var', None),
         selection=args.selection,
         stride=args.stride,
         cache_dir=paths['cache_dir'],

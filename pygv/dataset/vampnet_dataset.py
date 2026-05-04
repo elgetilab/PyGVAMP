@@ -44,6 +44,10 @@ class VAMPNetDataset(Dataset):
         Minimum distance for Gaussian expansion (auto-determined if None)
     distance_max : float, optional
         Maximum distance for Gaussian expansion (auto-determined if None)
+    gaussian_var : float, optional
+        Width σ of the Gaussian basis functions in nm.  If None, σ is computed
+        as (distance_max-distance_min)/K (the current default).  Set explicitly
+        to override — e.g. 0.2 to match the Ghorbani 2022 reference.
     selection : str, default="name CA"
         MDTraj selection string for atoms to include
     seed : int, default=42
@@ -85,6 +89,7 @@ class VAMPNetDataset(Dataset):
             gaussian_expansion_dim: int = 16,
             distance_min: Optional[float] = None,
             distance_max: Optional[float] = None,
+            gaussian_var: Optional[float] = None,
             selection: str = "name CA",
             seed: int = 42,
             stride: int = 1,
@@ -105,6 +110,7 @@ class VAMPNetDataset(Dataset):
         self.n_neighbors = n_neighbors
         self.node_embedding_dim = node_embedding_dim
         self.gaussian_expansion_dim = gaussian_expansion_dim
+        self.gaussian_var = gaussian_var
         self.selection = selection
         self.stride = stride
         self.chunk_size = chunk_size
@@ -306,7 +312,7 @@ class VAMPNetDataset(Dataset):
         """
         K = self.gaussian_expansion_dim
         d_range = self.distance_max - self.distance_min
-        sigma = d_range / K
+        sigma = self.gaussian_var if self.gaussian_var is not None else d_range / K
 
         valid_mask = distances >= 0
         distances_reshaped = distances.reshape(-1, 1)
