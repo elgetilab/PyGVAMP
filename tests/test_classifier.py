@@ -571,6 +571,92 @@ class TestEdgeCases:
 
 
 # =============================================================================
+# TestRankBottleneckHead - Pin no-activation 2-Linear chain (Ghorbani h_g)
+# =============================================================================
+#
+# The Ghorbani 2022 reference's classifier head is
+#   Linear(h_a, h_g) → Linear(h_g, n_classes) → softmax
+# with NO activation between the two Linears (model.py:fc_classes /
+# amino_emb).  Two unactivated linears compose to a single linear of
+# rank ≤ h_g — a deliberate rank bottleneck.
+#
+# Our SoftmaxMLP achieves the same with num_layers=2 because PyG's
+# torch_geometric.nn.models.MLP applies activations BETWEEN Linears,
+# and with num_layers=1 there is nothing to be between (the SoftmaxMLP
+# wrapper splits the chain into MLP(num_layers - 1) + a final Linear).
+#
+# This test pins that property — if PyG's MLP changes its semantics so
+# that act is applied AFTER the only Linear when num_layers=1, this
+# would silently break the rank-bottleneck behavior and the v8-style
+# probe would no longer match the reference.
+
+class TestRankBottleneckHead:
+    """Pin the no-activation 2-Linear head used in Ghorbani 2022 (h_g)."""
+
+    def test_num_layers_2_has_no_activation_between_linears(self, device):
+        """num_layers=2 must produce Linear → Linear → Softmax with no
+        activation in the middle.  Otherwise the rank-bottleneck head
+        used in the reference (h_g=2 for TrpCage) cannot be reproduced.
+        """
+        clf = SoftmaxMLP(
+            in_channels=16, hidden_channels=2, out_channels=4,
+            num_layers=2, act='relu', norm=None,
+        ).to(device)
+
+        # Probe: run intermediate activations through and check whether
+        # the value going into final_layer can be negative.  With ReLU
+        # active, it would be clamped to ≥ 0.
+        x = torch.randn(64, 16, device=device)
+        intermediate = clf.mlp(x)
+        assert (intermediate < 0).any(), (
+            "MLP intermediate is non-negative — likely a ReLU was applied "
+            "between the two Linears.  This breaks the rank-bottleneck "
+            "head needed for the Ghorbani 2022 h_g=2 probe."
+        )
+
+    def test_rank_bottleneck_actually_bottlenecks(self, device):
+        """With num_layers=2 and hidden_channels=2 < out_channels=4,
+        the head's logits should live in a 2D subspace of R^4
+        (rank-2 image)."""
+        clf = SoftmaxMLP(
+            in_channels=16, hidden_channels=2, out_channels=4,
+            num_layers=2, act='relu', norm=None,
+        ).to(device)
+        # Get logits before softmax: forward through mlp + final Linear (skip softmax)
+        x = torch.randn(256, 16, device=device)
+        intermediate = clf.mlp(x)                         # [256, 2]
+        logits = clf.final_layer[0](intermediate)         # [256, 4]
+        # Effective rank: image of logits should fit in ≤ 2D subspace
+        # (after centering, since bias adds a constant offset).
+        centered = logits - logits.mean(dim=0, keepdim=True)
+        # Singular values: only the first ≤ 2 should be non-trivial
+        s = torch.linalg.svdvals(centered)
+        # Tail singular values must be ~0 (rank ≤ 2)
+        assert s[2:].max().item() < 1e-4, (
+            f"Head produced rank > 2 output (singular values: {s.tolist()}); "
+            "rank bottleneck not enforced."
+        )
+
+    def test_num_layers_1_is_full_rank(self, device):
+        """Sanity baseline: num_layers=1 (current v4-v7 default) gives
+        a full-rank Linear, distinct from the rank-bottleneck path."""
+        clf = SoftmaxMLP(
+            in_channels=16, hidden_channels=2, out_channels=4,
+            num_layers=1,
+        ).to(device)
+        x = torch.randn(256, 16, device=device)
+        # Get pre-softmax logits
+        logits = clf.final_layer[0](x)
+        centered = logits - logits.mean(dim=0, keepdim=True)
+        s = torch.linalg.svdvals(centered)
+        # Full rank → all 4 singular values non-trivial
+        assert s.min().item() > 1e-3, (
+            f"num_layers=1 head should be full rank-4 but got "
+            f"singular values: {s.tolist()}"
+        )
+
+
+# =============================================================================
 # Run tests directly
 # =============================================================================
 

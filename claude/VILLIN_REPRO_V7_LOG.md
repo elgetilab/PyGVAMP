@@ -128,3 +128,69 @@ Single job (no `--array`).  Output:
 Best Val VAMP-2 in:
   `/mnt/hdd/experiments/villin_repro_v7/seed_00/exp_villin_<TIMESTAMP>/logs/log_*.txt`
 look for the last `New best model with score: <X.XXXX>` line.
+
+## Result (job 452, 2026-05-04 23:49 → 2026-05-05 03:30 CEST, exit 0)
+
+**v7 seed_00 best Val VAMP-2 = 3.7005**
+
+| Run | seed_00 best | Δ vs v4 |
+|---|---|---|
+| v1 | 3.5685 | — |
+| v2 | 3.6057 | — |
+| v3 | 3.6124 | — |
+| v4 | 3.7126 | — |
+| v5 | 3.7074 | −0.005 |
+| v6 (range pin) | 3.6158 | −0.097 |
+| **v7 (range + σ pin)** | **3.7005** | **−0.012** |
+
+### Interpretation
+
+The σ pin recovered almost all of v6's range-pin regression (−0.097 →
+−0.012).  That's a real signal: the σ formula deviation **was**
+contributing — but only as a **compensatory** effect for the range
+pin's basis-density loss.  When dmin=0 forces 2 of 16 centers below
+the physical Cα-Cα minimum, the remaining 14 active centers are spaced
+0.2 nm apart; using ours' default σ=(dmax-dmin)/K=0.1875 makes the
+Gaussians too peaked relative to that 0.2 nm spacing, losing smoothness.
+Pinning σ=0.2 restores unit-overlap between adjacent active centers
+and fixes the basis quality.
+
+But v7 still doesn't beat v4: −0.012 sits well within v4's 10-seed
+stdev (0.044), i.e. seed noise.
+
+### Verdict
+
+≲ 3.72 → **RBF is conclusively ruled out.**  Range tested in v6, σ in
+v7, both on top of v4.  Neither lever (alone or in combination, at the
+args.py-default values 0/3/0.2) produces meaningful improvement over v4.
+
+Caveat: v6/v7 used the args.py defaults (0/3/0.2), not paper-confirmed
+villin values.  Table I in Ghorbani 2022 doesn't list dmin/dmax/step,
+and the only run script in the repo (`src/gpu_1.sh`, for TrpCage) uses
+0/8/0.5.  So the strict statement is: **the args.py-default RBF
+parameters don't help**.  Whether *some other* RBF setting helps
+remains formally untested, but Table I confirming all visible villin
+hyperparameters match v4 makes RBF an unlikely culprit either way.
+
+### Next probes
+
+The residual ~0.10 gap can't come from anything in the paper's published
+architecture spec (v4 matches Table I on all 8 visible params).  It must
+come from something **not** tabulated:
+
+- **v8: `h_g` rank bottleneck** (strongest unsearched lever).  TrpCage
+  uses `h_g=2`; villin's value isn't in Table I, but the paper abstract
+  says "graph embeddings in the last layer of GraphVAMPNet were
+  transformed into 2D" — strong hint h_g=2 is the standard across all
+  systems.  Reference's head is `Linear(h_a, h_g) → Linear(h_g, n_classes)`
+  with no activation between — mathematically a low-rank Linear of rank
+  ≤ h_g.  For villin n_states=4 with h_g=2, this is a real architectural
+  difference from our `clf_num_layers=1` (full-rank Linear(16, 4)).
+  Requires `SoftmaxMLP` refactor to support no-activation 2-layer mode.
+- **Train/val split methodology** — random shuffle on continuous
+  trajectory leaks temporally adjacent frames; reference's
+  methodology not specified.
+
+Residual connections are **already on** in our SchNet
+(`pygv/encoder/schnet.py:268`: `h = h + delta` after each interaction
+block) — matches `gpu_1.sh`'s `--residual`.  Not a remaining suspect.
