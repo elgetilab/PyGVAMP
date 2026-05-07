@@ -122,7 +122,7 @@ pygvamp \
 | `--lag_times 20.0` | Villin entry, Table S1 |
 | `--hidden_dim 16` / `--n_interactions 4` / `--gaussian_expansion_dim 16` | "16 neurons per layer, 4 graph layers, 16 Gaussians" |
 | `--n_neighbors 10` | Villin entry |
-| `--no_use_attention` | Original GraphVAMPNet uses classic SchNet, no attention |
+| `--no_use_attention` | **CORRECTION 2026-05-06**: this mapping was wrong. The reference's "SchNet" branch (`--conv_type SchNet` in `gpu_1.sh`) selects an `InteractionBlock` whose `ContinuousFilterConv` contains softmax-attention over neighbors with a learnable `self.nbr_filter` parameter. v1–v9 all disabled the structurally-equivalent attention in our codebase. v10 corrects this with `--use_attention`. See `claude/ATTENTION_MAPPING_FINDING.md`. |
 | `--lr 5e-4`, `--batch_size 1000`, `--epochs 100`, `--val_split 0.3` | Ghorbani 2022 protocol details |
 | `--no_discover_states` + `--max_retrains 0` | Strict — no diagnostic-driven k change |
 | `--no_warm_start_retrains` | Strict — moot when max_retrains=0, set explicitly for clarity |

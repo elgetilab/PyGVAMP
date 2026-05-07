@@ -733,6 +733,137 @@ class TestEdgeCases:
         assert features is not None, "Features should be returned"
         assert features.shape == (1, dims['output_dim']), f"Expected (1, {dims['output_dim']}), got {features.shape}"
 
+    # =============================================================================
+    # Dual scoring methodology tests (concat vs per-batch avg)
+    # =============================================================================
+    # Pins the new evaluate() contract added 2026-05-07.
+    # Background: Ghorbani 2022 (and the deeptime VAMPNet template they use)
+    # reports val VAMP-2 as the MEAN of PER-BATCH VAMP-2 scores across
+    # validation batches.  Our default scoring concatenates val chi outputs
+    # and computes VAMP-2 once on the full set (less biased).
+    # See claude/VILLIN_REPRO_V10_LOG.md for the full audit and rationale.
+
+    def _make_eval_loader(self, num_batches, graph_dimensions, device, seed=42):
+        """Construct a tiny iterable yielding (batch_t0, batch_t1) tuples,
+        mimicking what a real DataLoader would produce.  Each batch has
+        4 graphs of 12 nodes — same structure as the time_lagged_batch
+        fixture but multiplied across batches."""
+        dims = graph_dimensions
+        torch.manual_seed(seed)
+        batches = []
+        for _ in range(num_batches):
+            graphs_t0, graphs_t1 = [], []
+            for _ in range(4):
+                num_nodes = 12
+                edge_index = []
+                for i in range(num_nodes):
+                    for j in range(1, 4):
+                        edge_index.append([i, (i + j) % num_nodes])
+                edge_index = torch.tensor(edge_index, dtype=torch.long, device=device).t().contiguous()
+                x_t0 = torch.randn(num_nodes, dims['node_dim'], device=device)
+                edge_attr = torch.randn(edge_index.size(1), dims['edge_dim'], device=device)
+                graphs_t0.append(Data(x=x_t0, edge_index=edge_index.clone(),
+                                      edge_attr=edge_attr.clone()))
+                x_t1 = x_t0 * 0.8 + torch.randn_like(x_t0) * 0.3
+                graphs_t1.append(Data(x=x_t1, edge_index=edge_index.clone(),
+                                      edge_attr=edge_attr.clone()))
+            batches.append((Batch.from_data_list(graphs_t0),
+                            Batch.from_data_list(graphs_t1)))
+        return batches
+
+    def test_evaluate_returns_dict_with_both_keys(self, vampnet_model,
+                                                  graph_dimensions, device):
+        """Pin the new return contract: dict with concat / perbatch_mean / perbatch_std."""
+        loader = self._make_eval_loader(num_batches=5, graph_dimensions=graph_dimensions,
+                                        device=device)
+        result = vampnet_model.evaluate(loader, device=device)
+        assert isinstance(result, dict), f"Expected dict, got {type(result).__name__}"
+        assert set(result.keys()) == {'concat', 'perbatch_mean', 'perbatch_std'}, \
+            f"Unexpected keys: {result.keys()}"
+        for key in ('concat', 'perbatch_mean', 'perbatch_std'):
+            assert isinstance(result[key], float), \
+                f"Expected float for {key}, got {type(result[key]).__name__}"
+            assert torch.isfinite(torch.tensor(result[key])), \
+                f"{key} is not finite: {result[key]}"
+
+    def test_evaluate_concat_matches_manual_full_set_call(self, vampnet_model,
+                                                          graph_dimensions, device):
+        """concat must equal: single VAMPScore call on concatenated chi.
+
+        This pins the unbiased estimator path so a future refactor can't
+        silently switch concat to a per-batch implementation.
+        """
+        loader = self._make_eval_loader(num_batches=4, graph_dimensions=graph_dimensions,
+                                        device=device)
+        result = vampnet_model.evaluate(loader, device=device)
+
+        # Manually replicate what concat should do
+        vampnet_model.eval()
+        chi_t0_chunks, chi_t1_chunks = [], []
+        with torch.no_grad():
+            for batch_t0, batch_t1 in loader:
+                c0, _ = vampnet_model(batch_t0, apply_classifier=True)
+                c1, _ = vampnet_model(batch_t1, apply_classifier=True)
+                chi_t0_chunks.append(c0)
+                chi_t1_chunks.append(c1)
+            chi_t0 = torch.cat(chi_t0_chunks, dim=0)
+            chi_t1 = torch.cat(chi_t1_chunks, dim=0)
+            manual = -vampnet_model.vamp_score.loss(chi_t0, chi_t1).item()
+        vampnet_model.train()
+
+        assert abs(result['concat'] - manual) < 1e-5, \
+            f"concat ({result['concat']}) ≠ manual full-set ({manual})"
+
+    def test_evaluate_perbatch_matches_manual_average(self, vampnet_model,
+                                                     graph_dimensions, device):
+        """perbatch_mean must equal: numpy mean of per-batch VAMP scores.
+
+        This pins the paper-comparable estimator path.
+        """
+        loader = self._make_eval_loader(num_batches=4, graph_dimensions=graph_dimensions,
+                                        device=device)
+        result = vampnet_model.evaluate(loader, device=device)
+
+        # Manually replicate what perbatch_mean should do
+        vampnet_model.eval()
+        per_batch = []
+        with torch.no_grad():
+            for batch_t0, batch_t1 in loader:
+                c0, _ = vampnet_model(batch_t0, apply_classifier=True)
+                c1, _ = vampnet_model(batch_t1, apply_classifier=True)
+                per_batch.append(-vampnet_model.vamp_score.loss(c0, c1).item())
+        vampnet_model.train()
+
+        manual_mean = float(torch.tensor(per_batch).mean())
+        assert abs(result['perbatch_mean'] - manual_mean) < 1e-5, \
+            f"perbatch_mean ({result['perbatch_mean']}) ≠ manual ({manual_mean})"
+
+    def test_evaluate_concat_and_perbatch_differ(self, vampnet_model,
+                                                 graph_dimensions, device):
+        """The two methodologies should give DIFFERENT numbers in general.
+
+        If they agree, the dual-scoring add is pointless — and the v10 log's
+        claim that the paper's per-batch averaging is biased relative to
+        concat would be wrong.  We expect a small but non-zero gap on any
+        non-degenerate input.
+        """
+        loader = self._make_eval_loader(num_batches=8, graph_dimensions=graph_dimensions,
+                                        device=device)
+        result = vampnet_model.evaluate(loader, device=device)
+        gap = abs(result['concat'] - result['perbatch_mean'])
+        assert gap > 1e-5, (
+            f"concat ({result['concat']}) and perbatch_mean ({result['perbatch_mean']}) "
+            f"agree to within {gap:.2e} — dual-scoring is pointless if true.  "
+            "If a future change made the two methodologies equivalent, that's "
+            "a real semantic shift; update this test deliberately."
+        )
+
+    def test_evaluate_returns_none_for_empty_loader(self, vampnet_model, device):
+        """Edge-case backwards compat: empty loader returns None, not a dict."""
+        empty_loader = []
+        result = vampnet_model.evaluate(empty_loader, device=device)
+        assert result is None, f"Expected None for empty loader, got {result!r}"
+
     def test_eval_vs_train_mode(self, vampnet_model, batched_graphs, graph_dimensions, device):
         """Test model behaves correctly in eval vs train mode."""
         batch, num_graphs = batched_graphs

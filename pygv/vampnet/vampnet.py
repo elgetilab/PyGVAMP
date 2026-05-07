@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy as np
 from typing import Union, Tuple
 from pygv.classifier.SoftmaxMLP import SoftmaxMLP
 from torch_geometric.nn.models import MLP
@@ -848,7 +849,9 @@ class VAMPNet(nn.Module):
             'batch_train_scores': [],  # Training scores for selected batches
             'batch_val_scores': [],  # Validation scores on samples
             'batch_indices': [],  # Corresponding batch indices
-            'epoch_val_scores': [],  # Full validation scores per epoch
+            'epoch_val_scores': [],  # Full validation scores per epoch (concat — model-selection metric)
+            'epoch_val_perbatch_mean': [],  # Per-batch averaged val VAMP (paper-comparable)
+            'epoch_val_perbatch_std': [],   # Std across val batches
             'epochs': []  # Epoch numbers
         }
 
@@ -959,15 +962,27 @@ class VAMPNet(nn.Module):
             history['train_scores'].append(avg_train_score)
             history['epochs'].append(epoch)
 
-            # Perform full validation after each epoch if test loader exists
+            # Perform full validation after each epoch if test loader exists.
+            # evaluate() returns BOTH scoring methodologies side-by-side:
+            #   concat       — our default, unbiased; drives model selection
+            #   perbatch_mean — paper's methodology (Ghorbani 2022 / deeptime),
+            #                   reported additionally for cross-paper comparison
+            # See evaluate() docstring and claude/VILLIN_REPRO_V10_LOG.md.
             current_val_score = None
             if test_loader is not None:
-                current_val_score = self.evaluate(test_loader, device)
+                eval_scores = self.evaluate(test_loader, device)
+                current_val_score = eval_scores['concat']
+                pb_mean = eval_scores['perbatch_mean']
+                pb_std = eval_scores['perbatch_std']
                 history['epoch_val_scores'].append(current_val_score)
+                history['epoch_val_perbatch_mean'].append(pb_mean)
+                history['epoch_val_perbatch_std'].append(pb_std)
 
                 if verbose:
                     print(
-                        f"Epoch {epoch + 1}/{n_epochs}, Train VAMP: {avg_train_score:.4f}, Val VAMP: {current_val_score:.4f}")
+                        f"Epoch {epoch + 1}/{n_epochs}, Train VAMP: {avg_train_score:.4f}, "
+                        f"Val VAMP: concat={current_val_score:.4f}, "
+                        f"perbatch={pb_mean:.4f}±{pb_std:.4f}")
             else:
                 # Use training score if no validation data
                 current_val_score = avg_train_score
@@ -1145,11 +1160,27 @@ class VAMPNet(nn.Module):
         """
         Fully evaluate the model on the given data loader.
 
-        Computes the VAMP score once over the concatenated chi outputs of
-        every batch, rather than averaging per-batch VAMP scores. Per-batch
-        VAMP is a biased, high-variance estimator because the score is a
-        nonlinear function (SVD of a sample covariance) — averaging is not
-        equivalent to the full-set score and introduces epoch-to-epoch jitter.
+        Returns BOTH scoring methodologies side-by-side in a dict:
+
+        - ``concat``       — VAMP score computed once on concatenated chi
+                             from every batch (our default; unbiased
+                             estimator, used for model selection).
+        - ``perbatch_mean``, ``perbatch_std`` — per-batch VAMP scores
+                             averaged across batches (biased, high-variance
+                             estimator; matches Ghorbani 2022's training
+                             code so reported numbers are directly
+                             comparable to that paper and others using
+                             the deeptime VAMPNet template).
+
+        Both are computed from the same forward passes — no extra GPU
+        cost.  See ``claude/VILLIN_REPRO_V10_LOG.md`` for the methodology
+        audit and rationale.
+
+        Note on bias: per-batch VAMP-2 with B << N has less-rank-deficient
+        covariance estimates → larger 1/√σ_min → systematically larger
+        ||K||_F² than the full-set estimate.  Concat is the more honest
+        generalization estimate; perbatch_mean is the "paper-comparable"
+        number.
 
         Parameters
         ----------
@@ -1160,8 +1191,9 @@ class VAMPNet(nn.Module):
 
         Returns
         -------
-        float
-            VAMP score computed on the full validation set.
+        dict | None
+            ``{'concat': float, 'perbatch_mean': float, 'perbatch_std': float}``
+            or ``None`` if the loader is empty.
         """
         if data_loader is None or len(data_loader) == 0:
             return None
@@ -1178,6 +1210,7 @@ class VAMPNet(nn.Module):
         self.eval()
         chi_t0_chunks = []
         chi_t1_chunks = []
+        perbatch_scores = []
 
         with torch.no_grad():
             for test_batch in data_loader:
@@ -1188,6 +1221,10 @@ class VAMPNet(nn.Module):
 
                 chi_t0_chunks.append(test_chi_t0)
                 chi_t1_chunks.append(test_chi_t1)
+
+                # Per-batch VAMP — paper's methodology.  Cheap (4x4 SVD).
+                batch_score = -self.vamp_score.loss(test_chi_t0, test_chi_t1)
+                perbatch_scores.append(batch_score.item())
 
         # Return to training mode (even on empty-loader edge case below)
         self.train()
@@ -1200,6 +1237,15 @@ class VAMPNet(nn.Module):
 
         with torch.no_grad():
             full_loss = self.vamp_score.loss(chi_t0_full, chi_t1_full)
+        concat_score = -full_loss.item()
 
-        return -full_loss.item()
+        perbatch_arr = np.asarray(perbatch_scores, dtype=np.float64)
+        perbatch_mean = float(perbatch_arr.mean())
+        perbatch_std = float(perbatch_arr.std()) if perbatch_arr.size > 1 else 0.0
+
+        return {
+            'concat': concat_score,
+            'perbatch_mean': perbatch_mean,
+            'perbatch_std': perbatch_std,
+        }
 
