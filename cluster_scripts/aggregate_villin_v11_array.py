@@ -43,6 +43,11 @@ EPOCH_LINE = re.compile(
 NEW_BEST = re.compile(r"New best model with score:\s*([0-9.]+)")
 # Matches: "Loaded best model with score: 3.7293"
 LOADED_BEST = re.compile(r"Loaded best model with score:\s*([0-9.]+)")
+# Matches: "Training completed successfully. ..." — treated as a fallback
+# completion marker because some runs miss the "Loaded best" line at the
+# end of the experiment-level log (occasional buffer flush quirk; the
+# saved best_model.pt still exists and the data is intact).
+TRAINING_DONE = re.compile(r"Training completed successfully")
 
 
 @dataclass
@@ -92,18 +97,27 @@ def parse_log(log_path: Path, seed: int) -> Optional[SeedResult]:
         return None
 
     # Find the canonical "best concat".  Prefer the "Loaded best model"
-    # line at the end of training; fall back to the highest concat seen
-    # if training was interrupted before model load.
+    # line at the end of training; fall back to "Training completed
+    # successfully" + max concat from epoch lines (some runs miss the
+    # "Loaded best" line due to a buffer-flush quirk in the
+    # experiment-level log — the saved best_model.pt still exists).
     completed = False
     best_concat = None
+    training_done = False
     for line in reversed(lines):
-        m = LOADED_BEST.search(line)
-        if m:
-            best_concat = float(m.group(1))
+        if not completed and LOADED_BEST.search(line):
+            best_concat = float(LOADED_BEST.search(line).group(1))
             completed = True
             break
+        if not training_done and TRAINING_DONE.search(line):
+            training_done = True
     if best_concat is None:
+        # Fallback: use highest concat seen in epoch lines.  Mark
+        # completed only if we saw "Training completed successfully";
+        # otherwise the run was interrupted.
         best_concat = max(c for c, _, _ in epoch_data.values())
+        if training_done:
+            completed = True
 
     # Find the FIRST epoch whose concat matches best_concat to ~0.0001
     # (the epoch that drove the saved best_model.pt).  The model
@@ -174,16 +188,19 @@ def print_table(results: list[SeedResult]) -> None:
 
 def print_summary(results: list[SeedResult], paper_mean=3.78,
                   paper_sigma=0.02) -> None:
-    if len(results) < 2:
-        print("\nNot enough seeds for cross-seed statistics "
-              "(need at least 2).", file=sys.stderr)
-        return
-
     completed = [r for r in results if r.completed]
     if len(completed) < len(results):
         print(f"\nNote: {len(results) - len(completed)} of {len(results)} "
               "seeds did not reach completion ('Loaded best model' missing).")
+    # Prefer completed seeds for the summary, but fall back to all
+    # parseable seeds if no seed has completed yet (e.g. mid-array
+    # snapshot).  Either way, need at least 2 for cross-seed stats.
     use = completed if completed else results
+    if len(use) < 2:
+        print(f"\nNot enough seeds for cross-seed statistics "
+              f"(need at least 2 completed; have {len(use)}).",
+              file=sys.stderr)
+        return
 
     concat_vals = [r.best_concat for r in use]
     pb_vals = [r.perbatch_mean for r in use]
