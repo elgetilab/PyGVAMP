@@ -820,6 +820,62 @@ class TestOptimizerOptions:
 
 
 # =============================================================================
+# TestDataLoaderConfig - Smoke test for multi-worker loader configuration
+# =============================================================================
+#
+# Tier 2 (pygv/pipe/training.py) switched the train loader to
+# num_workers=available_cpus() with persistent_workers=True and
+# prefetch_factor=4. Existing tests construct loaders with num_workers=0,
+# which doesn't exercise the worker-spawn + dataset-pickling path. This
+# class adds a low-cost smoke test that catches obvious breakage there
+# (e.g. unpicklable attributes on a future dataset variant).
+
+class TestDataLoaderConfig:
+    """Smoke test for the Tier 2 multi-worker loader configuration."""
+
+    @pytest.mark.parametrize("n_workers", [0, 2])
+    def test_loader_iterates_with_workers(self, synthetic_dataset, n_workers):
+        """Loader produces batches under both num_workers=0 and >0.
+
+        With workers > 0, the dataset must pickle cleanly to the worker
+        processes. With persistent_workers=True (matches the Tier 2 train
+        loader), workers are reused across iterations.
+        """
+        kwargs = dict(
+            dataset=synthetic_dataset,
+            batch_size=8,
+            shuffle=True,
+            num_workers=n_workers,
+        )
+        if n_workers > 0:
+            kwargs["persistent_workers"] = True
+            kwargs["prefetch_factor"] = 2
+
+        loader = DataLoader(**kwargs)
+
+        # First pass: verify batches are produced.
+        batches_seen = 0
+        for batch in loader:
+            batches_seen += 1
+            if batches_seen >= 3:
+                break
+        assert batches_seen == 3, (
+            f"Expected 3 batches, got {batches_seen} (num_workers={n_workers})"
+        )
+
+        # Second pass with persistent_workers exercises worker reuse —
+        # if workers can't survive a second iteration the loop hangs or
+        # raises here.
+        if n_workers > 0:
+            second_pass = 0
+            for batch in loader:
+                second_pass += 1
+                if second_pass >= 2:
+                    break
+            assert second_pass == 2
+
+
+# =============================================================================
 # Run tests directly
 # =============================================================================
 
