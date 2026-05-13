@@ -1105,6 +1105,204 @@ class TestDistanceRange:
 
 
 # =============================================================================
+# TestGraphBuildRegression - Pin vectorized graph build vs legacy implementation
+# =============================================================================
+#
+# Companion to claude/PYG_GRAPH_PREBUILD_PLAN.md. The previous
+# implementation of _create_graph_from_frame built edges via a Python
+# loop into a `set`, which made the *column ordering* of edge_index
+# process-dependent (CPython set iteration depends on the hash seed).
+# The vectorized rewrite produces deterministic row-major ordering of
+# the same underlying graph. GNN math is permutation-equivariant over
+# edges, so the graphs are mathematically equivalent — but raw tensor
+# equality on edge_index would (correctly) fail.
+#
+# These tests pin the equivalence using sorted-edge canonicalization:
+# sort both edge_indexes by (src, tgt), apply the same permutation to
+# edge_attr, then compare. That asserts "same graph" without depending
+# on column order.
+
+
+def _legacy_build_graph(coords, n_neighbors, n_atoms, distance_min,
+                        distance_max, gaussian_expansion_dim, gaussian_var,
+                        node_attr):
+    """Frozen pre-vectorization implementation of _create_graph_from_frame.
+
+    Do not modify. This function exists to detect regressions in the
+    new vectorized path — if a future refactor breaks mathematical
+    equivalence, the regression test below should fail.
+    """
+    diff = coords.unsqueeze(1) - coords.unsqueeze(0)
+    distances = torch.sqrt((diff ** 2).sum(dim=2))
+
+    diag_mask = torch.eye(n_atoms, dtype=torch.bool)
+    distances[diag_mask] = -1.0
+    valid_mask = ~diag_mask
+
+    nn_indices = []
+    for i in range(n_atoms):
+        valid_distances = distances[i][valid_mask[i]]
+        valid_indices = torch.nonzero(valid_mask[i], as_tuple=True)[0]
+        _, top_k = torch.topk(
+            valid_distances,
+            min(n_neighbors, len(valid_distances)),
+            largest=False,
+        )
+        nn_indices.append(valid_indices[top_k])
+    nn_indices = torch.stack(nn_indices)
+
+    edge_set = set()
+    for i in range(n_atoms):
+        for j in nn_indices[i]:
+            edge_set.add((i, j.item()))
+    directional = [(t, s) for s, t in edge_set]
+    src = torch.tensor([e[0] for e in directional])
+    tgt = torch.tensor([e[1] for e in directional])
+    edge_index = torch.stack([src, tgt], dim=0)
+    edge_dist = distances[src, tgt]
+
+    K = gaussian_expansion_dim
+    sigma = (
+        gaussian_var
+        if gaussian_var is not None
+        else (distance_max - distance_min) / K
+    )
+    mu = torch.linspace(distance_min, distance_max, K)
+    edge_attr = torch.exp(-((edge_dist.unsqueeze(-1) - mu) ** 2) / sigma ** 2)
+
+    return Data(
+        x=node_attr,
+        edge_index=edge_index,
+        edge_attr=edge_attr,
+        num_nodes=n_atoms,
+    )
+
+
+def _canonicalize(graph):
+    """Sort edges by (src, tgt) and apply the same permutation to edge_attr.
+
+    Returns (edge_index_sorted, edge_attr_sorted). Used to compare graphs
+    that have identical edge sets but potentially different column ordering.
+    """
+    src, tgt = graph.edge_index[0], graph.edge_index[1]
+    # Unique per directed edge — n cannot collide because src, tgt < n.
+    key = src.to(torch.long) * graph.num_nodes + tgt.to(torch.long)
+    perm = torch.argsort(key)
+    return graph.edge_index[:, perm], graph.edge_attr[perm]
+
+
+def _make_stub_dataset(n_atoms, n_neighbors, coords,
+                       distance_min=0.0, distance_max=3.0, K=16,
+                       gaussian_var=None):
+    """Build a minimal VAMPNetDataset shell that bypasses __init__.
+
+    Sets only the attributes needed by _create_graph_from_frame and its
+    helpers, and pre-seeds caches so no MDTraj / topology fixtures are
+    required.
+    """
+    from pygv.dataset.vampnet_dataset import VAMPNetDataset
+    ds = VAMPNetDataset.__new__(VAMPNetDataset)
+    ds.n_atoms = n_atoms
+    ds.n_neighbors = n_neighbors
+    ds.distance_min = distance_min
+    ds.distance_max = distance_max
+    ds.gaussian_expansion_dim = K
+    ds.gaussian_var = gaussian_var
+    ds.use_amino_acid_encoding = False
+    ds.amino_acid_feature_type = "labels"
+    ds._frames_t = coords.unsqueeze(0)            # one frame, shape (1, N, 3)
+    ds._node_attr_cache = {False: torch.eye(n_atoms)}
+    ds._rbf_centers = None
+    ds._rbf_inv_sigma2 = None
+    return ds
+
+
+class TestGraphBuildRegression:
+    """Pin that the vectorized graph build matches the legacy build."""
+
+    @pytest.mark.parametrize("rng_seed,n_atoms,n_neighbors", [
+        (0, 20, 7),    # Trp-cage shape
+        (1, 35, 10),   # Villin shape
+        (2, 42, 8),    # Aβ42-ish
+        (3, 5, 3),     # Tiny edge case (k = n_atoms - 2)
+        (4, 4, 5),     # n_neighbors > n_atoms - 1 (clamp path)
+    ])
+    def test_sorted_edge_equivalence(self, rng_seed, n_atoms, n_neighbors):
+        """New vectorized build == legacy build (up to edge column ordering).
+
+        Compares sorted edge sets and the corresponding edge_attr rows;
+        the test passes iff the two implementations produce the same
+        underlying graph for the same coordinates.
+        """
+        torch.manual_seed(rng_seed)
+        # Spread coordinates across the [0, 3 nm] range so distances
+        # span the RBF centers and exercise multiple basis functions.
+        coords = torch.rand(n_atoms, 3) * 3.0
+
+        ds = _make_stub_dataset(n_atoms, n_neighbors, coords)
+        node_attr = ds._node_attr_cache[False]
+
+        new_graph = ds._create_graph_from_frame(0)
+        old_graph = _legacy_build_graph(
+            coords=coords.clone(),     # legacy mutates `distances` derived from coords
+            n_neighbors=n_neighbors,
+            n_atoms=n_atoms,
+            distance_min=ds.distance_min,
+            distance_max=ds.distance_max,
+            gaussian_expansion_dim=ds.gaussian_expansion_dim,
+            gaussian_var=ds.gaussian_var,
+            node_attr=node_attr,
+        )
+
+        assert new_graph.num_nodes == old_graph.num_nodes
+        assert new_graph.edge_index.shape == old_graph.edge_index.shape, (
+            f"Edge counts diverge: new={new_graph.edge_index.shape}, "
+            f"old={old_graph.edge_index.shape}"
+        )
+
+        new_ei, new_ea = _canonicalize(new_graph)
+        old_ei, old_ea = _canonicalize(old_graph)
+
+        assert torch.equal(new_ei, old_ei), (
+            f"Edge sets diverge for seed={rng_seed}, n_atoms={n_atoms}, "
+            f"n_neighbors={n_neighbors}"
+        )
+        assert torch.allclose(new_ea, old_ea, atol=1e-6), (
+            f"edge_attr diverges for seed={rng_seed}: "
+            f"max |Δ| = {(new_ea - old_ea).abs().max().item():.2e}"
+        )
+        assert torch.allclose(new_graph.x, old_graph.x)
+
+    def test_vectorized_edge_ordering_is_deterministic(self):
+        """New code emits edges in row-major source order.
+
+        This is the property that makes raw tensor equality stable across
+        processes (legacy code's `set` made it process-dependent). Pinned
+        here so that a future regression — e.g. accidentally re-introducing
+        a `set` or shuffle — surfaces explicitly.
+        """
+        torch.manual_seed(0)
+        n_atoms, n_neighbors = 12, 4
+        coords = torch.rand(n_atoms, 3) * 3.0
+        ds = _make_stub_dataset(n_atoms, n_neighbors, coords)
+
+        g = ds._create_graph_from_frame(0)
+        # edge_index is [target, source] (legacy convention); the second
+        # row is the row-major iteration variable, so it must be
+        # non-decreasing.
+        src_row = g.edge_index[1]
+        assert torch.all(src_row[1:] >= src_row[:-1]), (
+            f"Expected non-decreasing source indices for row-major build, "
+            f"got: {src_row.tolist()}"
+        )
+        # Each source atom should appear exactly k=min(n_neighbors,n_atoms-1) times.
+        k = min(n_neighbors, n_atoms - 1)
+        for atom in range(n_atoms):
+            count = (src_row == atom).sum().item()
+            assert count == k, f"Atom {atom} has {count} outgoing edges, expected {k}"
+
+
+# =============================================================================
 # Run tests directly
 # =============================================================================
 
