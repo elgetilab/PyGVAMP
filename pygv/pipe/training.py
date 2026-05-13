@@ -164,15 +164,23 @@ def create_dataset_and_loader(args,
         test_loader = None  # Frame loader is typically used for inference only
     else:
         # Create data loaders for training and testing
-        # drop_last=True avoids single-sample batches that crash BatchNorm
+        # drop_last=True avoids single-sample batches that crash BatchNorm.
+        #
+        # Worker split: the training loader is the hot path, so it gets all
+        # available CPUs.  The test loader only runs at epoch end and at
+        # sample_validate_every batches; a single non-persistent worker is
+        # enough — making it persistent would idle a CPU slot during the
+        # training loop just to hold worker state.
+        n_train_workers = max(1, available_cpus())
         train_loader = DataLoader(
             train_dataset,
             shuffle=True,
             batch_size=args.batch_size,
             drop_last=True,
             pin_memory=torch.cuda.is_available() and not args.cpu,
-            num_workers=max(1, available_cpus() // 2),
+            num_workers=n_train_workers,
             persistent_workers=True,
+            prefetch_factor=4,
         )
         test_loader = DataLoader(
             test_dataset,
@@ -180,8 +188,9 @@ def create_dataset_and_loader(args,
             batch_size=args.batch_size,
             drop_last=True,
             pin_memory=torch.cuda.is_available() and not args.cpu,
-            num_workers=max(1, available_cpus() // 2),
-            persistent_workers=True,
+            num_workers=1,
+            persistent_workers=False,
+            prefetch_factor=2,
         )
 
     return dataset, train_dataset, train_loader, test_dataset, test_loader
