@@ -126,6 +126,13 @@ class VAMPNetDataset(Dataset):
         # auto-stride feature in the orchestrator.
         self.raw_timestep_ps: Optional[float] = None
 
+        # Frame-invariant caches, populated lazily.  Cleared per process,
+        # so each DataLoader worker rebuilds its own (identical) copies.
+        self._frames_t: Optional[torch.Tensor] = None
+        self._node_attr_cache: dict = {}
+        self._rbf_centers: Optional[torch.Tensor] = None
+        self._rbf_inv_sigma2: Optional[float] = None
+
         # Create cache directory if it doesn't exist
         if self.cache_dir and not os.path.exists(self.cache_dir):
             os.makedirs(self.cache_dir)
@@ -218,6 +225,9 @@ class VAMPNetDataset(Dataset):
             raise ValueError("No frames were loaded from trajectories")
 
         self.frames = np.array(self.frames)
+        # Pre-convert to a torch tensor once so __getitem__ doesn't copy
+        # numpy -> torch on every call.  Shares memory when possible.
+        self._frames_t = torch.as_tensor(self.frames, dtype=torch.float32)
         self.n_frames = len(self.frames)
         self.n_atoms = len(self.atom_indices)
 
@@ -309,25 +319,34 @@ class VAMPNetDataset(Dataset):
 
         Formula: e_t(i,j) = exp(-(d_ij - μ_t)²/σ²)
         where μ_t = dmin + t * (dmax - dmin)/K and σ = (dmax - dmin)/K
+        Entries with distance < 0 are treated as sentinels and yield a
+        zero feature row.
         """
+        self._ensure_rbf_buffers(device=distances.device)
+        # (..., 1) - (K,) -> (..., K), elementwise broadcast.
+        delta = distances.unsqueeze(-1) - self._rbf_centers
+        expanded = torch.exp(-(delta ** 2) * self._rbf_inv_sigma2)
+        # Preserve sentinel behavior: distance < 0 -> zero row.  Multiplying
+        # by a float mask is cheaper than gather/scatter.
+        valid = (distances >= 0).to(expanded.dtype).unsqueeze(-1)
+        return expanded * valid
+
+    def _ensure_rbf_buffers(self, device=None):
+        """Populate RBF centers and 1/σ² lazily; reused across calls.
+
+        Uses ``getattr`` so callers that bypass ``__init__`` (e.g. unit
+        tests using ``__new__``) still work.
+        """
+        if getattr(self, '_rbf_centers', None) is not None:
+            return
         K = self.gaussian_expansion_dim
         d_range = self.distance_max - self.distance_min
         sigma = self.gaussian_var if self.gaussian_var is not None else d_range / K
-
-        valid_mask = distances >= 0
-        distances_reshaped = distances.reshape(-1, 1)
-        mu_values = torch.linspace(self.distance_min, self.distance_max, K).view(1, -1)
-
-        expanded_features = torch.zeros((distances_reshaped.shape[0], K),
-                                        device=distances.device,
-                                        dtype=torch.float32)
-
-        valid_indices = torch.nonzero(valid_mask).squeeze()
-        valid_distances = distances_reshaped[valid_indices]
-        valid_expanded = torch.exp(-((valid_distances - mu_values) ** 2) / (sigma ** 2))
-        expanded_features[valid_indices] = valid_expanded
-
-        return expanded_features
+        self._rbf_centers = torch.linspace(
+            self.distance_min, self.distance_max, K,
+            device=device, dtype=torch.float32,
+        )
+        self._rbf_inv_sigma2 = 1.0 / (sigma ** 2)
 
     def _initialize_node_embeddings(self):
         """Initialize node embeddings with position encoding for better gradient flow."""
@@ -353,7 +372,10 @@ class VAMPNetDataset(Dataset):
 
     def _create_node_features(self, use_amino_acid_encoding: bool = None):
         """
-        Create node features based on encoding type.
+        Return frame-invariant node features, cached per encoding mode.
+
+        Callers must not mutate the returned tensor in place — it is
+        shared across all ``__getitem__`` calls for the same encoding.
 
         Parameters
         ----------
@@ -363,11 +385,27 @@ class VAMPNetDataset(Dataset):
         Returns
         -------
         torch.Tensor
-            Node feature tensor
+            Node feature tensor.
         """
         if use_amino_acid_encoding is None:
             use_amino_acid_encoding = self.use_amino_acid_encoding
 
+        cache = getattr(self, '_node_attr_cache', None)
+        if cache is None:
+            cache = {}
+            self._node_attr_cache = cache
+
+        key = bool(use_amino_acid_encoding)
+        cached = cache.get(key)
+        if cached is not None:
+            return cached
+
+        cached = self._build_node_features(use_amino_acid_encoding)
+        cache[key] = cached
+        return cached
+
+    def _build_node_features(self, use_amino_acid_encoding: bool):
+        """Construct node features for the given encoding mode (uncached)."""
         if use_amino_acid_encoding:
             # Amino acid-based node features
             if self.amino_acid_feature_type == "properties":
@@ -386,9 +424,7 @@ class VAMPNetDataset(Dataset):
                     node_attr[i] = torch.tensor(label, dtype=torch.float32)
         else:
             # One-hot encoding (n_atoms × n_atoms identity matrix)
-            node_attr = torch.zeros(self.n_atoms, self.n_atoms)
-            for i in range(self.n_atoms):
-                node_attr[i, i] = 1.0
+            node_attr = torch.eye(self.n_atoms)
 
         return node_attr
 
@@ -412,58 +448,43 @@ class VAMPNetDataset(Dataset):
         if use_amino_acid_encoding is None:
             use_amino_acid_encoding = self.use_amino_acid_encoding
 
-        # Get coordinates for the frame
-        coords = torch.tensor(self.frames[frame_idx], dtype=torch.float32)
+        # Frames are pre-converted to torch in _process_trajectories /
+        # _load_from_cache / from_cache; index directly.
+        coords = self._frames_t[frame_idx]
 
-        # Calculate pairwise distances
+        # Pairwise distances
         diff = coords.unsqueeze(1) - coords.unsqueeze(0)
         distances = torch.sqrt((diff ** 2).sum(dim=2))
 
-        # Create mask to identify self-connections
-        diag_mask = torch.eye(self.n_atoms, dtype=torch.bool, device=distances.device)
-        distances[diag_mask] = -1.0
-        valid_mask = ~diag_mask
+        # kNN: inflate self-distances on a copy so they never appear in
+        # topk(largest=False).  `distances` itself keeps its real values
+        # for the edge-distance lookup below.
+        distances_self_inf = distances.clone()
+        distances_self_inf.fill_diagonal_(float('inf'))
 
-        # Find k-nearest neighbors for each node
-        nn_indices = []
-        for i in range(self.n_atoms):
-            node_distances = distances[i]
-            valid_distances = node_distances[valid_mask[i]]
-            valid_indices = torch.nonzero(valid_mask[i], as_tuple=True)[0]
-            _, top_k_indices = torch.topk(valid_distances, min(self.n_neighbors, len(valid_distances)), largest=False)
-            node_nn_indices = valid_indices[top_k_indices]
-            nn_indices.append(node_nn_indices)
+        # Honor the legacy clamp: never request more neighbors than exist.
+        k = min(self.n_neighbors, max(0, self.n_atoms - 1))
+        _, nn_indices = torch.topk(distances_self_inf, k, dim=1, largest=False)
+        # nn_indices: (n_atoms, k); each row is sorted ascending by distance.
 
-        nn_indices = torch.stack(nn_indices)
+        # Build edge_index in deterministic row-major order.  Preserve the
+        # legacy [target, source] convention for message-passing direction
+        # (the original code did `(target, source) for source, target in edge_set`).
+        src_row = torch.arange(self.n_atoms, device=distances.device) \
+                       .unsqueeze(1).expand(-1, k).reshape(-1)
+        tgt_col = nn_indices.reshape(-1)
+        edge_index = torch.stack([tgt_col, src_row], dim=0)
 
-        # Collect directional edges (asymmetric k-NN)
-        edge_set = set()
-        for i in range(self.n_atoms):
-            for j in nn_indices[i]:
-                edge_set.add((i, j.item()))
-
-        # Create edge list (flipped for message passing direction)
-        directional_edges = [(target, source) for source, target in edge_set]
-
-        source_indices = torch.tensor([edge[0] for edge in directional_edges], device=distances.device)
-        target_indices = torch.tensor([edge[1] for edge in directional_edges], device=distances.device)
-
-        # Create edge_index tensor
-        edge_index = torch.stack([source_indices, target_indices], dim=0)
-
-        # Get edge distances and compute Gaussian expansion
-        edge_distances = distances[source_indices, target_indices]
+        edge_distances = distances[src_row, tgt_col]
         edge_attr = self._compute_gaussian_expanded_distances(edge_distances)
 
-        # Create node features
         node_attr = self._create_node_features(use_amino_acid_encoding)
 
-        # Create PyG Data object
         graph = Data(
             x=node_attr,
             edge_index=edge_index,
             edge_attr=edge_attr,
-            num_nodes=self.n_atoms
+            num_nodes=self.n_atoms,
         )
 
         return graph
@@ -570,6 +591,7 @@ class VAMPNetDataset(Dataset):
                 data = pickle.load(f)
 
             self.frames = data['frames']
+            self._frames_t = torch.as_tensor(self.frames, dtype=torch.float32)
             self.atom_indices = data['atom_indices']
             self.distance_min = data['distance_min']
             self.distance_max = data['distance_max']
@@ -692,6 +714,10 @@ class VAMPNetDataset(Dataset):
             super(VAMPNetDataset, instance).__init__()
 
             instance.frames = data['frames']
+            instance._frames_t = torch.as_tensor(instance.frames, dtype=torch.float32)
+            instance._node_attr_cache = {}
+            instance._rbf_centers = None
+            instance._rbf_inv_sigma2 = None
             instance.atom_indices = data['atom_indices']
             instance.distance_min = data['distance_min']
             instance.distance_max = data['distance_max']

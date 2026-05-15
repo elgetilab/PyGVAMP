@@ -600,7 +600,8 @@ class RevVAMPNet(nn.Module):
 
         def to_device(batch, device_):
             x_t0, x_t1 = batch
-            return (x_t0.to(device_), x_t1.to(device_))
+            return (x_t0.to(device_, non_blocking=True),
+                    x_t1.to(device_, non_blocking=True))
 
         # Training history
         history = {
@@ -809,7 +810,8 @@ class RevVAMPNet(nn.Module):
 
             def to_device(batch, device_):
                 x_t0, x_t1 = batch
-                return (x_t0.to(device_), x_t1.to(device_))
+                return (x_t0.to(device_, non_blocking=True),
+                    x_t1.to(device_, non_blocking=True))
 
             num_batches = min(num_batches, len(data_loader))
 
@@ -885,7 +887,8 @@ class RevVAMPNet(nn.Module):
 
         def to_device(batch, device_):
             x_t0, x_t1 = batch
-            return (x_t0.to(device_), x_t1.to(device_))
+            return (x_t0.to(device_, non_blocking=True),
+                    x_t1.to(device_, non_blocking=True))
 
         self.eval()
         chi_t0_chunks = []
