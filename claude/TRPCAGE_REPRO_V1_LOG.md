@@ -204,30 +204,86 @@ or hyperparameter detail we're still missing across systems, not a
 villin-specific issue). If the Trp-cage Δ is meaningfully smaller or
 flips sign, villin has system-specific issues to revisit.
 
-## Result
+## Result (job 522, 2026-05-12 23:34 → 2026-05-15 ~02:00 CEST, all 10 seeds ok)
 
-_To be filled in after the array completes._
+Wave 1 (seeds 0–7, %8 concurrent): ~25h elapsed each, finished
+~00:30 May 14. Wave 2 (seeds 8–9, 2 concurrent): ~26h each, finished
+~02:00 May 15. Both waves ran training + analysis end-to-end. No
+errors anywhere; all 10 seeds reported `ok` by the aggregator.
 
-### Headline numbers
+### Headline numbers (cross-seed, n=10)
 
-- Best concat (cross-seed): _TBD_
-- perbatch_mean @ best concat epoch (cross-seed): _TBD_
-- Δ vs paper (4.79): _TBD_
+| Metric | Trp-cage v1 | Paper |
+|---|---|---|
+| best concat | **4.6564 ± 0.0239** | — |
+| perbatch_mean @ best-concat epoch | **4.6516 ± 0.0175** | **4.79 ± 0.01** |
+| Δ vs paper (perbatch) | **−0.1384** | — |
+| ↳ in paper's σ | 13.8σ | — |
+| ↳ in **our** σ | **7.9σ** | — |
 
 ### Per-seed table
 
-_(filled by aggregator output)_
+| seed | best epoch | best concat | perbatch_mean | perbatch_std |
+|---:|---:|---:|---:|---:|
+| 0  | 86 | 4.6446 | 4.6393 | 0.1431 |
+| 1  | 95 | 4.6501 | 4.6450 | 0.1303 |
+| 2  | 96 | 4.6638 | 4.6545 | 0.1886 |
+| 3  | 75 | 4.6366 | 4.6317 | 0.1326 |
+| 4  | 83 | 4.6520 | 4.6509 | 0.1247 |
+| 5  | 91 | 4.6366 | 4.6399 | 0.1239 |
+| 6  | 98 | 4.6467 | 4.6481 | 0.1316 |
+| **7** | **87** | **4.7175** | **4.6920** | 0.1921 |
+| 8  | 91 | 4.6466 | 4.6444 | 0.1291 |
+| 9  | 95 | 4.6692 | 4.6699 | 0.1626 |
 
-### Verdict
+Best seed (concat & perbatch): seed_7 = 4.7175 / 4.6920. Closest any
+seed got to paper's 4.79: still −0.10 below in perbatch.
 
-_TBD — `parity-claimed` if cross-seed perbatch overlaps 4.79 ± 0.01
-in either σ convention. `not-yet` if Δ > 0.1 with no overlap._
+CSV at `/mnt/hdd/experiments/trpcage_repro_v1/summary.csv`.
+
+### Verdict — **not parity**
+
+- Δ = −0.1384 is **outside paper's σ by 13.8×** (their ± 0.01 is very
+  tight) AND **outside our own cross-seed σ by 7.9×** (ours is
+  ± 0.0175 — equally tight). The gap is therefore not seed noise on
+  our side.
+- For comparison, villin v11's Δ = −0.0877 sat inside our cross-seed
+  σ (1.9σ) — "close but not identical". Trp-cage's gap is
+  qualitatively worse: bigger absolute, and clearly outside scatter.
+
+### Cross-system pattern (villin + Trp-cage)
+
+Both systems undershoot the paper in the same direction. With two
+data points the natural reading is **systematic protocol/architecture
+detail still missing from our reproduction**, not a per-system issue.
+
+| | Villin v11 (10 seeds) | **Trp-cage v1 (10 seeds)** |
+|---|---|---|
+| n_atoms / n_neighbors / n_states | 35 / 10 / 4 | 20 / 7 / 5 |
+| Paper VAMP-2 | 3.78 ± 0.02 | 4.79 ± 0.01 |
+| Best concat (ours) | 3.7213 ± 0.0357 | 4.6564 ± 0.0239 |
+| perbatch_mean (ours) | 3.6923 ± 0.0458 | 4.6516 ± 0.0175 |
+| Δ vs paper | −0.0877 | **−0.1384** |
+| Δ in our σ | 1.9σ (within scatter) | **7.9σ (outside scatter)** |
+
+The `project_villin_gap` memory has the τ-normalization hypothesis as
+the leading candidate for villin's residual gap. If the same
+mechanism is at play on Trp-cage, the larger absolute Δ would need
+to be explained by Trp-cage's different timescale structure — worth
+testing once a gap-investigation lane is opened.
 
 ## Followups
 
-- If parity: move to NTL9 (k=5, τ=200 ns, paper 4.59 ± 0.09).
-- If not parity: cross-system gap study (villin Δ + Trp-cage Δ
-  together inform whether to investigate architecture or call it a
-  "close-but-not-identical" reproduction).
-- Either way: aBeta42 reversible reproduction next (different model
-  class — RevVAMPNet — first time exercised end-to-end at scale).
+- **Hold on NTL9 / Aβ42** until the gap pattern is understood, per
+  user 2026-05-15 decision (rigor over checklist progress). The two
+  remaining reproduction targets will land more interpretably once we
+  know whether the v11 architecture has a systematic offset.
+- Gap-investigation candidates (when prioritized):
+  - τ-normalization (per `project_villin_gap`)
+  - Train/val split convention (random_split vs perm-based)
+  - Batch-size or LR-schedule details vs Ghorbani 2022's actual code
+  - Architecture details: e.g. activation choices in the InteractionBlock,
+    BatchNorm placement, edge-attribute scaling
+- `claude/PYG_GRAPH_PREBUILD_INVESTIGATION.md` — open, orthogonal to
+  the gap question; would meaningfully cut wall time on any
+  small-architecture reproduction.
