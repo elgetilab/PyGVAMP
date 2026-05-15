@@ -40,7 +40,7 @@ REPO="/home/vi/PycharmProjects/PyGVAMP"
 # ---- Environment -----------------------------------------------------------
 module purge
 source /etc/profile.d/modules.sh
-module load 12.8
+module load cuda/12.8
 module load pygvamp/1.0.0
 
 # Override: prepend dev repo so our fixed master_pipeline.py wins at import.

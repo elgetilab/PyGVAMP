@@ -62,7 +62,7 @@
 # ---- Environment setup -----------------------------------------------------
 module purge
 source /etc/profile.d/modules.sh
-module load 12.8
+module load cuda/12.8
 module load pygvamp/1.0.0
 
 mkdir -p /mnt/hdd/experiments/logs
