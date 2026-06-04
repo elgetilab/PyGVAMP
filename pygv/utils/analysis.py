@@ -490,6 +490,38 @@ def calculate_state_edge_attention_maps(
     return state_attention_maps, state_populations
 
 
+def _discover_trajectory_files(traj_folder: str, file_pattern: str = None) -> list:
+    """Find trajectory files for state-structure generation.
+
+    When ``file_pattern`` is given, uses the recursive, pattern-aware
+    :func:`pygv.utils.pipe_utils.find_trajectory_files` — the same discovery the
+    rest of the pipeline uses — so nested layouts (e.g. DESRES NTL9's
+    ``DESRES-Trajectory_*/*/*.dcd``) are found. Falls back to the legacy flat
+    globs (``*.dcd``, ``*.xtc``, ``r?/traj*`` directly under ``traj_folder``)
+    when no pattern is provided or the recursive search comes up empty.
+    """
+    # Local import avoids a circular import at module load
+    # (pipe_utils → plotting → analysis).
+    from pygv.utils.pipe_utils import find_trajectory_files
+    if file_pattern:
+        files = find_trajectory_files(traj_folder, file_pattern=file_pattern,
+                                      recursive=True)
+        if files:
+            print(f"Found {len(files)} trajectory files matching "
+                  f"'{file_pattern}' under {traj_folder} (recursive)")
+            return list(files)
+
+    traj_files = []
+    for pattern in [os.path.join(traj_folder, "*.dcd"),
+                    os.path.join(traj_folder, "*.xtc"),
+                    os.path.join(traj_folder, "r?", "traj*")]:
+        files = sorted(glob(pattern))
+        if files:
+            traj_files.extend(files)
+            print(f"Found {len(files)} trajectory files matching {pattern}")
+    return traj_files
+
+
 def generate_state_structures(
         traj_folder: str,
         topology_file: str,
@@ -499,7 +531,8 @@ def generate_state_structures(
         stride: int = 10,
         n_structures: int = 10,
         prob_threshold: float = 0.7,
-        selection: str = None
+        selection: str = None,
+        file_pattern: str = None
 ) -> dict:
     """
     Generate multiple representative PDB structures for each conformational state.
@@ -535,18 +568,9 @@ def generate_state_structures(
     # Make sure output directory exists
     os.makedirs(save_dir, exist_ok=True)
 
-    # Get trajectory files based on available files
-    dcd_pattern = os.path.join(traj_folder, "*.dcd")
-    xtc_pattern = os.path.join(traj_folder, "*.xtc")
-    traditional_pattern = os.path.join(traj_folder, "r?", "traj*")
-
-    # Check for different trajectory formats
-    traj_files = []
-    for pattern in [dcd_pattern, xtc_pattern, traditional_pattern]:
-        files = sorted(glob(pattern))
-        if files:
-            traj_files.extend(files)
-            print(f"Found {len(files)} trajectory files matching {pattern}")
+    # Get trajectory files (recursive + pattern-aware when file_pattern given,
+    # so nested layouts like DESRES NTL9 are found — see _discover_trajectory_files).
+    traj_files = _discover_trajectory_files(traj_folder, file_pattern=file_pattern)
 
     if not traj_files:
         raise ValueError(f"No trajectory files found in {traj_folder}")

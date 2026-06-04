@@ -85,6 +85,10 @@ def add_analysis_args(parser: argparse.ArgumentParser):
     analysis_group = parser.add_argument_group('Analysis')
     analysis_group.add_argument('--max_tau', type=int, default=250,
                                 help='Maximum lag time for implied timescales plot')
+    analysis_group.add_argument('--analysis_max_frames', type=int, default=50_000,
+                                help='Max frames for post-training/analysis inference. '
+                                     'Larger datasets are randomly subsampled to this '
+                                     'count (deterministic, seed 42) to bound memory.')
     return analysis_group
 
 

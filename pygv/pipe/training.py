@@ -14,6 +14,7 @@ from pygv.args import parse_train_args
 
 import os
 import torch
+import numpy as np
 from torch.utils.data import random_split
 from torch_geometric.loader import DataLoader
 from datetime import datetime
@@ -154,6 +155,20 @@ def create_dataset_and_loader(args,
     if is_frame_loader:
         # Get frames dataset instead of time-lagged pairs dataset
         frames_dataset = dataset.get_frames_dataset(return_pairs=False)
+
+        # Subsample for analysis if the dataset is very large. Mirrors
+        # analysis.py:create_dataset_and_loader — without this, the
+        # post-training analysis block builds a loader over the entire
+        # dataset and OOM-killed NTL9 v2 (14.7M frames) after training.
+        # Same deterministic RNG/seed/sort so the sampled frames match the
+        # pipeline's analysis phase.
+        analysis_max = getattr(args, 'analysis_max_frames', 50_000)
+        n_frames = len(frames_dataset)
+        if n_frames > analysis_max:
+            print(f"Subsampling {n_frames} → {analysis_max} frames for analysis")
+            rng = np.random.default_rng(42)
+            indices = np.sort(rng.choice(n_frames, analysis_max, replace=False))
+            frames_dataset = torch.utils.data.Subset(frames_dataset, indices)
 
         train_loader = DataLoader(
             frames_dataset,

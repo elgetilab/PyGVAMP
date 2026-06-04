@@ -881,3 +881,63 @@ class TestDataLoaderConfig:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+
+
+# ============================================================================
+# Regression: the post-training analysis frame loader must subsample to
+# analysis_max_frames. Building it over the full split OOM-killed NTL9 v2
+# (14.7M frames) after training completed — see analysis.py:create_dataset_and_loader
+# which already caps at analysis_max_frames; training.py must match.
+# ============================================================================
+
+from tests.test_dataset import create_mock_trajectory, create_mock_topology
+
+
+class TestFrameLoaderSubsampling:
+    """Pins create_dataset_and_loader(is_frame_loader=True) frame count."""
+
+    def _mock_args(self, analysis_max_frames):
+        return Namespace(
+            traj_dir="/fake", file_pattern="*.dcd", top="/fake/top.pdb",
+            lag_time=0.01, n_neighbors=5, node_embedding_dim=16,
+            gaussian_expansion_dim=16, distance_min=None, distance_max=None,
+            gaussian_var=None, selection="name CA", stride=1,
+            cache_dir=None, use_cache=False, timestep=None, continuous=True,
+            runtime_stride=1, seed=42, batch_size=8, cpu=True,
+            analysis_max_frames=analysis_max_frames,
+        )
+
+    def _patch_io(self, monkeypatch, n_frames=100, n_atoms=10):
+        traj = create_mock_trajectory(n_frames=n_frames, n_atoms=n_atoms,
+                                      timestep_ps=1.0)
+        top = create_mock_topology(n_atoms)
+        monkeypatch.setattr('mdtraj.load', lambda *a, **k: traj)
+        monkeypatch.setattr('mdtraj.load_topology', lambda *a, **k: top)
+        monkeypatch.setattr(
+            'mdtraj.iterload',
+            lambda *a, **k: iter([create_mock_trajectory(n_frames=2,
+                                                          n_atoms=n_atoms,
+                                                          timestep_ps=1.0)]))
+        monkeypatch.setattr('pygv.pipe.training.find_trajectory_files',
+                            lambda *a, **k: ['/fake/traj.dcd'])
+
+    def test_frame_loader_subsamples_to_analysis_max(self, monkeypatch):
+        """When n_frames > analysis_max_frames, the frame loader is capped."""
+        from pygv.pipe.training import create_dataset_and_loader
+        self._patch_io(monkeypatch, n_frames=100)
+        args = self._mock_args(analysis_max_frames=10)
+        _, _, train_loader, _, _ = create_dataset_and_loader(
+            args, is_frame_loader=True)
+        assert len(train_loader.dataset) == 10, (
+            f"frame loader should cap at analysis_max_frames=10, "
+            f"got {len(train_loader.dataset)} (full-dataset build = OOM risk)")
+
+    def test_frame_loader_no_subsample_when_small(self, monkeypatch):
+        """When n_frames <= analysis_max_frames, all frames are kept."""
+        from pygv.pipe.training import create_dataset_and_loader
+        self._patch_io(monkeypatch, n_frames=100)
+        args = self._mock_args(analysis_max_frames=10_000)
+        _, _, train_loader, _, _ = create_dataset_and_loader(
+            args, is_frame_loader=True)
+        # frames dataset is the full per-frame count (no time-lag pairing here)
+        assert len(train_loader.dataset) == 100

@@ -406,6 +406,7 @@ def run_analysis(args=None):
         n_structures=10,
         prob_threshold=0.0,
         selection=viz_selection,
+        file_pattern=args.file_pattern,
     )
 
     # ---- Step 10: PyMOL visualizations (optional) ----

@@ -909,3 +909,62 @@ class TestStateCountsOutput:
 
             # Should have n_states + 1 lines (header + data)
             assert len(lines) == probs.shape[1] + 1
+
+
+# ============================================================================
+# Regression: state-structure trajectory discovery must be recursive +
+# pattern-aware (otherwise nested DESRES-style layouts are missed, which
+# aborted NTL9 v2 analysis at "Generating state structures" with
+# "No trajectory files found").
+# ============================================================================
+
+class TestStateStructureTrajectoryDiscovery:
+    """Pins _discover_trajectory_files: nested layouts found via file_pattern."""
+
+    def _make_nested_dcds(self, root):
+        """Create a DESRES-NTL9-style nested layout of empty .dcd files.
+
+        root/DESRES-Trajectory_NTL9-0-c-alpha/NTL9-0-c-alpha/NTL9-0-c-alpha-00N.dcd
+        """
+        made = []
+        for traj in (0, 1):
+            sub = os.path.join(root,
+                               f"DESRES-Trajectory_NTL9-{traj}-c-alpha",
+                               f"NTL9-{traj}-c-alpha")
+            os.makedirs(sub, exist_ok=True)
+            for i in range(3):
+                p = os.path.join(sub, f"NTL9-{traj}-c-alpha-{i:03d}.dcd")
+                open(p, "w").close()
+                made.append(p)
+        return made
+
+    def test_finds_nested_dcds_with_file_pattern(self):
+        """With a file_pattern, nested .dcd files are discovered recursively."""
+        from pygv.utils.analysis import _discover_trajectory_files
+        with tempfile.TemporaryDirectory() as root:
+            made = self._make_nested_dcds(root)
+            found = _discover_trajectory_files(
+                root, file_pattern="NTL9-*-c-alpha-*.dcd")
+            assert sorted(found) == sorted(made), (
+                "recursive+pattern discovery must find all nested DCDs")
+
+    def test_legacy_flat_glob_misses_nested(self):
+        """Documents the bug: the flat-glob fallback (no pattern) misses nested
+        files — this is exactly why NTL9 (nested layout) failed."""
+        from pygv.utils.analysis import _discover_trajectory_files
+        with tempfile.TemporaryDirectory() as root:
+            self._make_nested_dcds(root)
+            found = _discover_trajectory_files(root, file_pattern=None)
+            assert found == [], (
+                "flat globs only look directly under traj_folder; nested files "
+                "are (correctly, for this regression) not found without a pattern")
+
+    def test_flat_layout_still_works_without_pattern(self):
+        """Flat layouts (villin/trpcage) keep working via the legacy fallback."""
+        from pygv.utils.analysis import _discover_trajectory_files
+        with tempfile.TemporaryDirectory() as root:
+            flat = [os.path.join(root, f"traj_{i}.dcd") for i in range(3)]
+            for p in flat:
+                open(p, "w").close()
+            found = _discover_trajectory_files(root, file_pattern=None)
+            assert sorted(found) == sorted(flat)
