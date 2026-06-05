@@ -1109,6 +1109,17 @@ def main():
         config.n_neighbors = args.n_neighbors
     if args.gaussian_expansion_dim is not None:
         config.gaussian_expansion_dim = args.gaussian_expansion_dim
+    # ML3 encoder width/depth (the ML3 path reads ml3_* dims, not the generic ones)
+    if getattr(args, 'ml3_node_dim', None) is not None:
+        config.ml3_node_dim = args.ml3_node_dim
+    if getattr(args, 'ml3_edge_dim', None) is not None:
+        config.ml3_edge_dim = args.ml3_edge_dim
+    if getattr(args, 'ml3_hidden_dim', None) is not None:
+        config.ml3_hidden_dim = args.ml3_hidden_dim
+    if getattr(args, 'ml3_output_dim', None) is not None:
+        config.ml3_output_dim = args.ml3_output_dim
+    if getattr(args, 'ml3_num_layers', None) is not None:
+        config.ml3_num_layers = args.ml3_num_layers
     if args.distance_min is not None:
         config.distance_min = args.distance_min
     if args.distance_max is not None:

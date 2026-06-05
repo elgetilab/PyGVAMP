@@ -108,6 +108,21 @@ Examples:
                         help='k-NN graph neighbors.')
     parser.add_argument('--gaussian_expansion_dim', type=int, default=None,
                         help='Number of RBF/Gaussian edge features.')
+    # ML3 encoder width/depth — the generic --hidden_dim/--output_dim/
+    # --n_interactions above feed the SchNet/GIN path; the ML3 encoder reads
+    # its own ml3_* dims, so expose them here too (otherwise ML3 can only run
+    # at its preset width via the pipeline CLI, and can't be capacity-matched
+    # to the SchNet/GIN baselines).
+    parser.add_argument('--ml3_node_dim', type=int, default=None,
+                        help='ML3 encoder node feature dimension.')
+    parser.add_argument('--ml3_edge_dim', type=int, default=None,
+                        help='ML3 encoder edge feature dimension (match gaussian_expansion_dim).')
+    parser.add_argument('--ml3_hidden_dim', type=int, default=None,
+                        help='ML3 encoder hidden dimension.')
+    parser.add_argument('--ml3_output_dim', type=int, default=None,
+                        help='ML3 encoder output (embedding) dimension; feeds the classifier.')
+    parser.add_argument('--ml3_num_layers', type=int, default=None,
+                        help='Number of ML3 message-passing layers.')
     parser.add_argument('--distance_min', type=float, default=None,
                         help='Lower bound (nm) of the Gaussian RBF basis range. '
                              'Default: data-derived per-dataset.  Pass with --distance_max '

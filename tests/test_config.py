@@ -678,3 +678,25 @@ class TestEdgeCases:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short"])
+
+
+class TestML3PipelineCLI:
+    """Regression: the pipeline CLI (parse_pipeline_args) must expose ML3
+    width/depth args. Previously only the generic schnet/gin encoder args were
+    wired, so --ml3_* was rejected and ML3 width could not be matched to the
+    SchNet/GIN baselines via `pygvamp` (it ran at the ~80k-param preset)."""
+
+    def test_pipeline_cli_accepts_ml3_dims(self, monkeypatch):
+        import sys
+        from pygv.pipe.args import parse_pipeline_args
+        argv = ["pygvamp", "--traj_dir", "/x", "--top", "/y", "--model", "ml3",
+                "--ml3_node_dim", "16", "--ml3_edge_dim", "16",
+                "--ml3_hidden_dim", "16", "--ml3_output_dim", "16",
+                "--ml3_num_layers", "4"]
+        monkeypatch.setattr(sys, "argv", argv)
+        args = parse_pipeline_args()
+        assert args.ml3_node_dim == 16
+        assert args.ml3_edge_dim == 16
+        assert args.ml3_hidden_dim == 16
+        assert args.ml3_output_dim == 16
+        assert args.ml3_num_layers == 4
