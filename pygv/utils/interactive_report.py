@@ -696,8 +696,16 @@ def generate_merged_interactive_report(
                     top = md.load_topology(topology_file)
                     atom_indices = top.select(viewer_selection)
 
-                # Estimate total frames; increase stride if dataset is large
-                max_traj_frames = max_frames * 10
+                # Estimate total frames; increase stride if dataset is large.
+                # Bound the per-frame structure coordinates to the SAME cap as the
+                # analysis/embedding data (subsample_frames below also uses
+                # max_frames), so both paths embed a comparable number of frames.
+                # Otherwise the structure viewer embeds every frame (e.g. ~20k at
+                # stride 1) while the scatter references only <=max_frames of them.
+                # The scatter->structure index mapping in add_timescale
+                # (selected_indices // (traj_stride // stride)) already handles the
+                # resulting traj_stride > stride.
+                max_traj_frames = max_frames
                 sample_traj = md.load(traj_files[0], top=topology_file, atom_indices=atom_indices)
                 frames_per_file = len(sample_traj) // max(stride, 1)
                 estimated_total = frames_per_file * len(traj_files)
