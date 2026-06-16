@@ -13,8 +13,8 @@
 | Chains | A = receptor (~319 res), B = 7-mer peptide |
 | Selection | `chainid 0 and name CA` — **receptor CA only; peptide (chain 1) excluded** |
 | Timestep | 1 ns/frame (`cutted_dt_1ns.xtc`) → lag in ns directly |
-| Preset | `large_schnet` |
-| n_neighbors | **20** (k-NN graph; matches old `atr.sh`. `large_schnet`/base default is 4) |
+| Preset | `medium_schnet` (was `large_schnet` for run 0 / job 657 — switched down after that run overfit) |
+| n_neighbors | **10** (was 20 for run 0; reduced for sparser, more local graphs + less memory) |
 
 > The peptide (chain B / `chainid 1`) is deliberately excluded. The exact
 > receptor CA count (~319) is printed by the discovery job as `Selected N atoms`.
@@ -44,13 +44,14 @@ grep "Selected"             /mnt/hdd/experiments/logs/disc_<jobid>.out
 
 | Run | Lag (ns) | Encoder | n_states | Stride | Epochs | Batch | Train VAMP | Val VAMP | Status | Job ID | Notes |
 |-----|----------|--------------|----------|--------|--------|-------|------------|----------|--------|--------|-------|
-| 0 | 20 | large_schnet | 4 | 5 | 50 | 256 | ~3.95 | ~3.4 (peak quick-val) | done | 657 | quick first run: n_states 4 (disc. 655 rec. 10), stride 5. Batch 2048 OOM'd (job 656) → 256. ~6 min wall-clock |
+| 0 | 20 | large_schnet | 4 | 5 | 50 | 256 | ~3.95 | ~3.4 (peak quick-val) | done | 657 | first run: n_states 4 (disc. 655 rec. 10), stride 5. Batch 2048 OOM'd (656) → 256. ~6 min. **Overfit** (train pinned ~4.0, val noisy/declining); diagnostic eigval-gap suggested 3, state 2 only 5% pop — but keeping 4 per decision |
+| 1 | 20 | medium_schnet | 4 | 5 | 50 | 256 | — | — | pending (module rebuild) | — | medium_schnet + nn 10 (was large/nn20) to curb overfit; stride 5 still (test). Run after module rebuild |
 
 #### Submit command
 ```bash
-# Run 0 (quick first experiment): n_states 4, stride 5 (set in the script)
-sbatch cluster_scripts/atr_d_experiment.sh --n_states 4
-# optional: --run <IDX>   (default 0)
+# Run 1 (medium_schnet, nn 10, stride 5): rebuild the pygvamp module FIRST,
+# then submit. --run 1 keeps outputs separate from run 0.
+sbatch cluster_scripts/atr_d_experiment.sh --n_states 4 --run 1
 ```
 
 ### Reversible (RevGraphVAMP)
@@ -75,6 +76,8 @@ Not planned at the moment (standard VAMP-2 only).
 
 - **Resources:** `gputraining` partition, `--gres=gpu:batch:1` (full 5090), `--cpus-per-task=16`, `--mem=128G`. (128G and 16 CPUs are the partition maxima: `MaxMemPerNode=128000`, `MaxCPUsPerNode=16`. 200G was requested but the partition rejects it with `MaxMemPerLimit`.)
 - **n_states:** discovery-first workflow — run `atr_d_discovery.sh`, read the recommended value, then submit `atr_d_experiment.sh --n_states <N>`. No number is hardcoded.
-- **epochs/batch:** 50 / 2048 in `atr_d_experiment.sh` (repo-standard, matching `run_experiment.sh`); edit the script to change.
+- **epochs/batch:** 50 / 256 in `atr_d_experiment.sh` (batch reduced from 2048 after the run-0 OOM); edit the script to change.
+- **Interactive report fix (`pygv/utils/interactive_report.py`):** the structure viewer now mirrors the **mdtraj training selection** (`training_selection`) instead of the full-protein `"protein"` viz-selection. With `chainid 0 and name CA` it embeds 319 CA atoms instead of 5434 → ~17× smaller (run-0 report was 1.88 GB / unloadable, driven by 4040 frames × 5434 atoms × xyz inline). Full-atom selections (e.g. small molecules) still show all atoms. **Requires the cluster module rebuild to take effect.** Note: at stride 1 the CA-only viewer is still ~250 MB for ~20k frames — add a structure-frame cap later if needed.
+- **⚠️ Module rebuild pending:** the code fix lives in this repo, but the cluster runs the installed `pygvamp/1.0.0` module. Rebuild it before submitting run 1 (and before regenerating any report).
 - **d125p:** deferred. To add later, clone the two scripts and swap the file pattern to `d125p/cutted_dt_1ns.xtc` (topology `.../d125p/prot_chains.pdb`).
 - **Legacy `cluster_scripts/atr.sh`:** superseded — points at a different cluster (`paula`, conda `PyGVAMP5`), uses the legacy `run_training.py`, and `name CA` (would include the peptide). Not reused here; retire later.

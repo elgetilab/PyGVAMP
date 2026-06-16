@@ -60,11 +60,11 @@ TRAJ_DIR="/mnt/hdd/data/julia_ATR"
 TOPOLOGY="/mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb"
 FILE_PATTERN="d125d/cutted_dt_1ns.xtc"
 SELECTION="chainid 0 and name CA"
-PRESET="large_schnet"
+PRESET="medium_schnet"
 LAG=20
-N_NEIGHBORS=20
+N_NEIGHBORS=10
 EPOCHS=50
-BATCH_SIZE=256   # 319-node graphs OOM at 2048 on the 32G 5090; ~256 matches ab42's per-node footprint
+BATCH_SIZE=256   # 319-node graphs OOM'd at 2048 (large_schnet) on the 32G 5090; medium_schnet + nn10 is far lighter, 256 is safe
 STRIDE=5
 RUN_DIR=$(printf "/mnt/hdd/experiments/atr_d_std/lag%s/run_%02d" "${LAG}" "${RUN_IDX}")
 

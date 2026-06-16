@@ -44,7 +44,7 @@ TRAJ_DIR="/mnt/hdd/data/julia_ATR"
 TOPOLOGY="/mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb"
 FILE_PATTERN="d125d/cutted_dt_1ns.xtc"
 SELECTION="chainid 0 and name CA"
-PRESET="large_schnet"
+PRESET="medium_schnet"
 OUTPUT_DIR="/mnt/hdd/experiments/atr_d/discovery"
 
 scontrol update JobId=${SLURM_JOB_ID} Name=atr_d_disc 2>/dev/null
@@ -74,7 +74,7 @@ pygvamp \
     --protein_name "${PROTEIN_NAME}" \
     --output_dir "${OUTPUT_DIR}" \
     --preset "${PRESET}" \
-    --n_neighbors 20 \
+    --n_neighbors 10 \
     --stride 1 \
     --cache \
     --skip_training

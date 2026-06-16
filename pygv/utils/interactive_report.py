@@ -684,11 +684,17 @@ def generate_merged_interactive_report(
             from pygv.utils.pipe_utils import find_trajectory_files
             traj_files = find_trajectory_files(traj_dir, file_pattern)
             if traj_files:
-                # Resolve atom selection BEFORE loading to avoid reading all atoms
+                # Resolve atom selection BEFORE loading to avoid reading all atoms.
+                # Mirror the mdtraj selection used for *training* so the structure
+                # viewer shows exactly the atoms the model saw: CA-only when training
+                # on "name CA" (319 atoms instead of the full 5434-atom protein), or
+                # all atoms when training on a full-atom (e.g. small-molecule)
+                # selection. Falls back to the visualization selection, then all atoms.
+                viewer_selection = training_selection or selection
                 atom_indices = None
-                if selection:
+                if viewer_selection:
                     top = md.load_topology(topology_file)
-                    atom_indices = top.select(selection)
+                    atom_indices = top.select(viewer_selection)
 
                 # Estimate total frames; increase stride if dataset is large
                 max_traj_frames = max_frames * 10
