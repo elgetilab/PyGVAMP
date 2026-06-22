@@ -45,13 +45,15 @@ grep "Selected"             /mnt/hdd/experiments/logs/disc_<jobid>.out
 | Run | Lag (ns) | Encoder | n_states | Stride | Epochs | Batch | Train VAMP | Val VAMP | Status | Job ID | Notes |
 |-----|----------|--------------|----------|--------|--------|-------|------------|----------|--------|--------|-------|
 | 0 | 20 | large_schnet | 4 | 5 | 50 | 256 | ~3.95 | ~3.4 (peak quick-val) | done | 657 | first run: n_states 4 (disc. 655 rec. 10), stride 5. Batch 2048 OOM'd (656) → 256. ~6 min. **Overfit** (train pinned ~4.0, val noisy/declining); diagnostic eigval-gap suggested 3, state 2 only 5% pop — but keeping 4 per decision |
-| 1 | 20 | medium_schnet | 4 | 5 | 50 | 256 | — | — | pending (module rebuild) | — | medium_schnet + nn 10 (was large/nn20) to curb overfit; stride 5 still (test). Run after module rebuild |
+| 1 | 20 | medium_schnet | 4 | 5 | 50 | 256 | ~3.99 | ~1.0–2.9 (noisy quick-val) | done | 658 | medium_schnet + nn 10, stride 5. **Overfit persists** (train still pins ~4.0, quick-val swings 1.0–2.9 — same as run 0; stride-5 data too small). BUT state decomposition much healthier: populations [.20,.30,.13,.38] (no 5% ghost), 4th eigenvalue 0.79 (run 0: 0.34) → 4 states well-justified. Report 149 MB (fix live) |
+| 2 | 20 | medium_schnet | 4→**3** | 1 | 50 | 256 | 3.0 (3-state) | ~1.8–3.0 (noisy) | done | 659 | **stride 1** (~20k frames), in-run discovery enabled. **Auto-retrain reduced 4→3**: dropping `--no_discover_states` re-enabled the retrain loop (it had set max_retrains=0). At full data the 4-state model had a 1.5%-pop ghost state (eigvals [1,.95,.84,**.26**]); 3-state model is clean (eigvals [1,**.994,.989**], pops [.26,.40,.34]). Confirms 3 states (disc. gap + intuition). Train still pins ~max (overfit framing was a sample-val artifact). Report 193 MB; prep→VAMP panel now populated |
 
 #### Submit command
 ```bash
-# Run 1 (medium_schnet, nn 10, stride 5): rebuild the pygvamp module FIRST,
-# then submit. --run 1 keeps outputs separate from run 0.
-sbatch cluster_scripts/atr_d_experiment.sh --n_states 4 --run 1
+# atr_d resolves to 3 states (see "Run 2 result" below). For new runs:
+sbatch cluster_scripts/atr_d_experiment.sh --n_states 3 --run <IDX>
+# To strictly hold a fixed k and disable auto-shrinking, add --max_retrains 0
+# (the script would need that flag plumbed through; not currently exposed).
 ```
 
 ### Reversible (RevGraphVAMP)
@@ -62,6 +64,19 @@ Not planned at the moment (standard VAMP-2 only).
 
 `/mnt/hdd/experiments/atr_d/discovery`        (state discovery)
 `/mnt/hdd/experiments/atr_d_std/lag20/run_00` (standard run 0)
+
+## Run 2 result — ACCEPTED (3 states)
+
+**Decision (2026-06-16):** AT1R d125d resolves to **3 metastable states**, not 4. The
+stride-5 "4 good states" (run 1) was a small-data artifact — at full data (stride 1,
+~20k frames) the 4th state is only 1.5% populated. The auto-retrain loop reduced 4→3;
+3 states is corroborated by the discovery eigenvalue-gap, the initial intuition, and the
+full-data 1.5%-ghost diagnostic.
+
+- **Final model (3-state):** `…/run_02/exp_atr_d_20260616_155214/training/lag20ns_3states_retrained/20260616_163712/models/best_model.pt`
+- **Report (193 MB, prep→VAMP panel populated):** `…/run_02/exp_atr_d_20260616_155214/atr_d_interactive_report.html`
+- 3-state model: eigenvalues [1.0, 0.994, 0.989], populations [0.26, 0.40, 0.34].
+- For future atr_d runs use **`--n_states 3`** (with in-run discovery + retrain loop, 3 is stable).
 
 ## Run 0 results (job 657)
 

@@ -65,7 +65,7 @@ LAG=20
 N_NEIGHBORS=10
 EPOCHS=50
 BATCH_SIZE=256   # 319-node graphs OOM'd at 2048 (large_schnet) on the 32G 5090; medium_schnet + nn10 is far lighter, 256 is safe
-STRIDE=5
+STRIDE=1         # full data (~20k frames). Stride 5 (runs 0-1, ~4k frames) overfit; stride 1 is the real run
 RUN_DIR=$(printf "/mnt/hdd/experiments/atr_d_std/lag%s/run_%02d" "${LAG}" "${RUN_IDX}")
 
 JOB_NAME="atr_d_std_lag${LAG}_run${RUN_IDX}"
@@ -92,7 +92,11 @@ echo "Start:        $(date)"
 echo "============================================================"
 
 # Standard (non-reversible) VAMP-2: no --reversible flag.
-# --no_discover_states: use the n_states from discovery, do not re-discover.
+# In-run state discovery is ENABLED (no --no_discover_states) so the
+# preparation phase writes the Graph2Vec/clustering artifacts the interactive
+# report's "prep -> VAMP state mapping" panel needs. Training still uses the
+# CLI --n_states (the discovered recommendation is ignored for training because
+# --n_states sets _n_states_from_cli; see master_pipeline.py:730).
 pygvamp \
     --traj_dir "${TRAJ_DIR}" \
     --top "${TOPOLOGY}" \
@@ -100,7 +104,6 @@ pygvamp \
     --selection "${SELECTION}" \
     --lag_times ${LAG} \
     --n_states ${N_STATES} \
-    --no_discover_states \
     --protein_name "${PROTEIN_NAME}" \
     --output_dir "${RUN_DIR}" \
     --preset "${PRESET}" \
