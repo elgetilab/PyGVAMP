@@ -15,7 +15,7 @@ from pygv.args import parse_train_args
 import os
 import torch
 import numpy as np
-from torch.utils.data import random_split
+from torch.utils.data import random_split, Subset
 from torch_geometric.loader import DataLoader
 from datetime import datetime
 
@@ -143,10 +143,29 @@ def create_dataset_and_loader(args,
     test_size = int(len(dataset) * test_split)
     train_size = len(dataset) - test_size
 
-    # Set random seed for reproducibility
-    generator = torch.Generator().manual_seed(seed)
-
-    train_dataset, test_dataset = random_split(dataset, [train_size, test_size], generator=generator)
+    split_mode = getattr(args, 'split_mode', 'random') or 'random'
+    if split_mode == 'blocked':
+        # Temporally blocked (honest) split — whole contiguous frame blocks go to
+        # train or val, with a lag-width seam buffer. See pygv/dataset/splits.py.
+        from pygv.dataset.splits import make_blocked_split
+        split_seed = getattr(args, 'split_seed', None)
+        split_seed = int(split_seed) if split_seed is not None else seed
+        n_blocks = getattr(args, 'n_blocks', 10) or 10
+        tr_idx, va_idx, n_dropped = make_blocked_split(
+            dataset.t0_indices, dataset.t1_indices, dataset.n_frames,
+            val_frac=test_split, n_blocks=n_blocks, seed=split_seed,
+            trajectory_boundaries=getattr(dataset, 'trajectory_boundaries', None),
+        )
+        train_dataset = Subset(dataset, tr_idx.tolist())
+        test_dataset = Subset(dataset, va_idx.tolist())
+        print(f"Blocked split (n_blocks={n_blocks}, seed={split_seed}): "
+              f"{len(train_dataset)} train / {len(test_dataset)} val pairs, "
+              f"{n_dropped} dropped at seams")
+    else:
+        # Random/interleaved split (default — unchanged behavior).
+        generator = torch.Generator().manual_seed(seed)
+        train_dataset, test_dataset = random_split(
+            dataset, [train_size, test_size], generator=generator)
 
     print(f"Training set: {len(train_dataset)} samples")
     print(f"Testing set: {len(test_dataset)} samples")

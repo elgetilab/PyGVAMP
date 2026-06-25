@@ -85,6 +85,26 @@ python cluster_scripts/aggregate_trpcage_v1_array.py --root /mnt/hdd/experiments
 #           trpcage_ml3_v1, trpcage_ml3_native_v1
 ```
 
-## Open threads
-- ML3 instability: probe worst seeds (5,6 → ~4.44) — init vs LR-conditioning of the spectral layers?
-- None of the encoders reach the paper's 4.79 (all ~4.65 native) — a separate gap (cf. the villin τ-normalization finding).
+## The ~0.14 gap to the paper (4.65 vs 4.79) — what we ruled out
+
+All native encoders land ~4.65–4.67, ~0.14 below Ghorbani 2022's 4.79. We tested
+the leading explanations directly (frozen SchNet seed-0; tools:
+`cluster_scripts/split_leak_test1_eval.py`, `split_leak_estimator_check.py`;
+blocked-split feature in `pygv/dataset/splits.py`). **Three causes excluded:**
+
+| Hypothesis | Test | Result | Verdict |
+|---|---|---|---|
+| Encoder / WL-expressiveness | native-regime sweep (this file) | flat: SchNet ≈ GIN > ML3 | ❌ not it |
+| Train/val **split leakage** | Test 1: re-score full-val VAMP-2 under random vs **temporally-blocked** eval partition | concat: random **4.670**, blocked **4.756**, whole **4.668** | ❌ blocked ≥ random — opposite of leakage; if anything random under-scores |
+| Per-batch **estimator bias** | batch-size sweep (shuffled), perbatch_mean vs concat | concat flat **4.67** for all batch; perbatch **falls** at small batch (4.67→3.95@64), **never reaches 4.79** | ❌ not it (and contradicts the "perbatch biased high" claim in `vampnet.evaluate()` docstring — ε-regularization makes it biased *low*) |
+
+**Honest number: concat ≈ 4.67** (whole trajectory, batch-independent, < 5.0 ceiling ✓).
+The residual ~0.12 to 4.79 is real but **not** dynamical, split, or estimator — most
+likely featurization/architecture/training detail vs the reference, or what "4.79"
+itself measures (best-seed? training score?). Not pursued further (diminishing
+returns on a saturated score). The blocked-split feature (`--split_mode blocked`)
+is retained as reusable infrastructure even though the test came back null.
+
+## Open threads (not pursued)
+- ML3 instability: worst seeds 5,6 → ~4.44 — init vs LR-conditioning of the spectral layers?
+- The 0.12 residual gap — featurization/architecture diff vs the reference (no compute; not done).

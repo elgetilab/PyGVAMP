@@ -196,6 +196,16 @@ Examples:
                              'pygv/encoder/SCHNET_VERSIONS.md.')
     parser.add_argument('--val_split', type=float, default=None,
                         help='Validation fraction (e.g. 0.3 for 70/30).')
+    parser.add_argument('--split_mode', type=str, default=None,
+                        choices=['random', 'blocked'],
+                        help='Train/val partition of time-lagged pairs: "random" '
+                             '(interleaved; default) or "blocked" (temporally '
+                             'blocked with a lag-width seam buffer — honest split '
+                             'for autocorrelated MD).')
+    parser.add_argument('--n_blocks', type=int, default=None,
+                        help='Number of contiguous blocks for --split_mode blocked (default 10).')
+    parser.add_argument('--split_seed', type=int, default=None,
+                        help='RNG seed for blocked val-block choice (defaults to --seed).')
     parser.add_argument('--stride', type=int, default=None,
                         help='Frame stride for trajectory loading (overrides preset)')
     parser.add_argument('--selection', type=str, default=None,

@@ -1184,6 +1184,12 @@ def main():
         config.encoder_variant = args.encoder_variant
     if args.val_split is not None:
         config.val_split = args.val_split
+    if getattr(args, 'split_mode', None) is not None:
+        config.split_mode = args.split_mode
+    if getattr(args, 'n_blocks', None) is not None:
+        config.n_blocks = args.n_blocks
+    if getattr(args, 'split_seed', None) is not None:
+        config.split_seed = args.split_seed
     if args.stride is not None:
         config.stride = args.stride
     if args.selection is not None:

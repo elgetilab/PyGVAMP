@@ -44,6 +44,13 @@ class BaseConfig:
     lr: float = 0.001
     weight_decay: float = 0.0001
     val_split: float = 0.2
+    # Train/val partitioning of the time-lagged pair dataset.
+    #   "random"  — torch.utils.data.random_split (interleaved; default; the leaky
+    #               baseline for autocorrelated MD — see pygv/dataset/splits.py)
+    #   "blocked" — temporally blocked split with a lag-width seam buffer (honest)
+    split_mode: str = "random"
+    n_blocks: int = 10              # number of contiguous blocks for split_mode="blocked"
+    split_seed: Optional[int] = None  # RNG for block choice; falls back to `seed`
     clip_grad: Optional[float] = None
     lr_schedule: str = "none"   # "none" | "cosine"
     lr_min: float = 0.0         # eta_min for cosine schedule
