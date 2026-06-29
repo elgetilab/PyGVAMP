@@ -1155,6 +1155,63 @@ function buildPdbFromCoords(frameIndex) {
 // Protein viewer
 // =============================================================================
 
+// Cache of CA-only detection results, keyed by PDB string.
+const _caOnlyCache = new Map();
+
+/**
+ * True when a PDB contains only alpha-carbon (CA) atoms. 3Dmol cannot draw a
+ * cartoon ribbon for such a structure (no backbone to trace) — the viewer would
+ * be blank — so callers downgrade cartoon to a CA trace via proteinStyleSpec().
+ */
+function isCaOnlyPdb(pdbStr) {
+    if (!pdbStr) return false;
+    if (_caOnlyCache.has(pdbStr)) return _caOnlyCache.get(pdbStr);
+    let sawAtom = false, caOnly = true;
+    for (const line of pdbStr.split('\n')) {
+        if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
+            sawAtom = true;
+            if (line.substring(12, 16).trim() !== 'CA') { caOnly = false; break; }
+        }
+    }
+    const result = sawAtom && caOnly;
+    _caOnlyCache.set(pdbStr, result);
+    return result;
+}
+
+/**
+ * Build a 3Dmol style spec for the given representation, automatically
+ * downgrading bond/backbone-dependent styles (cartoon/line/stick) to a CA
+ * trace when the model is CA-only, so a structure is always drawn.
+ * `colorProps` is the inner style object, e.g. {color:'spectrum'} or
+ * {colorscheme:{...}}.
+ */
+function proteinStyleSpec(representation, colorProps, pdbStr) {
+    if (isCaOnlyPdb(pdbStr) && ['cartoon', 'line', 'stick'].includes(representation)) {
+        return { cartoon: Object.assign({ style: 'trace' }, colorProps || {}) };
+    }
+    return { [representation]: colorProps || {} };
+}
+
+/** Full-atom structure for a discovery cluster, or null if unavailable. */
+function getClusterStructure(clusterLabel) {
+    const cs = VISUALIZATION_DATA.cluster_structures;
+    if (cs == null || clusterLabel == null) return null;
+    return cs[String(clusterLabel)] || null;
+}
+
+/** A default structure to show when nothing is selected. */
+function defaultProteinStructure() {
+    const cs = VISUALIZATION_DATA.cluster_structures;
+    if (cs) {
+        const keys = Object.keys(cs).sort((a, b) => (+a) - (+b));
+        if (keys.length) return {pdb: cs[keys[0]], label: `cluster_${keys[0]}`};
+    }
+    if (VISUALIZATION_DATA.protein_structure) {
+        return {pdb: VISUALIZATION_DATA.protein_structure, label: 'default_structure'};
+    }
+    return null;
+}
+
 function initProteinViewer() {
     const container = document.getElementById('protein-viewer');
     if (!container) return;
@@ -1163,10 +1220,11 @@ function initProteinViewer() {
         backgroundColor: VISUALIZATION_DATA.config.theme === 'dark' ? '#2d2d2d' : '#f5f5f5'
     });
 
-    if (VISUALIZATION_DATA.protein_structure) {
-        proteinViewer.addModel(VISUALIZATION_DATA.protein_structure, 'pdb');
+    const def = defaultProteinStructure();
+    if (def) {
         const representation = VISUALIZATION_DATA.config.protein.representation;
-        proteinViewer.setStyle({}, { [representation]: { color: 'spectrum' } });
+        proteinViewer.addModel(def.pdb, 'pdb');
+        proteinViewer.setStyle({}, proteinStyleSpec(representation, { color: 'spectrum' }, def.pdb));
         proteinViewer.zoomTo();
         proteinViewer.render();
     }
@@ -1190,6 +1248,29 @@ function updateProteinViewer() {
     const ts = VISUALIZATION_DATA.timescales[state.currentTimescaleIndex];
     const representation = VISUALIZATION_DATA.config.protein.representation;
 
+    // Priority 0: full-atom structure for the selected discovery cluster.
+    // This is congruent with the 2D State Discovery plot (one structure per
+    // cluster) and renders as a proper cartoon ribbon.
+    const clusterPdb = getClusterStructure(state.selectedPrepState);
+    if (clusterPdb) {
+        proteinViewer.removeAllModels();
+        proteinViewer.addModel(clusterPdb, 'pdb');
+        proteinViewer.setStyle({}, proteinStyleSpec(representation, { color: 'spectrum' }, clusterPdb));
+
+        let info = `Discovery cluster ${state.selectedPrepState}`;
+        if (state.selectedVampState !== null) info += ` · VAMP S${state.selectedVampState}`;
+        setProteinViewerInfo(info);
+
+        state.proteinPdb = clusterPdb;
+        state.proteinPdbLabel = `discovery_cluster_${state.selectedPrepState}`;
+        updateDownloadButton('protein-download-btn', state.proteinPdb);
+
+        registerResidueHover(proteinViewer, 'protein-residue-info', 'protein');
+        proteinViewer.zoomTo();
+        proteinViewer.render();
+        return;
+    }
+
     // Priority 1: Show selected frame's actual conformation
     if (state.selectedFrameIndex !== null && ts.trajectory_frame_indices &&
         VISUALIZATION_DATA.frame_coordinates) {
@@ -1211,11 +1292,11 @@ function updateProteinViewer() {
                     const color = colorScale(value);
                     proteinViewer.setStyle(
                         { resi: attentionIndexToResi(residueIndex) },
-                        { [representation]: { color: color } }
+                        proteinStyleSpec(representation, { color: color }, pdbStr)
                     );
                 });
             } else {
-                proteinViewer.setStyle({}, { [representation]: { color: 'spectrum' } });
+                proteinViewer.setStyle({}, proteinStyleSpec(representation, { color: 'spectrum' }, pdbStr));
             }
 
             // Build info label
@@ -1247,11 +1328,9 @@ function updateProteinViewer() {
             proteinViewer.removeAllModels();
 
             proteinViewer.addModel(stateData.average, 'pdb');
-            proteinViewer.setStyle({model: 0}, {
-                [representation]: {
-                    colorscheme: {prop: 'b', gradient: 'rwb', min: 0, max: 90}
-                }
-            });
+            proteinViewer.setStyle({model: 0}, proteinStyleSpec(representation, {
+                colorscheme: {prop: 'b', gradient: 'rwb', min: 0, max: 90}
+            }, stateData.average));
 
             // Track PDB for download
             state.proteinPdb = stateData.average;
@@ -1265,16 +1344,17 @@ function updateProteinViewer() {
         }
     }
 
-    // Priority 4: Default spectrum coloring
+    // Priority 4: Default coloring (first cluster structure, else global structure)
     proteinViewer.removeAllModels();
-    if (VISUALIZATION_DATA.protein_structure) {
-        proteinViewer.addModel(VISUALIZATION_DATA.protein_structure, 'pdb');
-        proteinViewer.setStyle({}, { [representation]: { color: 'spectrum' } });
+    const def = defaultProteinStructure();
+    if (def) {
+        proteinViewer.addModel(def.pdb, 'pdb');
+        proteinViewer.setStyle({}, proteinStyleSpec(representation, { color: 'spectrum' }, def.pdb));
         proteinViewer.zoomTo();
 
         // Track PDB for download
-        state.proteinPdb = VISUALIZATION_DATA.protein_structure;
-        state.proteinPdbLabel = 'default_structure';
+        state.proteinPdb = def.pdb;
+        state.proteinPdbLabel = def.label;
         updateDownloadButton('protein-download-btn', state.proteinPdb);
     } else {
         state.proteinPdb = null;
@@ -1305,7 +1385,7 @@ function ensureAttentionViewer() {
         if (VISUALIZATION_DATA.protein_structure) {
             attentionViewer.addModel(VISUALIZATION_DATA.protein_structure, 'pdb');
             const representation = VISUALIZATION_DATA.config.protein.representation;
-            attentionViewer.setStyle({}, { [representation]: { color: 'spectrum' } });
+            attentionViewer.setStyle({}, proteinStyleSpec(representation, { color: 'spectrum' }, VISUALIZATION_DATA.protein_structure));
             attentionViewer.zoomTo();
             attentionViewer.render();
         }
@@ -1372,19 +1452,16 @@ function updateAttentionViewer() {
         if (stateData && stateData.average) {
             // Use the pipeline's pre-computed average structure (attention in B-factor)
             attentionViewer.addModel(stateData.average, 'pdb');
-            attentionViewer.setStyle({model: 0}, {
-                [representation]: {
-                    colorscheme: {prop: 'b', gradient: 'rwb', min: 0, max: 90}
-                }
-            });
+            attentionViewer.setStyle({model: 0}, proteinStyleSpec(representation, {
+                colorscheme: {prop: 'b', gradient: 'rwb', min: 0, max: 90}
+            }, stateData.average));
 
             // Overlay representative structures as transparent ghosts
             if (stateData.representatives) {
                 stateData.representatives.forEach((pdb, i) => {
                     attentionViewer.addModel(pdb, 'pdb');
-                    attentionViewer.setStyle({model: i + 1}, {
-                        [representation]: {opacity: 0.5, color: 'grey'}
-                    });
+                    attentionViewer.setStyle({model: i + 1},
+                        proteinStyleSpec(representation, {opacity: 0.5, color: 'grey'}, pdb));
                 });
             }
 
@@ -1407,7 +1484,7 @@ function updateAttentionViewer() {
                     const color = colorScale(value);
                     attentionViewer.setStyle(
                         { resi: attentionIndexToResi(residueIndex) },
-                        { [representation]: { color: color } }
+                        proteinStyleSpec(representation, { color: color }, VISUALIZATION_DATA.protein_structure)
                     );
                 });
             }
@@ -1545,41 +1622,45 @@ function updateTransitionMatrix(timescale) {
 // State legend
 // =============================================================================
 
-function updateStateLegend(timescale) {
-    const legend = document.getElementById('state-legend');
-    if (!legend) return;
-
+// Render one labelled distribution block (color swatch, label, percentage share
+// + raw count) for a set of per-frame assignments.
+function _legendSection(title, labels, n_states, labelPrefix) {
     const stateColors = VISUALIZATION_DATA.config.colors.states;
-
-    // Use prep cluster labels if available, else VAMP states
-    let labels, labelPrefix, n_states;
-    if (hasPrep) {
-        labels = VISUALIZATION_DATA.prep.cluster_labels;
-        labelPrefix = 'Cluster';
-        n_states = VISUALIZATION_DATA.prep.n_states;
-    } else {
-        labels = timescale.state_assignments;
-        labelPrefix = 'State';
-        n_states = timescale.n_states;
-    }
-
     const counts = {};
-    labels.forEach(s => {
-        counts[s] = (counts[s] || 0) + 1;
-    });
+    let total = 0;
+    labels.forEach(s => { counts[s] = (counts[s] || 0) + 1; total++; });
 
-    let html = `<h4>${hasPrep ? 'Prep Clusters' : 'States'}</h4>`;
+    let html = `<h4>${title}</h4>`;
     for (let i = 0; i < n_states; i++) {
         const color = stateColors[i % stateColors.length];
         const count = counts[i] || 0;
+        const pct = total ? (count / total * 100) : 0;
         html += `
             <div class="legend-item">
                 <div class="legend-color" style="background-color: ${color}"></div>
                 <span class="legend-label">${labelPrefix} ${i}</span>
-                <span class="legend-count">${count} frames</span>
+                <span class="legend-count">${pct.toFixed(1)}% (${count})</span>
             </div>
         `;
     }
+    return html;
+}
+
+function updateStateLegend(timescale) {
+    const legend = document.getElementById('state-legend');
+    if (!legend) return;
+
+    // Always show the VAMP-state distribution (percentage share of frames). When
+    // state-discovery data is present, also show the prep-cluster distribution so
+    // both 2D embedding plots have a matching legend.
+    let html = '';
+    if (hasPrep) {
+        html += _legendSection('Prep Clusters',
+            VISUALIZATION_DATA.prep.cluster_labels,
+            VISUALIZATION_DATA.prep.n_states, 'Cluster');
+    }
+    html += _legendSection('VAMP States',
+        timescale.state_assignments, timescale.n_states, 'State');
 
     legend.innerHTML = html;
 }
@@ -2717,6 +2798,38 @@ function downloadAlluvialCsv() {
     csv += `,${nFrames}\n`;
 
     downloadFile(csv, 'prep_vamp_state_mapping.csv', 'text/csv');
+}
+
+function downloadEmbeddingPng() {
+    const svg = document.querySelector('#embedding-plot svg');
+    if (svg) svgToPng(svg, '2d_embeddings_state_discovery.png', 3);
+}
+
+function downloadEmbeddingCsv() {
+    const embData = getEmbeddingData();
+    if (!embData) return;
+    let csv = 'frame,x,y,cluster\n';
+    embData.embeddings.forEach((p, i) => {
+        csv += `${i},${p[0]},${p[1]},${embData.labels[i]}\n`;
+    });
+    downloadFile(csv, '2d_embeddings_state_discovery.csv', 'text/csv');
+}
+
+function downloadVampEmbeddingPng() {
+    const svg = document.querySelector('#vamp-embedding-plot svg');
+    if (svg) svgToPng(svg, '2d_embeddings_vamp_states.png', 3);
+}
+
+function downloadVampEmbeddingCsv() {
+    const ts = VISUALIZATION_DATA.timescales[state.currentTimescaleIndex];
+    const embData = getEmbeddingData();
+    if (!embData || !ts) return;
+    let csv = 'frame,x,y,vamp_state\n';
+    embData.embeddings.forEach((p, i) => {
+        const v = (i < ts.state_assignments.length) ? ts.state_assignments[i] : '';
+        csv += `${i},${p[0]},${p[1]},${v}\n`;
+    });
+    downloadFile(csv, '2d_embeddings_vamp_states.csv', 'text/csv');
 }
 
 function downloadTransitionMatrixPng() {

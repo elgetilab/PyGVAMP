@@ -10,6 +10,7 @@ as graph datasets for training VAMPNet models.
 
 import os
 import torch
+import numpy as np
 from torch_geometric.loader import DataLoader
 from datetime import datetime
 import json
@@ -172,6 +173,13 @@ def run_state_discovery(dataset, args, paths):
     # Generate visualizations
     discovery.plot_results(paths['state_discovery_dir'])
 
+    # Write one full-atom representative structure per cluster (for the report's
+    # 3D viewer — see generate_cluster_structures).
+    try:
+        generate_cluster_structures(discovery, dataset, args, paths)
+    except Exception as e:
+        print(f"  Warning: could not generate cluster structures: {e}")
+
     # Get recommendation
     recommended_n_states = discovery.get_recommended_n_states()
 
@@ -184,6 +192,74 @@ def run_state_discovery(dataset, args, paths):
         'best_silhouette_k': discovery.best_k,
         'elbow_k': discovery.elbow_k,
     }
+
+
+def generate_cluster_structures(discovery, dataset, args, paths):
+    """
+    Write one full-atom representative PDB per state-discovery cluster.
+
+    The interactive report's 3D viewer is fed the *training* selection (often
+    ``name CA``), which 3Dmol cannot draw as a cartoon ribbon — the viewer ends
+    up blank.  Here we pick, for each discovery cluster, the medoid frame (the
+    point closest to the cluster centroid in the same embedding space the 2D
+    discovery plot uses, so it is congruent with what the user clicks), map it
+    back to its trajectory frame, and reload *that single frame* with a full-atom
+    (``protein``) selection.  The result is ~n_clusters small PDBs the report can
+    render as proper ribbons — far cheaper than embedding per-frame full-atom
+    coordinates (which previously produced multi-GB, unloadable reports).
+
+    Output: ``<state_discovery_dir>/cluster_structures/cluster_<c>.pdb`` plus a
+    ``cluster_structures.json`` index.
+    """
+    reps = discovery.get_cluster_representative_frames()
+    if not reps:
+        print("  No cluster representatives available — skipping cluster structures.")
+        return
+
+    traj_files = dataset.trajectory_files
+    boundaries = np.asarray(dataset.trajectory_boundaries)  # strided-frame cumulative
+    stride = int(dataset.stride)
+
+    # Resolve a full-atom selection: prefer 'protein', fall back to the training
+    # selection so this still works for full-atom (e.g. small-molecule) setups.
+    top = md.load_topology(args.top)
+    full_indices, full_sel = None, None
+    for sel in ('protein', args.selection):
+        if not sel:
+            continue
+        try:
+            idx = top.select(sel)
+        except Exception:
+            continue
+        if len(idx) > 0:
+            full_indices, full_sel = idx, sel
+            break
+
+    out_dir = os.path.join(paths['state_discovery_dir'], 'cluster_structures')
+    os.makedirs(out_dir, exist_ok=True)
+
+    index = {}
+    for cluster, frame_r in sorted(reps.items()):
+        # Full-embedding (frame) index -> (trajectory file, frame in file).
+        t = int(np.searchsorted(boundaries, frame_r, side='right') - 1)
+        if t < 0 or t >= len(traj_files):
+            continue
+        frame_in_file = int((frame_r - boundaries[t]) * stride)
+        try:
+            frame = md.load_frame(traj_files[t], frame_in_file,
+                                  top=args.top, atom_indices=full_indices)
+            out_path = os.path.join(out_dir, f'cluster_{cluster}.pdb')
+            frame.save_pdb(out_path)
+            index[str(cluster)] = os.path.basename(out_path)
+        except Exception as e:
+            print(f"  Warning: could not extract structure for cluster {cluster}: {e}")
+
+    with open(os.path.join(out_dir, 'cluster_structures.json'), 'w') as f:
+        json.dump({'selection': full_sel, 'structures': index}, f, indent=2)
+
+    n_atoms = len(full_indices) if full_indices is not None else 'all'
+    print(f"  Saved {len(index)} full-atom cluster structures "
+          f"(selection='{full_sel}', {n_atoms} atoms) to {out_dir}")
 
 
 def create_and_analyze_dataset(args, paths):

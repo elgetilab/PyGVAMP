@@ -24,7 +24,7 @@ import os
 import json
 import warnings
 import numpy as np
-from typing import Optional, List
+from typing import Optional, List, Dict
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
@@ -122,6 +122,12 @@ class StateDiscovery:
         self.chosen_source = None
         self.metric_recommendations = {}
 
+        # Maps each clustered (subsampled) point back to its index in the full
+        # embeddings array (= frame order of the frames dataset).  Identity when
+        # no subsampling occurred.  Needed to recover the trajectory frame behind
+        # each cluster representative.
+        self._cluster_sample_indices = None
+
     def fit(self, frames_dataset) -> 'StateDiscovery':
         """
         Run Graph2Vec and clustering sweep.
@@ -169,8 +175,12 @@ class StateDiscovery:
             print(f"Subsampled {n_total} → {self.clustering_max_samples} "
                   f"embeddings for clustering sweep")
         else:
+            cluster_idx = np.arange(n_total)
             cluster_embeddings = self.embeddings
 
+        # Remember which full-embedding (frame) index each clustered point came
+        # from, so cluster representatives can be traced back to trajectory frames.
+        self._cluster_sample_indices = cluster_idx
         self._cluster_embeddings = cluster_embeddings
 
         # Step 4: Clustering sweep
@@ -427,6 +437,55 @@ class StateDiscovery:
                            f"Available: {list(self.cluster_labels.keys())}")
 
         return self.cluster_labels[n_clusters]
+
+    def get_cluster_representative_frames(self,
+                                          n_clusters: Optional[int] = None
+                                          ) -> Dict[int, int]:
+        """
+        Pick one representative frame per cluster (the medoid).
+
+        For each cluster, the representative is the clustered point closest to
+        the cluster centroid in the winning source's embedding space — i.e. the
+        same space the 2D discovery plot is drawn in — so the chosen structure is
+        congruent with what the user sees in that plot.  The returned index is
+        the frame's position in the full embeddings array (frame order of the
+        frames dataset), recovered via the clustering subsample map.
+
+        Parameters
+        ----------
+        n_clusters : int, optional
+            Number of clusters. If None, uses recommended k.
+
+        Returns
+        -------
+        dict
+            Mapping ``cluster_label -> frame_index`` (into the full embeddings
+            array). Empty if the model has not been fitted.
+        """
+        if self.best_k is None or self.chosen_source is None:
+            return {}
+
+        if n_clusters is None:
+            n_clusters = self.best_k
+
+        labels = self.get_cluster_labels(n_clusters)
+        # Embedding space the winning clustering ran in (= the plotted space).
+        coords = self.sweep_results[self.chosen_source]['data']
+        sample_indices = (self._cluster_sample_indices
+                          if self._cluster_sample_indices is not None
+                          else np.arange(len(labels)))
+
+        reps: Dict[int, int] = {}
+        for c in range(n_clusters):
+            member_mask = np.where(labels == c)[0]
+            if len(member_mask) == 0:
+                continue
+            member_coords = coords[member_mask]
+            centroid = member_coords.mean(axis=0)
+            dists = np.sum((member_coords - centroid) ** 2, axis=1)
+            medoid_local = member_mask[int(np.argmin(dists))]
+            reps[c] = int(sample_indices[medoid_local])
+        return reps
 
     # ------------------------------------------------------------------
     # Plotting

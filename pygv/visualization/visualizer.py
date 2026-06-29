@@ -69,6 +69,7 @@ class MDTrajectoryVisualizer:
         self.pdb_template = None
         self.residue_mapping = None
         self.residue_names = None
+        self.cluster_structures = None
 
         # Default configuration
         self.config = {
@@ -220,6 +221,25 @@ class MDTrajectoryVisualizer:
             'summary': discovery_summary or {}
         }
 
+    def set_cluster_structures(self, cluster_structures: Dict[int, str]):
+        """
+        Set per-discovery-cluster full-atom PDB structures for the 3D viewer.
+
+        Each entry is a full-atom representative conformation for one state
+        discovery cluster (see ``generate_cluster_structures`` in the prep
+        pipeline). The report shows the structure for the cluster the user
+        selects in the 2D discovery plot, so the two stay congruent. Keys are
+        cluster labels (matching ``prep.cluster_labels``).
+
+        Parameters
+        ----------
+        cluster_structures : dict
+            Mapping ``cluster_label (int) -> PDB text (str)``.
+        """
+        if not cluster_structures:
+            return
+        self.cluster_structures = {int(k): v for k, v in cluster_structures.items()}
+
     def set_frame_coordinates(self, coordinates: np.ndarray, pdb_template: str):
         """
         Set per-frame protein coordinates for structure display.
@@ -355,6 +375,13 @@ class MDTrajectoryVisualizer:
         if self.frame_coordinates is not None:
             export_data['frame_coordinates'] = self.frame_coordinates
             export_data['pdb_template'] = self.pdb_template
+
+        # Add per-discovery-cluster full-atom structures if available. JSON keys
+        # are strings; the JS frontend keys lookups by cluster label as string.
+        if self.cluster_structures is not None:
+            export_data['cluster_structures'] = {
+                str(k): v for k, v in self.cluster_structures.items()
+            }
 
         # Add prep data if available
         if self.prep_data is not None:

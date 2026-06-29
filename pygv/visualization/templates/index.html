@@ -130,13 +130,23 @@
             <div id="tab-content-states" class="tab-content active">
                 <!-- Embedding viewer (prep data — constant across timescales) -->
                 <div id="embedding-viewer">
-                    <div class="viewer-label">2D Embeddings (State Discovery)</div>
+                    <div class="viewer-label">2D Embeddings (State Discovery)
+                        <span class="alluvial-controls">
+                            <button class="att-download-btn" onclick="downloadEmbeddingPng()">PNG</button>
+                            <button class="att-download-btn" onclick="downloadEmbeddingCsv()">CSV</button>
+                        </span>
+                    </div>
                     <div id="embedding-plot"></div>
                 </div>
 
                 <!-- VAMP embedding viewer (same coordinates, VAMP state coloring) -->
                 <div id="vamp-embedding-viewer">
-                    <div class="viewer-label">2D Embeddings (VAMP States)</div>
+                    <div class="viewer-label">2D Embeddings (VAMP States)
+                        <span class="alluvial-controls">
+                            <button class="att-download-btn" onclick="downloadVampEmbeddingPng()">PNG</button>
+                            <button class="att-download-btn" onclick="downloadVampEmbeddingCsv()">CSV</button>
+                        </span>
+                    </div>
                     <div id="vamp-embedding-plot"></div>
                 </div>
 

@@ -52,6 +52,14 @@ source /etc/profile.d/modules.sh
 module load cuda/12.8
 module load pygvamp/1.0.0
 
+# Opt-in: run uncommitted working-tree code (e.g. the per-cluster full-atom
+# structure feature) without rebuilding the shared module. No effect unless
+# PYGVAMP_SRC_OVERRIDE is set.
+if [ -n "${PYGVAMP_SRC_OVERRIDE}" ]; then
+    export PYTHONPATH="${PYGVAMP_SRC_OVERRIDE}:${PYTHONPATH}"
+    echo "PYTHONPATH override active: ${PYGVAMP_SRC_OVERRIDE}"
+fi
+
 mkdir -p /mnt/hdd/experiments/logs
 
 # ---- Hardcoded ATR / d125d parameters --------------------------------------
