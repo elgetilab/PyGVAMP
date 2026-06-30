@@ -427,6 +427,48 @@ def _load_analysis_artifacts(analysis_dir: str) -> Tuple[
     return probs, embeddings, edge_attentions, edge_indices
 
 
+def _load_cluster_structures(state_discovery_dir: str) -> Dict[int, str]:
+    """
+    Load per-discovery-cluster full-atom PDB structures, if present.
+
+    These are written by ``generate_cluster_structures`` in the prep pipeline as
+    ``<state_discovery_dir>/cluster_structures/cluster_<c>.pdb`` (with a JSON
+    index). Returns an empty dict when the directory is absent (e.g. experiments
+    prepared before this feature — the report falls back to its other views).
+
+    Returns
+    -------
+    dict
+        Mapping ``cluster_label (int) -> PDB text (str)``.
+    """
+    cs_dir = os.path.join(state_discovery_dir, 'cluster_structures')
+    if not os.path.isdir(cs_dir):
+        return {}
+
+    result: Dict[int, str] = {}
+    index_path = os.path.join(cs_dir, 'cluster_structures.json')
+    if os.path.isfile(index_path):
+        try:
+            with open(index_path) as f:
+                meta = json.load(f)
+            for cluster_str, fname in meta.get('structures', {}).items():
+                pdb_path = os.path.join(cs_dir, fname)
+                if os.path.isfile(pdb_path):
+                    with open(pdb_path) as pf:
+                        result[int(cluster_str)] = pf.read()
+            return result
+        except Exception:
+            pass  # fall back to globbing below
+
+    # No/oversized index — recover by globbing cluster_<c>.pdb files directly.
+    for pdb_path in glob.glob(os.path.join(cs_dir, 'cluster_*.pdb')):
+        m = re.search(r'cluster_(\d+)\.pdb$', os.path.basename(pdb_path))
+        if m:
+            with open(pdb_path) as pf:
+                result[int(m.group(1))] = pf.read()
+    return result
+
+
 def _image_to_base64(path: str) -> Optional[str]:
     """Read an image file and return a base64-encoded data URI string."""
     if not os.path.isfile(path):
@@ -750,6 +792,15 @@ def generate_merged_interactive_report(
                         viz.set_prep_data(prep_embeddings, prep_labels, discovery_summary)
                         print(f"  Loaded prep data: {len(prep_embeddings)} frames, "
                               f"{int(np.max(prep_labels)) + 1} clusters, source={chosen_source}")
+
+                        # Load per-cluster full-atom structures (written by the
+                        # prep pipeline) so the 3D viewer can show ribbons that
+                        # match the cluster the user clicks in the 2D plot.
+                        cluster_structs = _load_cluster_structures(sd_dir)
+                        if cluster_structs:
+                            viz.set_cluster_structures(cluster_structs)
+                            print(f"  Loaded {len(cluster_structs)} full-atom "
+                                  f"cluster structures.")
                     else:
                         print(f"  Prep embeddings file not found, skipping prep data.")
                 except Exception as e:
