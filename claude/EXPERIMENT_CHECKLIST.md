@@ -6,6 +6,55 @@ The experiments fall into three categories with different scientific goals and d
 
 ---
 
+## Current Status & Completion Plan (updated 2026-06-30)
+
+Verified against on-disk runs + aggregators on 2026-06-30. **"Paper reproduction" = Category 1 below.**
+
+### Reproduction scoreboard (Category 1)
+
+| System | Paper (perbatch VAMP-2) | Ours (10-seed perbatch) | Δ | Seeds | Status |
+|---|---|---|---|---|---|
+| Trp-cage | 4.79 ± 0.01 | 4.6516 ± 0.0175 | **−0.138** | 10 ✓ | run done, **below paper** (7.9σ ours) |
+| Villin | 3.78 ± 0.02 | 3.6923 ± 0.0458 | **−0.088** | 10 ✓ | run done, **closest** (1.9σ ours) |
+| NTL9 | 4.59 ± 0.09 | 4.3459 ± 0.0435 | **−0.244** | 10 ✓ | run done, **furthest below** |
+| Alanine dipeptide (Rev) | 4.41 ± 0.01 | — | — | 0 | **NOT STARTED** |
+| Aβ42 combined (Rev) | 3.99 ± 0.002 | — | — | 0 | **NOT STARTED** (only ox/red exploratory exist) |
+
+Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_repro_v11` (10 seeds; the
+`VILLIN_REPRO_V11_LOG.md` text is **stale** — it documents only the single-seed probe), `NTL9_REPRO_V2_LOG.md`.
+
+### What's missing to *complete* the paper reproduction
+
+1. **Resolve the systematic GraphVAMPNet gap (BLOCKER).** All three GraphVAMPNet systems undershoot, scaling
+   with system size (Villin −0.088 < Trp-cage −0.138 < NTL9 −0.244). Ruled out: encoder choice (SchNet ≈ GIN-native
+   on Trp-cage), split leakage (blocked-split test), per-batch estimator bias. Open candidates: τ-normalization /
+   lag scaling (see [[project_villin_gap]]), LR schedule / epoch budget vs Ghorbani's, edge-feature (Gaussian)
+   normalization. **Decide:** either (a) one focused ablation lane on Trp-cage (smallest/fastest) to close it, or
+   (b) formally accept-and-document the gap (Villin at 1.9σ is arguably already within tolerance; Trp-cage/NTL9 are not).
+   Nothing else in reproduction should be declared "done" until this is decided.
+2. **Alanine dipeptide — RevGraphVAMP reproduction (NOT STARTED).** No data prepared, no cluster script. Needs:
+   mdshare trajectories (10 heavy atoms), reversible 3-phase training, k=6, lag=20 ps, 10 seeds. Target 4.41 ± 0.01.
+3. **Aβ42 combined — RevGraphVAMP reproduction (NOT STARTED).** Only `ab42_red`/`ab42_ox` *exploratory* splits exist;
+   the strict reproduction is on the **combined** dataset (no ox/red split). Needs combined dataset, reversible,
+   k=4, lag=10 ns, 10 seeds. Target 3.99 ± 0.002. (ox/red split is a *novel contribution*, not reproduction — Category 3.)
+
+### Suggested order
+
+1. Decide the gap question (#1) — it gates whether GraphVAMPNet reproduction can be called complete.
+2. Alanine dipeptide (#2) — small/fast; first validation that the **reversible** path reproduces a published number.
+3. Aβ42 combined (#3) — larger; the headline RevGraphVAMP reproduction.
+
+### Stale docs to sync (accuracy, not new runs)
+
+- `VILLIN_REPRO_V11_LOG.md` — append the 10-seed aggregate (3.6923 ± 0.0458); currently only the single-seed probe is written up.
+- `experiments/trpcage_encoders.md` — ML3 de-tuned row still says "1 (smoke)"; the full 10-seed run is done
+  (4.6209 ± 0.0335, see `TRPCAGE_ML3_V1_LOG.md`).
+
+> Note: Category 2 (encoder sweeps) is the methodological *contribution*, not reproduction. Only Trp-cage has the
+> full encoder comparison; Villin/NTL9 encoder sweeps are still open but are **not** part of "paper reproduction."
+
+---
+
 ## Category 1: Reproduction Sweeps
 
 **Scientific goal:** Demonstrate that PyGVAMP correctly reproduces the published results of GraphVAMPNet and RevGraphVAMP. This validates the framework before any improvement claims are made.
@@ -30,7 +79,7 @@ The experiments fall into three categories with different scientific goals and d
 - Batch size = 1000
 - 10 seeds for error bars (95% CI)
 
-- [ ] **Trp-cage** (Lindorff-Larsen, 208 µs)
+- [x] **Trp-cage** (Lindorff-Larsen, 208 µs) — 10-seed run DONE; **4.6516 ± 0.0175 vs 4.79 (Δ −0.138, below paper)**. See `TRPCAGE_REPRO_V1_LOG.md`.
   - k = 5, lag time = 20 ns
   - n_neighbors = 7, n_atoms (Cα) = 20
   - batch_size = 1000, lr = 0.0005
@@ -38,7 +87,7 @@ The experiments fall into three categories with different scientific goals and d
   - Compare against: published VAMP-2 = 4.79 ± 0.01 (Table S1), ITS plot (Fig 2A), CK test (Fig 2B)
   - Estimated wall time: ~2-3 hours total at 10-20 min/seed
 
-- [ ] **Villin** (Lindorff-Larsen, 125 µs)
+- [x] **Villin** (Lindorff-Larsen, 125 µs) — 10-seed run DONE; **3.6923 ± 0.0458 vs 3.78 (Δ −0.088, 1.9σ — closest to paper)**. Aggregate via `aggregate_villin_v11_array.py`; `VILLIN_REPRO_V11_LOG.md` is stale (single-seed only).
   - k = 4, lag time = 20 ns
   - n_neighbors = 10, n_atoms (Cα) = 35
   - batch_size = 1000, lr = 0.0005
@@ -46,7 +95,7 @@ The experiments fall into three categories with different scientific goals and d
   - Compare against: published VAMP-2 = 3.78 ± 0.02 (Table S1), ITS plot (Fig 4A), CK test (Fig 4B)
   - Estimated wall time: ~2-3 hours total
 
-- [ ] **NTL9** (Lindorff-Larsen, 1.11 ms)
+- [x] **NTL9** (Lindorff-Larsen, 1.11 ms) — 10-seed run DONE (after OOM recovery); **4.3459 ± 0.0435 vs 4.59 (Δ −0.244, furthest below)**. See `NTL9_REPRO_V2_LOG.md`. (k=5 model collapses toward ~2 effective states — diagnostic suggests k~2.)
   - k = 5, lag time = 200 ns
   - n_neighbors = 10, n_atoms (Cα) = 39
   - batch_size = 1000, lr = 0.0005
@@ -75,7 +124,7 @@ The experiments fall into three categories with different scientific goals and d
 
 **One unresolved discrepancy:** The paper's Table 1 says Aβ42 uses **40 atoms** while the GitHub `train.py` command uses **`--num-atoms 42`**. Aβ42 has 42 amino acid residues. Worth checking their actual preprocessing code — they may select only 40 Cα positions due to terminal handling, or the paper table might have a typo. Test with both values and see which matches their published VAMP scores.
 
-- [ ] **Alanine dipeptide** (mdshare, 3 trajectories)
+- [ ] **Alanine dipeptide** (mdshare, 3 trajectories) — **NOT STARTED** (no data prepared, no cluster script). First reversible-path reproduction.
   - k = 6, lag time = 20 ps (confirmed in Section 3.1.1)
   - n_atoms = 10 (heavy atoms on main chain), n_neighbors = 5
   - batch_size = 1000
@@ -87,7 +136,7 @@ The experiments fall into three categories with different scientific goals and d
   - Compare against: RevGraphVAMP published VAMP-2 = 4.41 ± 0.01, VAMP-E = 4.38 ± 0.01 (Table 2)
   - Estimated wall time: ~1-2 hours total (small system)
 
-- [ ] **Aβ42** (Löhr et al. 2021 dataset, ref 23 in Huang 2024)
+- [ ] **Aβ42** (Löhr et al. 2021 dataset, ref 23 in Huang 2024) — **NOT STARTED for strict reproduction.** Only `ab42_red`/`ab42_ox` *exploratory* splits exist; reproduction must be on the **combined** dataset (no ox/red split — that split is a Category-3 novel contribution).
   - k = 4, lag time = 10 ns (confirmed in Section 3.2.1)
   - n_atoms = 40 (per paper Table 1) OR 42 (per GitHub train.py command) — discrepancy worth resolving
   - n_neighbors = 10

@@ -254,3 +254,37 @@ the empty-edges crash) survived the dual-scoring code change.
   report for the publication figure.
 - Optional: ITS comparison v11 vs v10 (both should match) and against
   the analytical timescales — which tightens the publication argument.
+
+## 10-seed array result (added 2026-06-30)
+
+The single-seed probe above (job 488) was followed by the full 10-seed array
+(`villin_repro_v11_array.sh`); all 10 seeds are on disk at
+`/mnt/hdd/experiments/villin_repro_v11/seed_{00..09}/` and completed 100 epochs.
+Aggregate via `cluster_scripts/aggregate_villin_v11_array.py --root /mnt/hdd/experiments/villin_repro_v11`.
+
+### Per-seed (perbatch_mean @ best-concat epoch)
+
+| seed | epoch | best concat | perbatch_mean | perbatch_std |
+|---|---|---|---|---|
+| 0 | 68 | 3.7293 | 3.6710 | 0.2151 |
+| 1 | 55 | 3.7575 | 3.7441 | 0.1709 |
+| 2 | 100 | 3.6958 | 3.6574 | 0.2475 |
+| 3 | 72 | 3.6837 | 3.6512 | 0.2419 |
+| 4 | 100 | 3.6675 | 3.6277 | 0.2452 |
+| 5 | 38 | 3.7577 | 3.7482 | 0.1513 |
+| 6 | 86 | 3.6887 | 3.6547 | 0.2363 |
+| 7 | 49 | 3.7702 | 3.7466 | 0.1832 |
+| 8 | 87 | 3.7221 | 3.6952 | 0.2016 |
+| 9 | 46 | 3.7403 | 3.7269 | 0.1791 |
+
+### Cross-seed summary (n=10)
+
+- best concat:   **3.7213 ± 0.0357**
+- perbatch_mean: **3.6923 ± 0.0458**  (paper: 3.78 ± 0.02)
+- **Δ vs paper: −0.0877** — 4.4σ in the paper's σ, but only **1.9σ in our cross-seed scatter**.
+
+This is the number to cite for Villin, not the single-seed 3.6710 above. Villin is
+the **closest** of the three GraphVAMPNet systems to its paper target (Trp-cage Δ −0.138,
+NTL9 Δ −0.244); at 1.9σ it is arguably within reproduction tolerance. The residual gap is
+shared across systems and tracked as the systematic-gap item in
+[EXPERIMENT_CHECKLIST.md](EXPERIMENT_CHECKLIST.md) and `project_villin_gap`.

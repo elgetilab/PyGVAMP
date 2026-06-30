@@ -33,7 +33,7 @@ epochs 100, **n_neighbors 7**, **val_split 0.3**, seeds 0–9.
 | **SchNet** | baseline | 10 | **4.6516** | ±0.0175 | ~7k | — | `trpcage_repro_v1_array.sh` |
 | GIN | de-tuned | 10 | 4.5955 | ±0.0750 | ~7k | −0.056 | `trpcage_gin_v1_array.sh` |
 | **GIN** | **native** | 10 | **4.6481** | ±0.0343 | 76,328 | ≈ tie | `trpcage_gin_native_v1_array.sh` |
-| ML3 | de-tuned | 1 (smoke) | 4.6431 | — | ~46k | (1 seed) | `trpcage_ml3_v1_array.sh` |
+| ML3 | de-tuned | 10 | 4.6209 | ±0.0335 | ~46k | −0.031 | `trpcage_ml3_v1_array.sh` |
 | **ML3** | **native** | 10 | **4.5743** | ±0.0770 | 86,905 | **−0.077** | `trpcage_ml3_native_v1_array.sh` |
 
 All native encoders sit ~0.14 below the paper's 4.79.
