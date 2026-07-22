@@ -83,15 +83,24 @@ Shared hp (both systems): hidden_dim=16, n_graph_layers=4, n_Gaussians=16, batch
 750k frames (3×250ns×1ps). Aβ42: 40 vs 42 atoms (paper Table1=40 vs GitHub `--num-atoms 42`
 — TEST BOTH), n_neighbors=10, 1.26M frames, 250 ps/frame, dmin0/dmax8/step0.5.
 
-## Data status
+## Data status — RESOLVED 2026-07-22 (step 4 done)
 
-- **Alanine dipeptide: NOT on disk.** `/mnt/hdd/data/` has none. Download via
-  mdshare (`alanine-dipeptide-*-northo.npz` or the 3 DESRES-style trajs). Small.
-- **Aβ42: on disk but SPLIT** at `/mnt/hdd/data/ab42/trajectories/{red,ox}/rN[cs]/*.xtc`,
-  no `combined/` dir. Reproduction needs COMBINED (ox+red together; the ox/red
-  split is our separate novel contribution, not RevGraphVAMP's protocol). Point at
-  the `trajectories/` parent with a recursive glob, or assemble a combined list.
-  Topology: `/mnt/hdd/data/ab42/trajectories/red/topol.pdb` (verify ox matches).
+- **Alanine dipeptide: DOWNLOADED** to `/mnt/hdd/data/alanine/` via
+  `cluster_scripts/download_alanine.sh` (mdshare mirror; mdshare pkg not installed
+  in the env). 3× `alanine-dipeptide-N-250ns-nowater.xtc` + `...-nowater.pdb`.
+  Verified: 22 atoms / **10 heavy** (ACE-ALA-NME), **750,000 frames** (3×250k) —
+  matches the RevGraphVAMP spec exactly. Selection: `not element H` (= 10 heavy).
+  Timestep 0.001 ns (1 ps/frame); lag 20 ps = `--lag_times 0.02 --timestep 0.001`.
+- **Aβ42: already on disk, no combining needed — CORRECTION.** The earlier
+  "reproduction needs red+ox combined" assumption was WRONG. RevGraphVAMP's Aβ42 is
+  the **reduced (red) ensemble ALONE**: `/mnt/hdd/data/ab42/trajectories/red/` has
+  **exactly 5119 xtc** files — matching the paper's stated "5,119 trajectories" —
+  and RevGraphVAMP's own repo stores its data under `trajectories/red/`. The `ox`
+  ensemble (3071 trajs) is a separate system they did NOT report; leave it out.
+  Feed with `--traj_dir .../ab42/trajectories/red/ --file_pattern '*.xtc'`
+  (recursive glob is ON by default → picks up the nested rN/rNcs subdirs).
+  Topology `.../red/topol.pdb`: 42 residues, **42 CA** → use `name CA` (42),
+  resolving the paper(40)-vs-GitHub(42) discrepancy in favor of 42.
 
 ## Code fragilities to guard (from their code — see verification doc §4)
 
@@ -149,8 +158,17 @@ Shared hp (both systems): hidden_dim=16, n_graph_layers=4, n_Gaussians=16, batch
       `args/args_train.py` (standalone train entry, unused by the repro). Add
       there too only if a standalone train path is needed.
       Activation defaulted to exp — CONFIRM vs their train_ala.py/train_ab.py.
-- [ ] (4) Alanine data (mdshare) + Aβ42-combined prep
-- [ ] (5) SLURM scripts + aggregator + tracking md; then run 10 seeds each
+- [x] (4) Data prep — DONE 2026-07-22. Alanine downloaded+verified (750k frames,
+      10 heavy) via `download_alanine.sh`; Aβ42 = red ensemble already on disk
+      (5119 trajs, 42 CA), no combining needed (see corrected Data status above).
+- [ ] (5) SLURM scripts + aggregator + tracking md; then run 10 seeds each ← NEXT
+      Alanine: `--reversible --rev_three_phase`, model schnet χ, selection
+      'not element H', n_neighbors 5, k 6, lag 0.02 ns, timestep 0.001, hidden 16,
+      gaussian 16, batch 1000, 70/30. Aβ42: red dir recursive, 'name CA' (42),
+      n_neighbors 10, k 4, lag 10 ns, batch 500, gaussian dmin0/dmax8/step0.5,
+      epoch_chi/us/all e.g. 300/.../1000 (confirm from train_ab.py). First do a
+      tiny alanine smoke run (2/2/2 epochs) — this is the FIRST end-to-end exercise
+      of fit_three_phase on real graph data.
 
 ## Open questions to resolve before RUNNING (not before coding)
 
