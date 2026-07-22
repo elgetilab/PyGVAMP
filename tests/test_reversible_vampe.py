@@ -24,7 +24,9 @@ import torch
 
 from pygv.scores.reversible_vampe import (
     VAMPU, VAMPS, vampe_trace_loss, reversible_vampe_score, _clamp_away_from_zero,
+    PHASE_CONFIG, apply_phase_freeze,
 )
+from pygv.scores.vamp_score_v0 import VAMPScore
 
 
 def _random_chi(n_batch=256, M=3, seed=0):
@@ -101,3 +103,72 @@ def test_guard_on_degenerate_v_no_nan():
         vamp_e, K, S = vamps(v, C, C, C, C)
     assert torch.isfinite(S).all()
     assert torch.isfinite(vamp_e).all()
+
+
+# --- Three-phase schedule ---------------------------------------------------
+
+def test_phase_config_values():
+    assert PHASE_CONFIG['chi'] == {'train_chi': True,  'train_rev': False, 'loss': 'vamp2'}
+    assert PHASE_CONFIG['us']  == {'train_chi': False, 'train_rev': True,  'loss': 'vampe'}
+    assert PHASE_CONFIG['all'] == {'train_chi': True,  'train_rev': True,  'loss': 'vampe'}
+
+
+def test_apply_phase_freeze_sets_requires_grad_and_trainable():
+    chi = [torch.nn.Parameter(torch.randn(2, 2))]
+    rev = [torch.nn.Parameter(torch.randn(2, 2))]
+
+    tr, kind = apply_phase_freeze(chi, rev, 'chi')
+    assert chi[0].requires_grad and not rev[0].requires_grad
+    assert kind == 'vamp2' and tr == chi
+
+    tr, kind = apply_phase_freeze(chi, rev, 'us')
+    assert (not chi[0].requires_grad) and rev[0].requires_grad
+    assert kind == 'vampe' and tr == rev
+
+    tr, kind = apply_phase_freeze(chi, rev, 'all')
+    assert chi[0].requires_grad and rev[0].requires_grad
+    assert kind == 'vampe' and len(tr) == 2
+
+    with pytest.raises(ValueError):
+        apply_phase_freeze(chi, rev, 'nope')
+
+
+def test_phase_gradient_isolation():
+    """One optimizer step per phase; only the phase's params may change.
+
+    Uses a toy linear χ + the real VAMPU/VAMPS, so the freeze mechanics are
+    exercised end-to-end without needing the GNN encoder.
+    """
+    torch.manual_seed(0)
+    M, d_in, n = 3, 5, 128
+    chi_net = torch.nn.Linear(d_in, M)
+    vampu = VAMPU(M, activation=torch.exp)
+    vamps = VAMPS(M, activation=torch.exp)
+    x0, x1 = torch.randn(n, d_in), torch.randn(n, d_in)
+    vamp2 = VAMPScore(method='VAMP2')
+
+    chi_params = list(chi_net.parameters())
+    rev_params = list(vampu.parameters()) + list(vamps.parameters())
+
+    for phase in ['chi', 'us', 'all']:
+        trainable, kind = apply_phase_freeze(chi_params, rev_params, phase)
+        opt = torch.optim.Adam(trainable, lr=0.1)
+        chi_before = [p.detach().clone() for p in chi_params]
+        rev_before = [p.detach().clone() for p in rev_params]
+
+        opt.zero_grad()
+        c0, c1 = torch.softmax(chi_net(x0), 1), torch.softmax(chi_net(x1), 1)
+        if kind == 'vamp2':
+            loss = vamp2.loss(c0, c1)
+        else:
+            u, v, C00, C11, C01, sigma, mu = vampu(c0, c1)
+            ve, K, S = vamps(v, C00, C11, C01, sigma)
+            loss = vampe_trace_loss(ve)
+        loss.backward()
+        opt.step()
+
+        chi_changed = any(not torch.allclose(a, b) for a, b in zip(chi_before, chi_params))
+        rev_changed = any(not torch.allclose(a, b) for a, b in zip(rev_before, rev_params))
+        cfg = PHASE_CONFIG[phase]
+        assert chi_changed == cfg['train_chi'], f"phase {phase}: χ update mismatch"
+        assert rev_changed == cfg['train_rev'], f"phase {phase}: reversible update mismatch"

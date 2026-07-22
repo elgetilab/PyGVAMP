@@ -3,6 +3,9 @@ import torch.nn as nn
 from typing import Union, Tuple
 from pygv.classifier.SoftmaxMLP import SoftmaxMLP
 from pygv.scores.reversible_score import ReversibleVAMPScore
+from pygv.scores.reversible_vampe import (
+    VAMPU, VAMPS, vampe_trace_loss, apply_phase_freeze,
+)
 from torch_geometric.nn.models import MLP
 import os
 import datetime
@@ -916,3 +919,166 @@ class RevVAMPNet(nn.Module):
             nll = self.rev_score.loss(chi_t0_full, chi_t1_full).item()
 
         return nll
+
+    # ==================================================================
+    # Three-phase RevGraphVAMP training (VAMP-2 -> VAMP-E; chi / U+S / all)
+    # ==================================================================
+    # Faithful to RevGraphVAMP's schedule (see claude/REVGRAPHVAMP_TODO.md).
+    # Uses the ported VAMPU/VAMPS layer (reversible_vampe.py), NOT the older
+    # single-phase NLL rev_score (which fit() above still uses for back-compat).
+
+    def attach_vampe_layer(self, n_states=None, activation=torch.exp,
+                           renorm=False):
+        """Create the reversible VAMP-E layer (VAMPU/VAMPS) + validation scores.
+
+        Must be called before ``fit_three_phase``. Idempotent-ish: re-creates the
+        layer each call. VAMPU/VAMPS are registered submodules, so their params
+        are saved/loaded with the model.
+        """
+        from pygv.scores.vamp_score_v0 import VAMPScore
+        if n_states is None:
+            n_states = getattr(self.rev_score, 'n_states', None)
+        if n_states is None:
+            raise ValueError("n_states could not be inferred; pass it explicitly")
+        self.vampu = VAMPU(n_states, activation=activation)
+        self.vamps = VAMPS(n_states, activation=activation, renorm=renorm)
+        # Standard scores for paper-comparable validation (VAMP-2 = headline).
+        self._vamp2_score = VAMPScore(method='VAMP2')
+        self._vampe_score = VAMPScore(method='VAMPE')
+        dev = next(self.parameters()).device
+        self.vampu.to(dev)
+        self.vamps.to(dev)
+        return self
+
+    def chi_parameters(self):
+        """Parameters of χ = embedding + encoder + classifier."""
+        params = []
+        for m in (self.embedding_module, self.encoder, self.classifier_module):
+            if m is not None:
+                params += list(m.parameters())
+        return params
+
+    def reversible_vampe_parameters(self):
+        """Parameters of the reversible VAMP-E layer (VAMPU + VAMPS)."""
+        return list(self.vampu.parameters()) + list(self.vamps.parameters())
+
+    def _chi_pair(self, data_t0, data_t1):
+        chi_t0, _ = self.forward(data_t0, apply_classifier=True)
+        chi_t1, _ = self.forward(data_t1, apply_classifier=True)
+        return chi_t0, chi_t1
+
+    def _phase_loss(self, chi_t0, chi_t1, loss_kind):
+        """Phase-1 loss = -VAMP2 (train χ); phase-2/3 loss = VAMP-E trace."""
+        if loss_kind == 'vamp2':
+            return self._vamp2_score.loss(chi_t0, chi_t1)
+        u, v, C00, C11, C01, sigma, mu = self.vampu(chi_t0, chi_t1)
+        vamp_e, K, S = self.vamps(v, C00, C11, C01, sigma)
+        return vampe_trace_loss(vamp_e)
+
+    def _validate_scores(self, loader, device):
+        """Paper-comparable val scores on concatenated val chi (VAMP-2 & VAMP-E)."""
+        if loader is None or len(loader) == 0:
+            return None
+        self.eval()
+        t0s, t1s = [], []
+        with torch.no_grad():
+            for batch in loader:
+                d0, d1 = batch
+                d0 = d0.to(device, non_blocking=True)
+                d1 = d1.to(device, non_blocking=True)
+                c0, c1 = self._chi_pair(d0, d1)
+                t0s.append(c0)
+                t1s.append(c1)
+        self.train()
+        c0 = torch.cat(t0s, dim=0)
+        c1 = torch.cat(t1s, dim=0)
+        with torch.no_grad():
+            return {
+                'vamp2': self._vamp2_score(c0, c1).item(),
+                'vampe': self._vampe_score(c0, c1).item(),
+            }
+
+    def fit_three_phase(self, train_loader, test_loader=None, device=None,
+                        epoch_chi=100, epoch_us=100, epoch_all=100,
+                        lr_chi=5e-4, lr_us=5e-4, lr_all=1e-4,
+                        weight_decay=1e-5, save_dir='models', verbose=True):
+        """RevGraphVAMP three-phase training.
+
+        Phase 1 ('chi'): train χ with VAMP-2 (lr_chi).
+        Phase 2 ('us') : freeze χ, train VAMPU+VAMPS with VAMP-E-trace (lr_us).
+        Phase 3 ('all'): train all with VAMP-E-trace (lr_all); best model tracked
+                         by validation VAMP-2 (the headline metric).
+
+        Requires ``attach_vampe_layer()`` to have been called. Returns a history
+        dict; loads the best (phase-3) model state before returning.
+        """
+        if not hasattr(self, 'vampu'):
+            raise RuntimeError("call attach_vampe_layer() before fit_three_phase()")
+        if device is None:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        elif isinstance(device, str):
+            device = torch.device(device)
+        self.to(device)
+        if save_dir:
+            os.makedirs(save_dir, exist_ok=True)
+
+        def to_device(batch):
+            d0, d1 = batch
+            return d0.to(device, non_blocking=True), d1.to(device, non_blocking=True)
+
+        history = {'phase_epoch_loss': [], 'val_vamp2': [], 'val_vampe': []}
+        best_vamp2 = -float('inf')
+        best_state = None
+
+        phases = [('chi', epoch_chi, lr_chi),
+                  ('us',  epoch_us,  lr_us),
+                  ('all', epoch_all, lr_all)]
+
+        for name, n_epochs, lr in phases:
+            trainable, loss_kind = apply_phase_freeze(
+                self.chi_parameters(), self.reversible_vampe_parameters(), name)
+            if not trainable:
+                continue
+            optimizer = torch.optim.Adam(trainable, lr=lr, weight_decay=weight_decay)
+            if verbose:
+                print(f"[RevGraphVAMP phase '{name}'] {n_epochs} epochs, "
+                      f"lr={lr}, loss={loss_kind}, {len(trainable)} param tensors")
+
+            for epoch in range(n_epochs):
+                self.train()
+                epoch_loss, n_batches = 0.0, 0
+                iterator = tqdm(train_loader, desc=f"[{name}] {epoch+1}/{n_epochs}",
+                                leave=False) if verbose else train_loader
+                for batch in iterator:
+                    d0, d1 = to_device(batch)
+                    optimizer.zero_grad()
+                    chi_t0, chi_t1 = self._chi_pair(d0, d1)
+                    loss = self._phase_loss(chi_t0, chi_t1, loss_kind)
+                    if not torch.isfinite(loss):
+                        continue
+                    loss.backward()
+                    optimizer.step()
+                    epoch_loss += loss.item()
+                    n_batches += 1
+                mean_loss = epoch_loss / max(n_batches, 1)
+                history['phase_epoch_loss'].append((name, epoch, mean_loss))
+
+                # Model selection only in the final phase.
+                if name == 'all' and test_loader is not None:
+                    scores = self._validate_scores(test_loader, device)
+                    if scores is not None:
+                        history['val_vamp2'].append(scores['vamp2'])
+                        history['val_vampe'].append(scores['vampe'])
+                        if scores['vamp2'] > best_vamp2:
+                            best_vamp2 = scores['vamp2']
+                            best_state = {k: v.detach().cpu().clone()
+                                          for k, v in self.state_dict().items()}
+                        if verbose:
+                            print(f"  epoch {epoch+1}: val VAMP-2={scores['vamp2']:.4f}"
+                                  f"  VAMP-E={scores['vampe']:.4f}"
+                                  f"  (best VAMP-2={best_vamp2:.4f})")
+
+        if best_state is not None:
+            self.load_state_dict(best_state)
+        history['best_val_vamp2'] = best_vamp2
+        return history

@@ -195,3 +195,45 @@ def reversible_vampe_score(vamp_e: torch.Tensor) -> torch.Tensor:
     the ``+1`` constant), use ``VAMPScore(method='VAMPE')`` on the model outputs.
     """
     return -torch.trace(vamp_e)
+
+
+# --- Three-phase training schedule (RevGraphVAMP) --------------------------
+# Phase 1 ('chi')  : train χ (encoder+classifier) with VAMP-2, χ only.
+# Phase 2 ('us')   : freeze χ, train VAMPU+VAMPS with the VAMP-E-trace loss.
+# Phase 3 ('all')  : train everything with the VAMP-E-trace loss.
+PHASE_CONFIG = {
+    'chi': {'train_chi': True,  'train_rev': False, 'loss': 'vamp2'},
+    'us':  {'train_chi': False, 'train_rev': True,  'loss': 'vampe'},
+    'all': {'train_chi': True,  'train_rev': True,  'loss': 'vampe'},
+}
+
+
+def apply_phase_freeze(chi_params, rev_params, phase):
+    """Set ``requires_grad`` per phase and return the params to optimize.
+
+    Pure w.r.t. the phase schedule so it can be unit-tested without the GNN.
+
+    Parameters
+    ----------
+    chi_params, rev_params : iterable of nn.Parameter
+        The χ (encoder+classifier[+embedding]) and reversible (VAMPU+VAMPS) params.
+    phase : {'chi', 'us', 'all'}
+
+    Returns
+    -------
+    (trainable, loss_kind) : (list[nn.Parameter], str)
+        Params to hand to the optimizer, and which loss this phase uses
+        ('vamp2' or 'vampe').
+    """
+    if phase not in PHASE_CONFIG:
+        raise ValueError(f"unknown phase {phase!r}, expected one of {list(PHASE_CONFIG)}")
+    cfg = PHASE_CONFIG[phase]
+    chi_params = list(chi_params)
+    rev_params = list(rev_params)
+    for p in chi_params:
+        p.requires_grad_(cfg['train_chi'])
+    for p in rev_params:
+        p.requires_grad_(cfg['train_rev'])
+    trainable = (chi_params if cfg['train_chi'] else []) + \
+                (rev_params if cfg['train_rev'] else [])
+    return trainable, cfg['loss']

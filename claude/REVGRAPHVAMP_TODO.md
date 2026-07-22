@@ -130,8 +130,20 @@ Shared hp (both systems): hidden_dim=16, n_graph_layers=4, n_Gaussians=16, batch
       reversible_vampe_score, guarded); `tests/test_reversible_vampe.py` (8 tests
       pass, incl. golden `S @ v = 1` for M=2/3/5). Activation defaulted to
       `torch.exp` — CONFIRM vs their train script before a strict run.
-- [ ] (2) 3-phase driver in `rev_vampnet.fit()` + gradient-isolation tests ← NEXT
-- [ ] (3) CLI args + pipeline wiring
+- [x] (2) 3-phase driver — DONE 2026-07-22. Added to `rev_vampnet.py` (kept old
+      single-phase `fit()` for back-compat): `attach_vampe_layer()`,
+      `chi_parameters()`, `reversible_vampe_parameters()`, `_phase_loss()`,
+      `_validate_scores()`, `fit_three_phase(epoch_chi/us/all, lr_chi/us/all)`.
+      Phase freeze logic (`PHASE_CONFIG`, `apply_phase_freeze`) in
+      `reversible_vampe.py`. Best model tracked by val VAMP-2 in phase 3.
+      Tests: gradient-isolation verified (χ moves only in chi/all; U+S only in
+      us/all). Full suite still collects (658 tests, no import breakage).
+- [ ] (3) CLI args + pipeline wiring ← NEXT
+      Add `--epoch_chi/--epoch_us/--epoch_all`, `--lr_chi/--lr_us/--lr_all`,
+      `--rev_three_phase` (or auto when reversible + phase epochs given) to
+      args_train.py + pipe/args.py; in training.py, when reversible+3phase call
+      `model.attach_vampe_layer(...)` then `model.fit_three_phase(...)` instead of
+      the single-phase `fit()`. Confirm u/S activation (exp?) here too.
 - [ ] (4) Alanine data (mdshare) + Aβ42-combined prep
 - [ ] (5) SLURM scripts + aggregator + tracking md; then run 10 seeds each
 
