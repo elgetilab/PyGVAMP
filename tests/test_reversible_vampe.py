@@ -172,3 +172,18 @@ def test_phase_gradient_isolation():
         cfg = PHASE_CONFIG[phase]
         assert chi_changed == cfg['train_chi'], f"phase {phase}: χ update mismatch"
         assert rev_changed == cfg['train_rev'], f"phase {phase}: reversible update mismatch"
+
+
+def test_three_phase_dispatch_requires_epoch_args():
+    """The pipeline wiring errors clearly if --rev_three_phase lacks phase epochs."""
+    from types import SimpleNamespace
+    from pygv.pipe.training import _train_reversible_three_phase
+    args = SimpleNamespace(
+        rev_activation='exp', epoch_chi=None, epoch_us=10, epoch_all=10,
+        lr_chi=None, lr_us=None, lr_all=None, weight_decay=1e-5,
+        n_states=3, rev_renorm=False,
+    )
+    with pytest.raises(ValueError, match="epoch_chi"):
+        _train_reversible_three_phase(args, model=None, train_loader=None,
+                                      test_loader=None, paths={'model_dir': '/tmp'},
+                                      device='cpu')

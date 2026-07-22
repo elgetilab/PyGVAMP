@@ -1073,6 +1073,12 @@ class RevVAMPNet(nn.Module):
                             best_vamp2 = scores['vamp2']
                             best_state = {k: v.detach().cpu().clone()
                                           for k, v in self.state_dict().items()}
+                            # Persist the best model where the pipeline discovers
+                            # it (<model_dir>/best_model.pt). The model is at its
+                            # best weights right now (validated this epoch).
+                            if save_dir:
+                                self.save_complete_model(
+                                    os.path.join(save_dir, "best_model.pt"))
                         if verbose:
                             print(f"  epoch {epoch+1}: val VAMP-2={scores['vamp2']:.4f}"
                                   f"  VAMP-E={scores['vampe']:.4f}"
@@ -1080,5 +1086,11 @@ class RevVAMPNet(nn.Module):
 
         if best_state is not None:
             self.load_state_dict(best_state)
+        elif save_dir:
+            # No validation (or no test_loader) → the final model is the best we
+            # have; persist it as best_model.pt so the pipeline can discover it.
+            self.save_complete_model(os.path.join(save_dir, "best_model.pt"))
+        if save_dir:
+            self.save_complete_model(os.path.join(save_dir, "final_model.pt"))
         history['best_val_vamp2'] = best_vamp2
         return history

@@ -387,10 +387,62 @@ def create_model(args):
     return model
 
 
+def _train_reversible_three_phase(args, model, train_loader, test_loader, paths, device):
+    """RevGraphVAMP three-phase schedule (VAMPU/VAMPS + VAMP-E).
+
+    Distinct from the single-phase path in ``train_model``. See
+    ``RevVAMPNet.fit_three_phase`` and claude/REVGRAPHVAMP_TODO.md.
+    """
+    import torch.nn.functional as F
+    act_map = {'exp': torch.exp, 'abs': torch.abs, 'softplus': F.softplus}
+    act_name = getattr(args, 'rev_activation', None) or 'exp'
+    activation = act_map[act_name]
+
+    missing = [n for n in ('epoch_chi', 'epoch_us', 'epoch_all')
+               if getattr(args, n, None) is None]
+    if missing:
+        raise ValueError(f"--rev_three_phase requires {missing} to be set")
+
+    lr_chi = getattr(args, 'lr_chi', None) or 5e-4
+    lr_us = getattr(args, 'lr_us', None) or 5e-4
+    lr_all = getattr(args, 'lr_all', None) or 1e-4
+    wd = args.weight_decay if getattr(args, 'weight_decay', None) is not None else 1e-5
+
+    print(f"RevGraphVAMP 3-phase schedule: "
+          f"chi={args.epoch_chi}@{lr_chi} (VAMP-2), "
+          f"us={args.epoch_us}@{lr_us} (VAMP-E), "
+          f"all={args.epoch_all}@{lr_all} (VAMP-E); "
+          f"activation={act_name}, renorm={getattr(args, 'rev_renorm', False)}")
+
+    model.attach_vampe_layer(
+        n_states=args.n_states,
+        activation=activation,
+        renorm=getattr(args, 'rev_renorm', False),
+    )
+    return model.fit_three_phase(
+        train_loader=train_loader,
+        test_loader=test_loader,
+        device=device,
+        epoch_chi=args.epoch_chi,
+        epoch_us=args.epoch_us,
+        epoch_all=args.epoch_all,
+        lr_chi=lr_chi, lr_us=lr_us, lr_all=lr_all,
+        weight_decay=wd,
+        save_dir=paths['model_dir'],
+        verbose=True,
+    )
+
+
 def train_model(args, model, train_loader, test_loader, paths):
     """Train the model"""
     # Set device
     device = torch.device("cpu" if args.cpu else "cuda" if torch.cuda.is_available() else "cpu")
+
+    # RevGraphVAMP three-phase path (VAMPU/VAMPS + VAMP-E) — bypasses the
+    # single-phase optimizer/fit below.
+    if getattr(args, 'reversible', False) and getattr(args, 'rev_three_phase', False):
+        return _train_reversible_three_phase(
+            args, model, train_loader, test_loader, paths, device)
 
     # Create optimizer
     optimizer = torch.optim.AdamW(

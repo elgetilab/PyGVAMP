@@ -215,7 +215,34 @@ Examples:
                              'Use when the XTC/DCD time metadata is incorrect '
                              '(e.g. --timestep 0.2 for 0.2 ns between frames)')
     parser.add_argument('--reversible', action='store_true',
-                        help='Use RevGraphVAMP (reversible likelihood-based training)')
+                        help='Use a reversible (detailed-balance) VAMPNet. Default '
+                             'training is the single-phase NLL score; pass '
+                             '--rev_three_phase for the faithful RevGraphVAMP '
+                             'schedule.')
+    # RevGraphVAMP three-phase schedule (Huang 2024). Requires --reversible.
+    # chi: train encoder+classifier with VAMP-2; us: freeze chi, train VAMPU/VAMPS
+    # with VAMP-E; all: train everything with VAMP-E. See claude/REVGRAPHVAMP_TODO.md.
+    parser.add_argument('--rev_three_phase', action='store_true',
+                        help='Use the RevGraphVAMP 3-phase schedule (VAMPU/VAMPS + '
+                             'VAMP-E) instead of the single-phase NLL. Requires --reversible.')
+    parser.add_argument('--epoch_chi', type=int, default=None,
+                        help='[3-phase] Epochs for phase 1 (train chi with VAMP-2).')
+    parser.add_argument('--epoch_us', type=int, default=None,
+                        help='[3-phase] Epochs for phase 2 (freeze chi; train VAMPU/VAMPS with VAMP-E).')
+    parser.add_argument('--epoch_all', type=int, default=None,
+                        help='[3-phase] Epochs for phase 3 (train all with VAMP-E).')
+    parser.add_argument('--lr_chi', type=float, default=None,
+                        help='[3-phase] LR for phase 1 (default 5e-4).')
+    parser.add_argument('--lr_us', type=float, default=None,
+                        help='[3-phase] LR for phase 2 (default 5e-4).')
+    parser.add_argument('--lr_all', type=float, default=None,
+                        help='[3-phase] LR for phase 3 (default 1e-4).')
+    parser.add_argument('--rev_activation', type=str, default=None,
+                        choices=['exp', 'abs', 'softplus'],
+                        help='[3-phase] Positivity activation for VAMPU/VAMPS kernels '
+                             '(default exp, matching deep_rev_msm/RevGraphVAMP).')
+    parser.add_argument('--rev_renorm', action='store_true',
+                        help='[3-phase] Enable the VAMPS w1 renorm heuristic (default off).')
     parser.add_argument('--cpu', action='store_true',
                         help='Force CPU usage even if CUDA is available')
     parser.add_argument('--no_continuous', action='store_true',
