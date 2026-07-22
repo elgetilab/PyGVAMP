@@ -173,9 +173,12 @@ Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_r
 
 ### Per system
 
-- [ ] **Trp-cage:** SchNet, GIN, ML3 × 10 seeds = 30 runs
-- [ ] **Villin:** SchNet, GIN, ML3 × 10 seeds = 30 runs
-- [ ] **NTL9:** SchNet, GIN, ML3 × 10 seeds = 30 runs
+- [x] **Trp-cage:** SchNet, GIN, ML3 × 10 seeds. DONE — native GIN ≈ SchNet (4.6481 vs 4.6516), ML3 below (4.5743). See [experiments/trpcage_encoders.md](../experiments/trpcage_encoders.md).
+- [x] **Villin:** SchNet, GIN, ML3 × 10 seeds. DONE (native) — **SchNet 3.6923 > GIN 3.5894 > ML3 3.5513**; neither alt reaches SchNet. See [experiments/villin_encoders.md](../experiments/villin_encoders.md).
+- [~] **NTL9:** SchNet, GIN, ML3 × 10 seeds. PARTIAL/messy — GIN native **unstable (2/10 collapse to 1.0)**, non-collapsed ~4.28 (≈ below SchNet 4.3459); ML3 native **no usable run (CUDA-OOM 9/10 + 1 collapse)**. GIN analysis recovered via `ntl9_gin_native_analysis_array.sh`. See [experiments/ntl9_encoders.md](../experiments/ntl9_encoders.md).
+
+**Decision (2026-07-01):** dropped the de-tuned regime for Villin/NTL9 — the sweep is native-only (SchNet paper-cfg vs GIN/ML3 native). The SchNet reproduction runs (Category 1) serve as the SchNet arm; no re-run.
+**Decision (2026-07-14):** NTL9 native GIN/ML3 left as-is (no retrain) — instability/OOM reported as findings rather than sinking ~2–3 more weeks into reruns; GIN native analysis-only recovery run for the ITS/CK/state artifacts.
 - [ ] **Alanine dipeptide:** SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
 - [ ] **Aβ42** (full dataset, matching RevGraphVAMP): SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
 - [ ] **Aβ42-red** (if you have the split): SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
