@@ -115,6 +115,17 @@ class BaseConfig:
 
     # Reversibility constraints
     reversible: bool = False            # Use RevGraphVAMP (reversible likelihood loss)
+    # RevGraphVAMP three-phase schedule (VAMPU/VAMPS + VAMP-E). Requires reversible.
+    # Default off → single-phase NLL. See claude/REVGRAPHVAMP_TODO.md.
+    rev_three_phase: bool = False
+    epoch_chi: Optional[int] = None     # phase 1 (train chi with VAMP-2) epochs
+    epoch_us: Optional[int] = None      # phase 2 (freeze chi; train VAMPU/VAMPS) epochs
+    epoch_all: Optional[int] = None     # phase 3 (train all with VAMP-E) epochs
+    lr_chi: float = 5e-4
+    lr_us: float = 5e-4
+    lr_all: float = 1e-4
+    rev_activation: str = "exp"         # VAMPU/VAMPS kernel activation (exp|abs|softplus)
+    rev_renorm: bool = False            # VAMPS w1 renorm heuristic
 
     # Hardware
     cpu: bool = False

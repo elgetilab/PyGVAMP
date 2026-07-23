@@ -1202,6 +1202,16 @@ def main():
     # Reversible training
     if args.reversible:
         config.reversible = True
+    # RevGraphVAMP three-phase schedule overrides
+    if getattr(args, 'rev_three_phase', False):
+        config.rev_three_phase = True
+    for _f in ('epoch_chi', 'epoch_us', 'epoch_all',
+               'lr_chi', 'lr_us', 'lr_all', 'rev_activation'):
+        _v = getattr(args, _f, None)
+        if _v is not None:
+            setattr(config, _f, _v)
+    if getattr(args, 'rev_renorm', False):
+        config.rev_renorm = True
 
     # State diagnostics overrides
     if args.population_threshold is not None:
