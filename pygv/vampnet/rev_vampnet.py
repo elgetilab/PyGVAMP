@@ -4,7 +4,7 @@ from typing import Union, Tuple
 from pygv.classifier.SoftmaxMLP import SoftmaxMLP
 from pygv.scores.reversible_score import ReversibleVAMPScore
 from pygv.scores.reversible_vampe import (
-    VAMPU, VAMPS, vampe_trace_loss, apply_phase_freeze,
+    VAMPU, VAMPS, vampe_trace_loss, apply_phase_freeze, algebraic_init_us,
 )
 from torch_geometric.nn.models import MLP
 import os
@@ -975,6 +975,26 @@ class RevVAMPNet(nn.Module):
         vamp_e, K, S = self.vamps(v, C00, C11, C01, sigma)
         return vampe_trace_loss(vamp_e)
 
+    def _collect_chi(self, loader, device):
+        """Concatenate frozen-χ softmax outputs (chi_0, chi_t) over the full loader.
+
+        Used for the algebraic U/S init (RevGraphVAMP Stage 2), which needs the
+        pretrained-χ assignments over the whole training set. Collected on CPU to
+        stay memory-safe on large datasets.
+        """
+        self.eval()
+        t0s, t1s = [], []
+        with torch.no_grad():
+            for batch in loader:
+                d0, d1 = batch
+                d0 = d0.to(device, non_blocking=True)
+                d1 = d1.to(device, non_blocking=True)
+                c0, c1 = self._chi_pair(d0, d1)
+                t0s.append(c0.cpu())
+                t1s.append(c1.cpu())
+        self.train()
+        return torch.cat(t0s, dim=0), torch.cat(t1s, dim=0)
+
     def _validate_scores(self, loader, device):
         """Paper-comparable val scores on concatenated val chi (VAMP-2 & VAMP-E)."""
         if loader is None or len(loader) == 0:
@@ -1001,13 +1021,20 @@ class RevVAMPNet(nn.Module):
     def fit_three_phase(self, train_loader, test_loader=None, device=None,
                         epoch_chi=100, epoch_us=100, epoch_all=100,
                         lr_chi=5e-4, lr_us=5e-4, lr_all=1e-4,
-                        weight_decay=1e-5, save_dir='models', verbose=True):
-        """RevGraphVAMP three-phase training.
+                        weight_decay=1e-5, save_dir='models', verbose=True,
+                        algebraic_us_init=True):
+        """RevGraphVAMP training schedule (faithful to their train_ab.py).
 
         Phase 1 ('chi'): train χ with VAMP-2 (lr_chi).
-        Phase 2 ('us') : freeze χ, train VAMPU+VAMPS with VAMP-E-trace (lr_us).
-        Phase 3 ('all'): train all with VAMP-E-trace (lr_all); best model tracked
-                         by validation VAMP-2 (the headline metric).
+        Stage 2 (default, ``algebraic_us_init=True``): closed-form init of the
+            VAMPU/VAMPS kernels from the frozen-χ covariances over the full train
+            set (RevGraphVAMP's ``update_auxiliary_weights``) — NOT gradient
+            training. ``epoch_us``/``lr_us`` are ignored in this mode.
+        Phase 3 ('all'): joint-train all with VAMP-E-trace (lr_all); best model
+            tracked by validation VAMP-2 (the headline metric).
+
+        Set ``algebraic_us_init=False`` to instead gradient-train VAMPU/VAMPS in a
+        separate phase 'us' (a documented deviation; not RevGraphVAMP's protocol).
 
         Requires ``attach_vampe_layer()`` to have been called. Returns a history
         dict; loads the best (phase-3) model state before returning.
@@ -1030,9 +1057,28 @@ class RevVAMPNet(nn.Module):
         best_vamp2 = -float('inf')
         best_state = None
 
-        phases = [('chi', epoch_chi, lr_chi),
-                  ('us',  epoch_us,  lr_us),
-                  ('all', epoch_all, lr_all)]
+        def _consider_best(scores):
+            """Track/persist the best model by val VAMP-2 (headline metric).
+
+            Called both after the algebraic init and each phase-3 epoch, so a
+            strong post-init model isn't lost if joint training later drifts.
+            """
+            nonlocal best_vamp2, best_state
+            if not scores:
+                return
+            history['val_vamp2'].append(scores['vamp2'])
+            history['val_vampe'].append(scores['vampe'])
+            if scores['vamp2'] > best_vamp2:
+                best_vamp2 = scores['vamp2']
+                best_state = {k: v.detach().cpu().clone()
+                              for k, v in self.state_dict().items()}
+                if save_dir:
+                    self.save_complete_model(os.path.join(save_dir, "best_model.pt"))
+
+        phases = [('chi', epoch_chi, lr_chi)]
+        if not algebraic_us_init:
+            phases.append(('us', epoch_us, lr_us))   # gradient variant (deviation)
+        phases.append(('all', epoch_all, lr_all))
 
         for name, n_epochs, lr in phases:
             trainable, loss_kind = apply_phase_freeze(
@@ -1066,23 +1112,25 @@ class RevVAMPNet(nn.Module):
                 # Model selection only in the final phase.
                 if name == 'all' and test_loader is not None:
                     scores = self._validate_scores(test_loader, device)
-                    if scores is not None:
-                        history['val_vamp2'].append(scores['vamp2'])
-                        history['val_vampe'].append(scores['vampe'])
-                        if scores['vamp2'] > best_vamp2:
-                            best_vamp2 = scores['vamp2']
-                            best_state = {k: v.detach().cpu().clone()
-                                          for k, v in self.state_dict().items()}
-                            # Persist the best model where the pipeline discovers
-                            # it (<model_dir>/best_model.pt). The model is at its
-                            # best weights right now (validated this epoch).
-                            if save_dir:
-                                self.save_complete_model(
-                                    os.path.join(save_dir, "best_model.pt"))
-                        if verbose:
-                            print(f"  epoch {epoch+1}: val VAMP-2={scores['vamp2']:.4f}"
-                                  f"  VAMP-E={scores['vampe']:.4f}"
-                                  f"  (best VAMP-2={best_vamp2:.4f})")
+                    _consider_best(scores)
+                    if verbose and scores is not None:
+                        print(f"  epoch {epoch+1}: val VAMP-2={scores['vamp2']:.4f}"
+                              f"  VAMP-E={scores['vampe']:.4f}"
+                              f"  (best VAMP-2={best_vamp2:.4f})")
+
+            # Stage 2 (RevGraphVAMP): closed-form U/S init after χ pretraining.
+            if name == 'chi' and algebraic_us_init:
+                chi_0, chi_t = self._collect_chi(train_loader, device)
+                algebraic_init_us(self.vampu, self.vamps, chi_0, chi_t)
+                init_scores = (self._validate_scores(test_loader, device)
+                               if test_loader is not None else None)
+                _consider_best(init_scores)   # keep the post-init model if it's best
+                if verbose:
+                    msg = "[RevGraphVAMP] algebraic U/S init done (Stage 2)"
+                    if init_scores is not None:
+                        msg += (f"  val VAMP-2={init_scores['vamp2']:.4f}"
+                                f"  VAMP-E={init_scores['vampe']:.4f}")
+                    print(msg)
 
         if best_state is not None:
             self.load_state_dict(best_state)

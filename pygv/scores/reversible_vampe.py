@@ -26,6 +26,7 @@ fires, so a genuine state collapse is distinguishable from a numerical blow-up.
 
 import warnings
 
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -195,6 +196,88 @@ def reversible_vampe_score(vamp_e: torch.Tensor) -> torch.Tensor:
     the ``+1`` constant), use ``VAMPScore(method='VAMPE')`` on the model outputs.
     """
     return -torch.trace(vamp_e)
+
+
+# --- Algebraic U/S initialization (RevGraphVAMP Stage 2) -------------------
+# Faithful port of RevGraphVAMP's update_auxiliary_weights / covariances_E /
+# matrix_inverse / _compute_pi (revvamp.py). After phase-1 χ pretraining, the u
+# and S kernels are set in CLOSED FORM from the frozen-χ covariances (no gradient
+# training), then phase 3 jointly refines. Verbatim spec: REVGRAPHVAMP_TODO.md.
+
+def matrix_inverse(mat, epsilon: float = 1e-10):
+    """Eigendecomposition pseudo-inverse (eigenvalues <= epsilon dropped).
+
+    Mirrors RevGraphVAMP's ``matrix_inverse``. Accepts a torch tensor or ndarray;
+    returns an ndarray. Used only in the one-shot algebraic init (no autograd).
+    """
+    m = mat.detach().cpu().numpy() if torch.is_tensor(mat) else np.asarray(mat)
+    eigva, eigveca = np.linalg.eigh(m)
+    inc = eigva > epsilon
+    eigv, eigvec = eigva[inc], eigveca[:, inc]
+    return eigvec @ np.diag(1.0 / eigv) @ eigvec.T
+
+
+def covariances_E(chil, chir):
+    """Non-mean-removed covariances: returns (C0inv, Ctau).
+
+    ``C0 = (1/N) chilᵀ chil``, ``Ctau = (1/N) chilᵀ chir``, ``C0inv`` = eigh
+    pseudo-inverse of ``C0``. Mirrors RevGraphVAMP's ``covariances_E`` (the
+    reversible init deliberately keeps the mean — the constant singular function
+    carries the stationary information).
+    """
+    c = chil.detach().cpu().numpy() if torch.is_tensor(chil) else np.asarray(chil)
+    ct = chir.detach().cpu().numpy() if torch.is_tensor(chir) else np.asarray(chir)
+    norm = 1.0 / c.shape[0]
+    C0 = norm * (c.T @ c)
+    Ctau = norm * (c.T @ ct)
+    return matrix_inverse(C0), Ctau
+
+
+def compute_pi(K):
+    """Stationary distribution of transition matrix ``K`` (left eigvec @ eigval≈1).
+
+    Mirrors RevGraphVAMP's ``_compute_pi``; takes the real part (``np.linalg.eig``
+    may return complex) and normalizes to sum 1.
+    """
+    eigv, eigvec = np.linalg.eig(np.asarray(K).T)
+    pi_v = np.real(eigvec[:, ((eigv - 1) ** 2).argmin()])
+    return pi_v / pi_v.sum(keepdims=True)
+
+
+def algebraic_init_us(vampu: "VAMPU", vamps: "VAMPS",
+                      chi_0: torch.Tensor, chi_t: torch.Tensor,
+                      epsilon: float = 1e-10):
+    """Closed-form init of the VAMPU/VAMPS kernels (RevGraphVAMP Stage 2).
+
+    Sets ``vampu._u_kernel`` and ``vamps._s_kernel`` from the frozen-χ covariances
+    so that (with the exp activation) VAMPU reconstructs ``|C0inv·pi|`` and VAMPS
+    reconstructs ``|0.5·S_rev|``. ``chi_0/chi_t`` are the frozen-χ softmax outputs
+    over the (full) training set, shape (N, M). In-place, no autograd.
+
+    Note: ``log|x|`` is floored at ``log(epsilon)`` (guards exact zeros — a safe
+    deviation from the reference's bare ``log|x|`` which would give -inf).
+    """
+    C0inv, Ctau = covariances_E(chi_0, chi_t)          # numpy (M,M)
+    K = C0inv @ Ctau                                    # non-reversible Koopman
+
+    # --- u kernel (optimize_u) ---
+    pi = compute_pi(K)                                  # (M,)
+    u_kernel = np.log(np.maximum(np.abs(C0inv @ pi), epsilon))
+    dev = vampu._u_kernel.device
+    with torch.no_grad():
+        vampu._u_kernel.copy_(torch.as_tensor(
+            u_kernel, dtype=vampu._u_kernel.dtype, device=dev))
+
+    # --- S kernel (optimize_S) — sigma comes from a VAMPU forward with the new u ---
+    with torch.no_grad():
+        _, _, _, _, _, sigma, _ = vampu(chi_0.to(dev), chi_t.to(dev))
+    sigma_inv = matrix_inverse(sigma, epsilon)          # numpy (M,M)
+    S_nonrev = K @ sigma_inv
+    S_rev = 0.5 * (S_nonrev + S_nonrev.T)
+    s_kernel = np.log(np.maximum(np.abs(0.5 * S_rev), epsilon))
+    with torch.no_grad():
+        vamps._s_kernel.copy_(torch.as_tensor(
+            s_kernel, dtype=vamps._s_kernel.dtype, device=vamps._s_kernel.device))
 
 
 # --- Three-phase training schedule (RevGraphVAMP) --------------------------

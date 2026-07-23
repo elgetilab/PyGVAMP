@@ -13,12 +13,12 @@
 #
 # LAG: 20 ps = 0.02 ns at timestep 0.001 ns/frame.
 #
-# ⚠️ SCHEDULE FIDELITY (OPEN): RevGraphVAMP parametrizes its schedule with TWO
-# knobs (pre_train_epoch + epochs) and may algebraically initialize U/S before
-# the joint phase, whereas our driver uses THREE gradient-trained phase counts
-# (epoch_chi/us/all). The values below are PROVISIONAL. Confirm the exact
-# mapping against their train_ala.py training loop before trusting the numbers
-# (tracked as an open item in REVGRAPHVAMP_TODO.md).
+# SCHEDULE (faithful to RevGraphVAMP train_ala.py, resolved 2026-07-23):
+#   phase chi (VAMP-2, epoch_chi) -> ALGEBRAIC U/S init (closed form, no gradient)
+#   -> phase all (joint VAMP-E, epoch_all). --epoch_us is IGNORED in this
+#   (default) faithful mode; kept only to satisfy the CLI. Their knobs are
+#   pre_train_epoch (=epoch_chi) and epochs (=epoch_all). EPOCH values below are
+#   PROVISIONAL — confirm the exact pre_train/epochs from their run command.
 #
 # MODULE: needs the working-tree reversible 3-phase code (not yet in the deployed
 # module) → run with PYGVAMP_SRC_OVERRIDE (set below via the opt-in hook).
@@ -61,10 +61,10 @@ fi
 SEED=${SLURM_ARRAY_TASK_ID}
 RUN_DIR=$(printf "/mnt/hdd/experiments/alanine_rev_v1/seed_%02d" "${SEED}")
 
-# --- 3-phase schedule (PROVISIONAL — see fidelity note above) ---
-EPOCH_CHI=100     # phase 1: train χ with VAMP-2
-EPOCH_US=20       # phase 2: freeze χ, train VAMPU/VAMPS with VAMP-E
-EPOCH_ALL=100     # phase 3: train all with VAMP-E
+# --- schedule (PROVISIONAL — see note above) ---
+EPOCH_CHI=100     # phase 1: pretrain χ with VAMP-2 (their pre_train_epoch)
+EPOCH_US=0        # IGNORED in faithful mode (algebraic U/S init replaces phase 2)
+EPOCH_ALL=100     # phase 3: joint VAMP-E training (their epochs)
 
 JOB_NAME="ala_rev_seed${SEED}"
 scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null

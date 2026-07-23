@@ -25,6 +25,7 @@ import torch
 from pygv.scores.reversible_vampe import (
     VAMPU, VAMPS, vampe_trace_loss, reversible_vampe_score, _clamp_away_from_zero,
     PHASE_CONFIG, apply_phase_freeze,
+    matrix_inverse, covariances_E, compute_pi, algebraic_init_us,
 )
 from pygv.scores.vamp_score_v0 import VAMPScore
 
@@ -187,3 +188,76 @@ def test_three_phase_dispatch_requires_epoch_args():
         _train_reversible_three_phase(args, model=None, train_loader=None,
                                       test_loader=None, paths={'model_dir': '/tmp'},
                                       device='cpu')
+
+
+# --- Algebraic U/S init (RevGraphVAMP Stage 2) -----------------------------
+
+def test_matrix_inverse_matches_numpy_inv():
+    import numpy as np
+    torch.manual_seed(0)
+    A = torch.randn(5, 5)
+    spd = A @ A.t() + 3.0 * torch.eye(5)   # well-conditioned SPD
+    inv = matrix_inverse(spd)
+    np.testing.assert_allclose(inv, np.linalg.inv(spd.numpy()), rtol=1e-4, atol=1e-5)
+
+
+def test_compute_pi_recovers_stationary():
+    import numpy as np
+    # K row-stochastic with known stationary pi = [2/3, 1/3].
+    K = np.array([[0.8, 0.2], [0.4, 0.6]])
+    pi = compute_pi(K)
+    np.testing.assert_allclose(pi, [2.0 / 3.0, 1.0 / 3.0], atol=1e-6)
+    # pi is a left eigenvector for eigenvalue 1: pi @ K == pi
+    np.testing.assert_allclose(pi @ K, pi, atol=1e-6)
+
+
+def test_covariances_E_reconstructs_koopman():
+    import numpy as np
+    chi0, chi1 = _random_chi(n_batch=500, M=3, seed=7)
+    C0inv, Ctau = covariances_E(chi0, chi1)
+    K = C0inv @ Ctau
+    # Manual: K = C00^{-1} C01 with non-mean-removed covariances.
+    c0 = chi0.numpy(); c1 = chi1.numpy(); n = c0.shape[0]
+    C00 = (c0.T @ c0) / n
+    C01 = (c0.T @ c1) / n
+    np.testing.assert_allclose(K, np.linalg.inv(C00) @ C01, rtol=1e-3, atol=1e-4)
+
+
+def test_algebraic_init_recovers_reversible_vampe_on_metastable_data():
+    """On data with real metastability, the closed-form init should lift the
+    reversible VAMP-E from its (bad) default up to near the standard VAMP-E
+    ceiling — the whole point of RevGraphVAMP Stage 2. (On structureless/random
+    chi there is nothing to fit, so this is tested on a genuine 2-state process.)
+    """
+    import numpy as np
+    rng = np.random.RandomState(0)
+    N, p_stay = 20000, 0.99                 # slow 2-state Markov chain
+    s = np.zeros(N, dtype=int)
+    for i in range(1, N):
+        s[i] = s[i - 1] if rng.rand() < p_stay else 1 - s[i - 1]
+
+    def to_chi(states):                     # near one-hot softmax features + noise
+        logits = np.zeros((len(states), 2))
+        logits[np.arange(len(states)), states] = 3.0
+        logits += 0.5 * rng.randn(len(states), 2)
+        e = np.exp(logits)
+        return (e / e.sum(1, keepdims=True)).astype(np.float32)
+
+    chi0 = torch.from_numpy(to_chi(s[:-1]))
+    chi1 = torch.from_numpy(to_chi(s[1:]))
+    vampu, vamps = VAMPU(2, activation=torch.exp), VAMPS(2, activation=torch.exp)
+
+    def rev_vampe():
+        u, v, C00, C11, C01, sig, mu = vampu(chi0, chi1)
+        ve, K, S = vamps(v, C00, C11, C01, sig)
+        return reversible_vampe_score(ve).item()
+
+    before = rev_vampe()
+    algebraic_init_us(vampu, vamps, chi0, chi1)
+    after = rev_vampe()
+    ceiling = VAMPScore(method='VAMPE')(chi0, chi1).item()
+
+    assert after > before, f"init did not improve VAMP-E: {before} -> {after}"
+    assert after > ceiling - 0.3, f"init VAMP-E {after} far below ceiling {ceiling}"
+    assert torch.isfinite(vampu._u_kernel).all()
+    assert torch.isfinite(vamps._s_kernel).all()

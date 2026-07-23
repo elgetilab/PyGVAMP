@@ -232,11 +232,15 @@ WHY exp activation is right: forward does `activation(exp)(_u_kernel)` → `exp(
 so the log-init inverts the exp activation. (Guard the `log(abs(...))` against zeros.)
 
 ### Revised step-5 plan
-- (5a) Implement `covariances_E`/`matrix_inverse`/`_compute_pi`/`update_auxiliary_weights`
-  (in reversible_vampe.py + a RevVAMPNet method) + correctness test (K stationary
-  recovers pi; S symmetric; init reduces VAMP-E vs random). Rewire `fit_three_phase`
-  to: phase chi (VAMP-2) → **algebraic init over full train set** → phase all (VAMP-E).
-  Keep gradient phase `us` only as an opt-in fallback (default off).
+- [x] (5a) DONE 2026-07-23. `reversible_vampe.py`: `matrix_inverse`, `covariances_E`,
+  `compute_pi`, `algebraic_init_us` (faithful port). `rev_vampnet.py`:
+  `_collect_chi` + `fit_three_phase` rewired to chi(VAMP-2) → algebraic U/S init →
+  all(VAMP-E), with `algebraic_us_init=True` default (gradient `us` kept as opt-in
+  fallback). Best model tracked after init AND each phase-3 epoch. Tests (16 pass):
+  matrix_inverse vs np.inv, compute_pi vs known stationary, covariances_E vs manual
+  Koopman, and metastable-data init recovers reversible VAMP-E to near the standard
+  ceiling (−1.76 → 1.81 vs 1.94). Smoke: chi → "algebraic U/S init done" → all →
+  PIPELINE COMPLETED. `epoch_us` now ignored in faithful mode (alanine script updated).
 - (5b) Aβ42 repro SLURM script (red dir, 42 CA, k4, lag10ns, batch500, gaussian
   dmin0/dmax8/step0.5) + a reversible aggregator (parse "val VAMP-2=/VAMP-E=" →
   cross-seed mean±CI) + tracking md. Alanine script already written (update its
