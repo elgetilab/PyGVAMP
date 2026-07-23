@@ -161,14 +161,88 @@ Shared hp (both systems): hidden_dim=16, n_graph_layers=4, n_Gaussians=16, batch
 - [x] (4) Data prep — DONE 2026-07-22. Alanine downloaded+verified (750k frames,
       10 heavy) via `download_alanine.sh`; Aβ42 = red ensemble already on disk
       (5119 trajs, 42 CA), no combining needed (see corrected Data status above).
-- [ ] (5) SLURM scripts + aggregator + tracking md; then run 10 seeds each ← NEXT
-      Alanine: `--reversible --rev_three_phase`, model schnet χ, selection
-      'not element H', n_neighbors 5, k 6, lag 0.02 ns, timestep 0.001, hidden 16,
-      gaussian 16, batch 1000, 70/30. Aβ42: red dir recursive, 'name CA' (42),
-      n_neighbors 10, k 4, lag 10 ns, batch 500, gaussian dmin0/dmax8/step0.5,
-      epoch_chi/us/all e.g. 300/.../1000 (confirm from train_ab.py). First do a
-      tiny alanine smoke run (2/2/2 epochs) — this is the FIRST end-to-end exercise
-      of fit_three_phase on real graph data.
+- [~] (5) SLURM scripts + aggregator + tracking; run 10 seeds each ← IN PROGRESS
+      DONE so far: alanine data + alanine_rev_v1_array.sh; pipeline config plumbing
+      fixed (base_config fields + args→config map, commit c65a574); smoke run
+      PASSED end-to-end (chi/us/all dispatch, U+S freeze = 2 params, best_model,
+      analysis, PIPELINE COMPLETED). Schedule-fidelity resolved: their protocol =
+      χ-VAMP2 → algebraic U/S init → joint VAMP-E; decision = implement faithfully.
+      REMAINING: (5a) algebraic init + driver rewire + test [spec above];
+      (5b) Aβ42 script + reversible aggregator + tracking; (5c) GPU smoke then
+      10-seed runs (alanine + Aβ42). Recommend doing 5a as a fresh focused step.
+
+## SCHEDULE FIDELITY — RESOLVED against their train_ab.py (2026-07-23)
+
+Their ACTUAL protocol is NOT 3 gradient phases. From `train_ab.py`:
+1. Stage 1 (`pre_train_epoch`): freeze VAMPU/VAMPS, train χ with **VAMP-2**.
+2. Stage 2 (**algebraic, no gradient**): transform all data through frozen χ →
+   `vampnet.update_auxiliary_weights([probs, probs_tau], optimize_S=True)` —
+   closed-form init of the u/S kernels from the encoder covariances
+   (`_compute_pi` / `optimize_S`).
+3. Stage 3 (`epochs`): unfreeze all, joint-train with **VAMPCE** (VAMP-E trace).
+
+OUR driver (`fit_three_phase`) does 3 GRADIENT phases (chi / us / all) — phase
+`us` gradient-trains U/S with frozen χ instead of the algebraic init. This is a
+**documented deviation**. Faithful reproduction needs Stage-2 algebraic init
+(port `update_auxiliary_weights`/`optimize_S`/`_compute_pi` from revvamp.py, add
+a correctness test) and then chi→init→all (phase `us` becomes optional/removed).
+DECISION PENDING (see chat): (A) implement algebraic init [faithful] vs
+(B) keep the gradient-phase-us approximation [documented deviation].
+
+Smoke run (2/2/2, alanine, CPU) PASSED end-to-end after the config-plumbing fix:
+dispatch chi(56 params,VAMP-2)/us(2 params,VAMP-E)/all(58,VAMP-E), U+S freeze
+verified, best_model.pt saved, analysis + PIPELINE COMPLETED. The mechanism is
+sound; only the Stage-2 init fidelity is open.
+
+## Algebraic U/S init — VERBATIM spec (decision: implement faithfully, 2026-07-23)
+
+Port these from `DS00HY/RevGraphVamp/src/revvamp.py` (chi_0/chi_t are the frozen-χ
+softmax outputs over the whole train set; assign into VAMPU._u_kernel / VAMPS._s_kernel):
+
+```python
+def matrix_inverse(mat, epsilon=1e-10):          # eigh pseudo-inverse
+    eigva, eigveca = np.linalg.eigh(mat.detach().cpu().numpy())
+    inc = eigva > epsilon
+    eigv, eigvec = eigva[inc], eigveca[:, inc]
+    return eigvec @ np.diag(1./eigv) @ eigvec.T
+
+def covariances_E(chil, chir):                   # NOT mean-removed
+    norm = 1./chil.shape[0]
+    C0, Ctau = norm * chil.T @ chil, norm * chil.T @ chir
+    return matrix_inverse(C0), Ctau              # (C0inv, Ctau)
+
+def _compute_pi(K):                              # stationary via left-eigvec @ eigval≈1
+    eigv, eigvec = np.linalg.eig(K.T)
+    pi_v = eigvec[:, ((eigv - 1)**2).argmin()]
+    return pi_v / pi_v.sum(keepdims=True)
+
+# update_auxiliary_weights(data=[chi_0, chi_t], optimize_u=True, optimize_S=True):
+C0inv, Ctau = covariances_E(chi_0, chi_t)
+K = C0inv @ Ctau                                  # non-reversible Koopman
+# optimize_u:
+pi = _compute_pi(K);  u_kernel = np.log(np.abs(C0inv @ pi))   # -> VAMPU._u_kernel
+# optimize_S (after a vampu forward to get sigma):
+sigma_inv = matrix_inverse(sigma)
+S_nonrev = K @ sigma_inv
+S_rev = 0.5*(S_nonrev + S_nonrev.T)
+s_kernel = np.log(np.abs(0.5 * S_rev))            # -> VAMPS._s_kernel
+```
+
+WHY exp activation is right: forward does `activation(exp)(_u_kernel)` → `exp(log|·|)=|·|`,
+so the log-init inverts the exp activation. (Guard the `log(abs(...))` against zeros.)
+
+### Revised step-5 plan
+- (5a) Implement `covariances_E`/`matrix_inverse`/`_compute_pi`/`update_auxiliary_weights`
+  (in reversible_vampe.py + a RevVAMPNet method) + correctness test (K stationary
+  recovers pi; S symmetric; init reduces VAMP-E vs random). Rewire `fit_three_phase`
+  to: phase chi (VAMP-2) → **algebraic init over full train set** → phase all (VAMP-E).
+  Keep gradient phase `us` only as an opt-in fallback (default off).
+- (5b) Aβ42 repro SLURM script (red dir, 42 CA, k4, lag10ns, batch500, gaussian
+  dmin0/dmax8/step0.5) + a reversible aggregator (parse "val VAMP-2=/VAMP-E=" →
+  cross-seed mean±CI) + tracking md. Alanine script already written (update its
+  schedule to pre_train+epochs once 5a lands).
+- (5c) Alanine smoke on GPU with real (unstrided) data + a few epochs to sanity a
+  non-degenerate VAMP-2, THEN 10-seed runs for alanine + Aβ42.
 
 ## Open questions to resolve before RUNNING (not before coding)
 
