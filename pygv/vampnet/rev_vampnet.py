@@ -1109,14 +1109,19 @@ class RevVAMPNet(nn.Module):
                 mean_loss = epoch_loss / max(n_batches, 1)
                 history['phase_epoch_loss'].append((name, epoch, mean_loss))
 
-                # Model selection only in the final phase.
-                if name == 'all' and test_loader is not None:
+                # Validate every phase (visibility into the χ-pretrain
+                # trajectory too), but do model selection only in the final phase
+                # — matching RevGraphVAMP's select-on-`epochs` protocol.
+                if test_loader is not None:
                     scores = self._validate_scores(test_loader, device)
-                    _consider_best(scores)
+                    if name == 'all':
+                        _consider_best(scores)
                     if verbose and scores is not None:
-                        print(f"  epoch {epoch+1}: val VAMP-2={scores['vamp2']:.4f}"
-                              f"  VAMP-E={scores['vampe']:.4f}"
-                              f"  (best VAMP-2={best_vamp2:.4f})")
+                        best_str = (f"  (best VAMP-2={best_vamp2:.4f})"
+                                    if name == 'all' else "")
+                        print(f"  [{name}] epoch {epoch+1}: "
+                              f"val VAMP-2={scores['vamp2']:.4f}"
+                              f"  VAMP-E={scores['vampe']:.4f}{best_str}")
 
             # Stage 2 (RevGraphVAMP): closed-form U/S init after χ pretraining.
             if name == 'chi' and algebraic_us_init:
