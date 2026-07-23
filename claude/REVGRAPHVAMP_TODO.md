@@ -241,10 +241,12 @@ so the log-init inverts the exp activation. (Guard the `log(abs(...))` against z
   Koopman, and metastable-data init recovers reversible VAMP-E to near the standard
   ceiling (−1.76 → 1.81 vs 1.94). Smoke: chi → "algebraic U/S init done" → all →
   PIPELINE COMPLETED. `epoch_us` now ignored in faithful mode (alanine script updated).
-- (5b) Aβ42 repro SLURM script (red dir, 42 CA, k4, lag10ns, batch500, gaussian
-  dmin0/dmax8/step0.5) + a reversible aggregator (parse "val VAMP-2=/VAMP-E=" →
-  cross-seed mean±CI) + tracking md. Alanine script already written (update its
-  schedule to pre_train+epochs once 5a lands).
+- [x] (5b) DONE 2026-07-23. `cluster_scripts/ab42_rev_v1_array.sh` (red dir, 42 CA,
+  k4, lag10ns@0.25, batch500, Gaussians [0,8], epoch_chi300/epoch_all1000, src
+  override); `cluster_scripts/aggregate_reversible_array.py` (parses
+  `val VAMP-2=/VAMP-E=`, reports cross-seed at max-VAMP-2 epoch; regex validated);
+  tracker `experiments/revgraphvamp_repro.md`. Alanine script schedule updated
+  (epoch_us ignored). Args validated (--distance_min/max exist), both scripts bash -n clean.
 - (5c) Alanine smoke on GPU with real (unstrided) data + a few epochs to sanity a
   non-degenerate VAMP-2, THEN 10-seed runs for alanine + Aβ42.
 
