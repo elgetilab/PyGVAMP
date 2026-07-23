@@ -5,6 +5,61 @@ Single source of truth for the RevGraphVAMP (reversible) reproduction. Written
 able to continue from this file alone. Companion: `REVGRAPHVAMP_VAMPE_VERIFICATION.md`
 (the code verification) and `EXPERIMENT_CHECKLIST.md` (Category 1, RevGraphVAMP rows).
 
+---
+## ⭐ RESTART / RESUME (written 2026-07-23, before a planned cluster restart)
+
+**State at restart:** working tree CLEAN; no running/queued SLURM jobs (nothing
+for the restart to kill). All work committed. HEAD = `0a4a66f`.
+
+**⚠️ BEFORE the restart — PUSH (I could not; do it from your env):**
+`git push origin main`, then confirm `origin/main` is at `0a4a66f`. Local
+`origin/main..HEAD` reads empty here but my shell can't reach GitHub to verify,
+so confirm the true remote yourself. This is the #1 thing to secure — the ~8
+RevGraphVAMP commits (809e6f3 → 0a4a66f) live only on this disk otherwise.
+
+**Survives the restart (on-disk, if the disk persists):** the repo + all commits;
+data at `/mnt/hdd/data/alanine/` (750k frames) and `/mnt/hdd/data/ab42/trajectories/red/`
+(5119 xtc); the deployed module + conda env at `/opt/software/pygvamp/1.0.0`.
+
+**Module note:** the DEPLOYED module LACKS the reversible-3-phase code, so all
+RevGraphVAMP runs must use the working-tree code via
+`--export=ALL,PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP` (the alanine
+& ab42 scripts document this). To bake it into the module instead, rebuild:
+`sudo bash module/install_module.sh --prefix /opt/software/pygvamp/1.0.0 --moduledir /opt/modulefiles --skip-env`.
+
+**RESUME HERE → step 5c (GPU smoke on REAL unstrided alanine, then full runs).**
+First, a modest real-data GPU smoke (one seed, few epochs) to confirm a
+NON-degenerate VAMP-2 climbing toward the ~4.41 regime (the earlier CPU smoke used
+heavy stride + 2–3 epochs → numbers meaningless, only the code path was checked):
+```
+sbatch --array=0 --export=ALL,PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP \
+    cluster_scripts/alanine_rev_v1_array.sh      # then read val VAMP-2 in the .out
+```
+(or edit EPOCH_CHI/EPOCH_ALL down to ~20/30 for a quicker smoke first). If VAMP-2
+looks sane, launch the full 10-seed arrays (alanine then Aβ42 — time one Aβ42 seed
+first, it's ~1.26M frames × 1300 epochs). Aggregate with
+`cluster_scripts/aggregate_reversible_array.py` (targets: alanine 4.41/4.38,
+Aβ42 3.99/3.99). Still-open before trusting numbers: confirm alanine's exact
+pre_train/epochs from their run cmd (Aβ42 uses GitHub 300/1000).
+
+## Implementation summary (what is built — all committed, all tested)
+- `pygv/scores/reversible_vampe.py` — VAMPU/VAMPS reversible layer, `vampe_trace_loss`,
+  phase-freeze (`PHASE_CONFIG`/`apply_phase_freeze`), and the algebraic init
+  (`matrix_inverse`, `covariances_E`, `compute_pi`, `algebraic_init_us`).
+- `pygv/vampnet/rev_vampnet.py` — `attach_vampe_layer`, `fit_three_phase`
+  (χ VAMP-2 → algebraic U/S init → joint VAMP-E; best-tracked; writes best_model.pt).
+  Old single-phase NLL `fit()` kept for back-compat.
+- `pygv/pipe/{args.py,training.py}` + `pygv/config/base_config.py` — CLI flags
+  (`--rev_three_phase`, `--epoch_chi/us/all`, `--lr_chi/us/all`, `--rev_activation`,
+  `--rev_renorm`) plumbed through config → `_train_reversible_three_phase`.
+- `cluster_scripts/{alanine_rev_v1_array.sh, ab42_rev_v1_array.sh,
+  aggregate_reversible_array.py, download_alanine.sh}`; tracker
+  `experiments/revgraphvamp_repro.md`.
+- Tests: `tests/test_reversible_vampe.py` (16 pass). VAMP-E verified identical to
+  their repo; full 3-phase smoke passed end-to-end (CPU). Full suite unaffected
+  (only pre-existing torch_scatter/Meta failures, unrelated).
+---
+
 ## Goal & success criteria
 
 Reproduce RevGraphVAMP (Huang et al. 2024) Table 2 with PyGVAMP:
