@@ -14,7 +14,17 @@
 #         glob is on by default) — 5119 xtc, ~1.26M frames, 250 ps/frame.
 #   top:  /mnt/hdd/data/ab42/trajectories/red/topol.pdb  (42 residues → 42 CA).
 # Selection 'name CA' = 42 atoms (matches GitHub --num-atoms 42; paper's 40 is the
-# outlier). Lag 10 ns = 40 frames at 0.25 ns/frame (--timestep 0.25 MANDATORY).
+# outlier).
+#
+# *** LAG CORRECTED 2026-07-24 — was 10.0 ns, which was WRONG ***
+#   The paper's tau=10 ns is its CK-TEST/ITS lag ("for the subsequent correctness
+#   test (CK test), a lag time of tau=10 ns"), NOT the training lag. Paper Table 1
+#   has no lag column; their code default is --tau 1 == ONE FRAME.
+#   Verified: their committed red_5nbrs_1ns_datainfo_min.npy lengths
+#   [252,337,266,262,226] match OUR r1/traj0000-0004 frame counts exactly, at
+#   dt=250 ps. So 1 frame = 0.25 ns -> training lag = 0.25 ns.
+#   (Same misread cost the alanine repro: 2.85 @20ps vs 4.41 @1ps. See
+#   experiments/revgraphvamp_repro.md.)
 # Edge Gaussians over [0,8] with 16 bins (their dmin0/dmax8/step0.5).
 #
 # ⚠️ EPOCHS: RevGraphVAMP GitHub Aβ42 uses pre_train=300 + epochs=1000 → set
@@ -69,7 +79,7 @@ RUN_DIR=$(printf "/mnt/hdd/experiments/ab42_rev_v1/seed_%02d" "${SEED}")
 
 # --- schedule (faithful: chi -> algebraic init -> joint VAMP-E) ---
 EPOCH_CHI=300     # pretrain χ with VAMP-2 (their pre_train_epoch)
-EPOCH_US=0        # IGNORED in faithful mode (algebraic U/S init)
+EPOCH_US=50       # stage 3: gradient U/S with chi frozen (their train_US)
 EPOCH_ALL=1000    # joint VAMP-E training (their epochs)
 
 JOB_NAME="ab42_rev_seed${SEED}"
@@ -92,9 +102,11 @@ pygvamp \
     --timestep     0.25 \
     --seed         "${SEED}" \
     --model        schnet \
+    --encoder_variant v2 \
     --selection    'name CA' \
+    `# paper Table 1 says 40 atoms; GitHub --num-atoms 42; topol.pdb has 42 CA -> OPEN, test both` \
     --stride       1 \
-    --lag_times    10.0 \
+    --lag_times    0.25 \
     --n_states     4 \
     --no_discover_states \
     --max_retrains 0 \
@@ -107,7 +119,7 @@ pygvamp \
     --lr_chi 5e-4 --lr_us 5e-4 --lr_all 1e-4 \
     --rev_activation exp \
     --hidden_dim            16 \
-    --output_dim            16 \
+    --output_dim            8 \
     --n_interactions        4 \
     --n_neighbors           10 \
     --gaussian_expansion_dim 16 \
