@@ -74,9 +74,38 @@ batch 200/1000, seeds 1–4, χ epochs to 120, joint epochs to 110, and joint lr
 ∈ {1e-4, 5e-4, 5e-3, 0.2}. All held ~2.85 at 20 ps — the invariance to every
 training knob is what finally pointed at the data/scoring convention.
 
-⚠️ OPEN: the paper prose reportedly says 20 ps while the code says tau=1. Verify
-what the paper actually claims for the alanine lag before writing this up; if the
-paper really says 20 ps, their reported 4.41 is inconsistent with their own code.
+### Paper checked directly (bioRxiv PDF, 2026-07-24) — NOT a paper error, OUR misread
+
+Downloaded `10.1101/2024.03.11.584426v1.full.pdf` and read the text:
+
+- **Table 1 "Hyperparameters of model training" has NO lag/tau column.** The paper
+  never states the training lag. Columns are: graph layers, neurons, states,
+  batch-size, learning rate, atoms, neighbors, Gaussians.
+- The only τ values in the paper are **CK-test / ITS lags**, not training lags:
+  alanine *"The implicit time function of the trained model is depicted in Figure 3a,
+  with a selected lag time of τ=20 ps"* (Figure 3 = *"Correctness verification …
+  (a) Implied timescale (ITS) (b) CK test results"*), and Aβ42 *"the implied
+  timescales … converged when the lag time τ=10 ns. Therefore, **for the subsequent
+  correctness test (CK test)**, a lag time of τ=10 ns is [used]"*.
+- Our `EXPERIMENT_CHECKLIST.md:128` claim "lag time = 20 ps (confirmed in Section
+  3.1.1)" **misattributed the CK-test lag as the training lag**. That is the whole
+  bug. With no training lag stated, their code default `--tau 1` (= 1 frame = 1 ps)
+  governs Table 2's VAMP scores — which is exactly where we reproduce 4.41.
+
+**Table 1 values confirm several of our settings and settle an open question:**
+
+| | layers | neurons | states | batch | lr | atoms | neighbors | Gaussians |
+|---|---|---|---|---|---|---|---|---|
+| Alanine | 4 | 16 | 6 | **1000** | **[0.0005, 0.0001]** | 10 | **5** | 16 |
+| Aβ42 | 4 | 16 | 4 | 500 | [0.0005, 0.0001] | **40** | 10 | 16 |
+
+- **lr = [0.0005, 0.0001]** ⇒ `set_optimizer_lr(0.2)` IS a factor (0.2 × 5e-4 = 1e-4).
+  Our `lr_chi 5e-4 / lr_all 1e-4` is confirmed correct by the paper, independently of
+  the collapse experiment.
+- **batch 1000** and **5 neighbors** for alanine confirm our original settings (the
+  bs=200 / nn=9 probes were chasing nothing — those came from Aβ42-oriented arg defaults).
+- **Aβ42 = 40 atoms in the paper** vs `--num-atoms 42` in their GitHub command, and
+  their `topol.pdb` has 42 CA. The 40-vs-42 question is still OPEN; run both.
 
 ## (historical) BLOCKER as diagnosed 2026-07-23 — χ-stage VAMP-2 ceilings at ~2.9
 

@@ -125,7 +125,10 @@ Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_r
 **One unresolved discrepancy:** The paper's Table 1 says Aβ42 uses **40 atoms** while the GitHub `train.py` command uses **`--num-atoms 42`**. Aβ42 has 42 amino acid residues. Worth checking their actual preprocessing code — they may select only 40 Cα positions due to terminal handling, or the paper table might have a typo. Test with both values and see which matches their published VAMP scores.
 
 - [ ] **Alanine dipeptide** (mdshare, 3 trajectories) — **NOT STARTED** (no data prepared, no cluster script). First reversible-path reproduction.
-  - k = 6, lag time = 20 ps (confirmed in Section 3.1.1)
+  - k = 6. **LAG CORRECTED 2026-07-24: training lag = 1 frame = 1 ps** (their
+    `--tau 1` default; paper Table 1 has NO lag column). The "20 ps" previously
+    noted here is the paper's **CK-test/ITS** lag (Figure 3), NOT the training
+    lag — misreading it cost the whole repro gap (2.85 @20ps vs 4.41 @1ps).
   - n_atoms = 10 (heavy atoms on main chain), n_neighbors = 5
   - batch_size = 1000
   - lr = [0.0005, 0.0001] — two-phase: 0.0005 for phase 1 (χ training), 0.0001 for phase 3 (full model)
