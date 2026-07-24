@@ -73,19 +73,53 @@ Diagnosis (all committed to this tracker + TODO):
    nn=9 → 2.90 (marginal); bs=200 → 2.58 (worse); nn9+bs200 → 2.73 (worse).
    The ~2.8–2.9 ceiling is robust to these knobs.
 
-Remaining hypotheses (NOT yet tested — need a decision on direction):
-- (A) **Table-2 4.41 is their graph-ATTENTION model, not SchNet.** "RevGraphVAMP"
-  = NeighborMultiHeadAttention encoder; SchNet is likely a baseline that scores
-  lower. Matching 4.41 may require porting their attention encoder (we have
-  schnet/gin/ml3, not NeighborMultiHeadAttention). ← strongest hypothesis.
-- (B) **Encoder-detail mismatch within SchNet path**: their GraphVampNet has
-  residual conns, attention/AA pooling, atom-embedding init, dropout=0.4, h_g=8
-  projection — options our SchNet-χ + classifier may not replicate.
-- (C) **State collapse mechanism** (3/6 states at 0%): could be seed-dependent;
-  a diagnostic multi-seed χ sweep would show if any seed escapes ~2.9 (frame as
-  diagnosis, NOT seed-cherry-picking — see user rigor pref).
-- Their exact alanine command line is NOT published (README shows only Aβ42,
-  data file `red_5nbrs_...` ⇒ Aβ42 uses 5 neighbors); can't just copy the recipe.
+### ⚠️ RETRACTED (2026-07-24): "they use a graph-attention encoder"
+
+An earlier version of this file claimed Table-2's 4.41 came from a
+NeighborMultiHeadAttention encoder and that SchNet could not reach it. **That was
+WRONG** — it came from an unreliable web-summary, not their source. Verified by
+cloning `github.com/DS00HY/RevGraphVamp` and reading the code directly:
+
+- Their README training command passes **`--conv_type SchNet`** explicitly (plus
+  `--residual`). `train_ala.py` does `lobe = GraphVampNet()` and never overrides
+  `conv_type`, whose default in `args.py` is `'SchNet'`.
+- `GraphVampNet` is a *wrapper* over 4 interchangeable convs (GraphConvLayer,
+  NeighborMultiHeadAttention, GATLayer, SchNet/InteractionBlock). SchNet is a
+  first-class choice, NOT a weak baseline.
+- **Our SchNet encoder choice is correct.** No attention encoder port is needed.
+
+### Verified against their source (2026-07-24, local clone)
+
+- **Alanine = 5 neighbors** (`--data-path` default `../intermediate/ala_5nbrs_1ns_`).
+  Our original `n_neighbors=5` was right; the nn=9 probe was chasing nothing.
+- **Alanine = 750,000 frames** (`ala_5nbrs_1ns_datainfo.npy` → 3×250,000).
+  Our dataset matches theirs exactly.
+- Aβ42 command (README): `--num-atoms 42 --num-classes 4 --num_neighbors 10
+  --conv_type SchNet --dmin 0 --dmax 8. --step 0.5 --batch-size 500 --lr 0.0005
+  --pre-train-epoch 300 --epochs 1000 --residual --score-method VAMPCE`.
+- **Their protocol is FOUR stages, not three** (`train_ala.py`):
+  1. χ VAMP-2 pretrain (`pre_train_epoch`, EarlyStopping patience=300)
+  2. algebraic init `update_auxiliary_weights([probs, probs_tau], optimize_S=True)`
+  3. **gradient U/S training `train_US()` with the lobe FROZEN** (`pre_train_epoch`
+     epochs, patience=100) ← **WE ARE MISSING THIS STAGE**
+  4. joint VAMPCE on all params (`epochs`, patience=200) after `set_optimizer_lr(0.2)`
+  Step 5a wrongly concluded the algebraic init *replaced* the gradient-US phase and
+  made it opt-in. Their code does **both**, in sequence.
+- **`set_optimizer_lr` is defined NOWHERE** — not in their repo, not in deeptime
+  (checked `DLEstimatorMixin`/`_vampnet.py` in a local deeptime clone). Their
+  published `train_ala.py:264` / `train_ab.py:277` would raise AttributeError
+  right before the joint phase ⇒ **the published code cannot run to completion
+  as-is**, and the joint-phase lr is NOT recoverable from their source. Our
+  `lr_all=1e-4` (reading 0.2 as a factor on 5e-4) is a reasonable GUESS, not fact.
+
+### χ-plateau is probably NOT the blocker (revised)
+
+χ VAMP-2 ~2.8 is robust across every variable tested — encoder variant v1 vs **v2**
+(2.85 vs 2.83), n_neighbors 5/9, batch 200/1000, and seeds 1–4 (2.83–2.86). Since
+their 4.41 is measured after the LONG joint VAMPCE phase (up to 1000 epochs,
+patience 200) which also trains the lobe, a ~2.8 χ pretrain plateau is plausibly
+normal. **Our joint phase only ever ran 30 epochs at lr 1e-4** → it never moved.
+NEXT: implement missing stage 3 + run a long joint phase before concluding anything.
 
 ### Still true / next
 - Aβ42 full run is long (~1.26M frames × 1300 epochs) — time one seed first,

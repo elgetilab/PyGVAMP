@@ -1023,18 +1023,29 @@ class RevVAMPNet(nn.Module):
                         lr_chi=5e-4, lr_us=5e-4, lr_all=1e-4,
                         weight_decay=1e-5, save_dir='models', verbose=True,
                         algebraic_us_init=True):
-        """RevGraphVAMP training schedule (faithful to their train_ab.py).
+        """RevGraphVAMP training schedule (faithful to their train_ala.py).
 
-        Phase 1 ('chi'): train χ with VAMP-2 (lr_chi).
-        Stage 2 (default, ``algebraic_us_init=True``): closed-form init of the
+        Verified 2026-07-24 against a local clone of DS00HY/RevGraphVamp. Their
+        protocol is FOUR stages, run in sequence:
+
+        Stage 1 ('chi'): train χ with VAMP-2 (lr_chi).
+        Stage 2 (``algebraic_us_init=True``, default): closed-form init of the
             VAMPU/VAMPS kernels from the frozen-χ covariances over the full train
-            set (RevGraphVAMP's ``update_auxiliary_weights``) — NOT gradient
-            training. ``epoch_us``/``lr_us`` are ignored in this mode.
-        Phase 3 ('all'): joint-train all with VAMP-E-trace (lr_all); best model
-            tracked by validation VAMP-2 (the headline metric).
+            set (their ``update_auxiliary_weights(..., optimize_S=True)``) — no
+            gradient.
+        Stage 3 ('us'): gradient-train VAMPU/VAMPS with χ FROZEN (their
+            ``train_US()``), ``epoch_us`` epochs at ``lr_us``. Runs whenever
+            ``epoch_us > 0`` — their code does the algebraic init AND this phase,
+            not one or the other. Set ``epoch_us=0`` to skip it.
+        Stage 4 ('all'): joint-train everything with VAMP-E-trace (lr_all); best
+            model tracked by validation VAMP-2 (the headline metric).
 
-        Set ``algebraic_us_init=False`` to instead gradient-train VAMPU/VAMPS in a
-        separate phase 'us' (a documented deviation; not RevGraphVAMP's protocol).
+        Known deviations: their ``train_US`` takes one full-batch step per epoch
+        over precomputed χ outputs, whereas this phase iterates minibatches. Their
+        joint-phase lr comes from ``set_optimizer_lr(0.2)``, which is defined
+        nowhere in their repo or in deeptime (their published script would raise
+        AttributeError there), so ``lr_all`` is our reading of 0.2 as a factor on
+        5e-4 — a guess, not recoverable from their source.
 
         Requires ``attach_vampe_layer()`` to have been called. Returns a history
         dict; loads the best (phase-3) model state before returning.
@@ -1075,9 +1086,13 @@ class RevVAMPNet(nn.Module):
                 if save_dir:
                     self.save_complete_model(os.path.join(save_dir, "best_model.pt"))
 
+        # RevGraphVAMP train_ala.py order: chi -> algebraic init -> gradient U/S
+        # -> all.  Their code runs the algebraic init AND a gradient U/S phase in
+        # sequence (not as alternatives), so 'us' is scheduled in both modes; the
+        # init itself is applied between 'chi' and 'us' in the loop below.
         phases = [('chi', epoch_chi, lr_chi)]
-        if not algebraic_us_init:
-            phases.append(('us', epoch_us, lr_us))   # gradient variant (deviation)
+        if epoch_us > 0:
+            phases.append(('us', epoch_us, lr_us))
         phases.append(('all', epoch_all, lr_all))
 
         for name, n_epochs, lr in phases:
