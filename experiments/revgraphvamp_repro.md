@@ -51,7 +51,34 @@ submit with `--export=ALL,PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP`
 | Alanine | ✓ implemented; pipeline validated end-to-end on real data | ✓ ran, but **χ VAMP-2 ceilings at ~2.85** (target 4.41) | ☐ BLOCKED | χ-stage ceiling |
 | Aβ42 | ✓ script ready | ☐ (blocked pending alanine diagnosis) | ☐ | — |
 
-## ⛔ BLOCKER (found 2026-07-23) — χ-stage VAMP-2 ceilings at ~2.9 on alanine
+## ✅ RESOLVED 2026-07-24 — the gap was LAG TIME (τ), not the model
+
+**Their reported alanine 4.41 is at lag = 1 ps, not 20 ps.** `args.py` defaults to
+`--tau 1` = ONE FRAME, and their alanine data is 750k frames at 1 ps/frame. We had
+assumed 20 ps from the paper prose. Measured on our SchNet-χ (k=6, single seed):
+
+| lag | χ VAMP-2 |
+|---|---|
+| 20 ps (what we ran all along) | 2.85 |
+| 5 ps | 3.51 |
+| **1 ps (their `--tau 1`)** | **4.41–4.47** (peak 4.4668; VAMP-E 4.414) |
+
+Target is 4.41 / 4.38 → reproduced at their actual lag. VAMP-2 = 1 + Σσᵢ² with
+σᵢ = e^(−τ/tᵢ), so a 20× longer lag decays every singular value; scores are simply
+not comparable across lags. **Nothing was wrong with the encoder, the reversible
+port, or the algebraic init.** Second time this class of bug bit us (cf. villin
+τ-normalization).
+
+Ruled out beforehand, at real GPU cost: encoder variant v1/v2, n_neighbors 5/9,
+batch 200/1000, seeds 1–4, χ epochs to 120, joint epochs to 110, and joint lr
+∈ {1e-4, 5e-4, 5e-3, 0.2}. All held ~2.85 at 20 ps — the invariance to every
+training knob is what finally pointed at the data/scoring convention.
+
+⚠️ OPEN: the paper prose reportedly says 20 ps while the code says tau=1. Verify
+what the paper actually claims for the alanine lag before writing this up; if the
+paper really says 20 ps, their reported 4.41 is inconsistent with their own code.
+
+## (historical) BLOCKER as diagnosed 2026-07-23 — χ-stage VAMP-2 ceilings at ~2.9
 
 GPU smoke (job 796, real unstrided 750k frames, χ=20/all=30) ran cleanly
 end-to-end (correct data 10 heavy atoms / lag 20 ps; chi→algebraic init→joint

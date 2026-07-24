@@ -14,11 +14,18 @@
 # LAG: 20 ps = 0.02 ns at timestep 0.001 ns/frame.
 #
 # SCHEDULE (faithful to RevGraphVAMP train_ala.py, resolved 2026-07-23):
-#   phase chi (VAMP-2, epoch_chi) -> ALGEBRAIC U/S init (closed form, no gradient)
-#   -> phase all (joint VAMP-E, epoch_all). --epoch_us is IGNORED in this
-#   (default) faithful mode; kept only to satisfy the CLI. Their knobs are
-#   pre_train_epoch (=epoch_chi) and epochs (=epoch_all). EPOCH values below are
-#   PROVISIONAL — confirm the exact pre_train/epochs from their run command.
+#   4 stages, verified 2026-07-24 against a local clone of their repo:
+#   chi (VAMP-2, epoch_chi) -> ALGEBRAIC U/S init (closed form, no gradient)
+#   -> us (gradient U/S, chi frozen, epoch_us) -> all (joint VAMP-E, epoch_all).
+#   Their code runs the algebraic init AND the gradient U/S phase, in sequence.
+#
+# *** LAG (critical, resolved 2026-07-24) ***
+#   Their args.py default is --tau 1 == ONE FRAME. Alanine data is 750k frames at
+#   1 ps/frame, so their lag is 1 ps, NOT the 20 ps we previously assumed from the
+#   paper text. This single setting accounts for the whole reproduction gap:
+#     lag 20 ps -> VAMP-2 2.85 | 5 ps -> 3.51 | 1 ps -> 4.41-4.47  (target 4.41)
+#   Encoder must be v2 (per-atom ReLU before pooling, their conv_activation);
+#   output_dim 8 mirrors their h_g=8.
 #
 # MODULE: needs the working-tree reversible 3-phase code (not yet in the deployed
 # module) → run with PYGVAMP_SRC_OVERRIDE (set below via the opt-in hook).
@@ -62,9 +69,9 @@ SEED=${SLURM_ARRAY_TASK_ID}
 RUN_DIR=$(printf "/mnt/hdd/experiments/alanine_rev_v1/seed_%02d" "${SEED}")
 
 # --- schedule (PROVISIONAL — see note above) ---
-EPOCH_CHI=100     # phase 1: pretrain χ with VAMP-2 (their pre_train_epoch)
-EPOCH_US=0        # IGNORED in faithful mode (algebraic U/S init replaces phase 2)
-EPOCH_ALL=100     # phase 3: joint VAMP-E training (their epochs)
+EPOCH_CHI=100     # stage 1: pretrain χ with VAMP-2 (their pre_train_epoch)
+EPOCH_US=50       # stage 3: gradient U/S with χ frozen (their train_US)
+EPOCH_ALL=200     # stage 4: joint VAMP-E training (their epochs)
 
 JOB_NAME="ala_rev_seed${SEED}"
 scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null
@@ -85,9 +92,10 @@ pygvamp \
     --timestep     0.001 \
     --seed         "${SEED}" \
     --model        schnet \
+    --encoder_variant v2 \
     --selection    'not element H' \
     --stride       1 \
-    --lag_times    0.02 \
+    --lag_times    0.001 \
     --n_states     6 \
     --no_discover_states \
     --max_retrains 0 \
@@ -100,7 +108,7 @@ pygvamp \
     --lr_chi 5e-4 --lr_us 5e-4 --lr_all 1e-4 \
     --rev_activation exp \
     --hidden_dim            16 \
-    --output_dim            16 \
+    --output_dim            8 \
     --n_interactions        4 \
     --n_neighbors           5 \
     --gaussian_expansion_dim 16 \
