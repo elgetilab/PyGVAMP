@@ -34,6 +34,14 @@ import re
 # Matches both the init line and the per-epoch line (both carry the pair):
 #   "... val VAMP-2=4.4051  VAMP-E=4.3760 ..."
 VAL_LINE = re.compile(r"val VAMP-2=([0-9.]+)\s+VAMP-E=([0-9.]+)")
+# Since 2026-07-24 EVERY phase logs a val line ("  [chi] epoch 3: val VAMP-2=..."),
+# but fit_three_phase only does model selection on the algebraic-init line and the
+# final 'all' phase.  Scoring chi/us lines here would report a peak that does NOT
+# correspond to the saved best_model.pt (e.g. alanine seed 0: chi 4.4946 vs
+# all 4.4875).  Only count lines the selector actually considered.
+SELECTABLE = re.compile(r"\[all\]\s+epoch|algebraic U/S init done")
+# Legacy logs (pre-2026-07-24) had no phase tag: "  epoch 12: val VAMP-2=...".
+LEGACY_EPOCH = re.compile(r"^\s*epoch\s+\d+:")
 # run_training prints this after train_model returns (→ stdout → log).
 TRAINING_DONE = re.compile(r"Training completed successfully")
 
@@ -62,7 +70,7 @@ def parse_log(log_path: Path, seed: int) -> Optional[SeedResult]:
     completed = False
     for line in lines:
         m = VAL_LINE.search(line)
-        if m:
+        if m and (SELECTABLE.search(line) or LEGACY_EPOCH.search(line)):
             pairs.append((float(m.group(1)), float(m.group(2))))
         if TRAINING_DONE.search(line):
             completed = True
