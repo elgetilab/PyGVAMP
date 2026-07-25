@@ -51,6 +51,21 @@ submit with `--export=ALL,PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP`
 | Alanine | ✓ implemented; pipeline validated end-to-end on real data | ✓ ran, but **χ VAMP-2 ceilings at ~2.85** (target 4.41) | ☐ BLOCKED | χ-stage ceiling |
 | Aβ42 | ✓ script ready | ☐ (blocked pending alanine diagnosis) | ☐ | — |
 
+## ✅ ALANINE REPRODUCED (10-seed, 2026-07-25)
+
+Full 4-stage schedule at tau=1 (lag 0.001 ns), encoder v2, h_g=8, k=6, 5 nbrs,
+batch 1000. Model-selected VAMP scores, `alanine_rev_v1` seeds 0–9:
+
+  **VAMP-2 = 4.402 ± 0.244** (paper 4.41 ± 0.01)  Δ = −0.008
+  **VAMP-E = 4.402 ± 0.244** (paper 4.38 ± 0.01)  Δ = +0.022
+
+Mean matches almost exactly. Caveat: our seed variance is ~24× theirs (±0.24 vs
+±0.01). 8/10 seeds cluster in 4.46–4.53; two land low (seed 9 = 3.76, seed 4 =
+4.22, the partial-collapse failure mode). Their ±0.01 implies no collapsed seeds —
+an unmatched training-stability difference (init/anti-collapse detail unknown), NOT
+a score gap. Kept all seeds (no cherry-picking). Per-seed: 4.494/4.504/4.458/4.519/
+4.218/4.521/4.518/4.503/4.526/3.760.
+
 ## ✅ RESOLVED 2026-07-24 — the gap was LAG TIME (τ), not the model
 
 **Their reported alanine 4.41 is at lag = 1 ps, not 20 ps.** `args.py` defaults to
