@@ -103,6 +103,9 @@ pygvamp \
     --seed         "${SEED}" \
     --model        schnet \
     --encoder_variant v2 \
+    # ATOMS = 42 CA (name CA). Paper Table 1 says 40; per user 2026-07-26 the
+    # paper's 40 is an ERROR — their GitHub uses --num-atoms 42 and topol.pdb has
+    # 42 CA. Run 42.
     --selection    'name CA' \
     `# paper Table 1 says 40 atoms; GitHub --num-atoms 42; topol.pdb has 42 CA -> OPEN, test both` \
     --stride       1 \
