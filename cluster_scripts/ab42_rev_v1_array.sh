@@ -50,9 +50,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=gputraining
-#SBATCH --gres=gpu:batch:1
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=120G
+#SBATCH --gres=shard:1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48G
 #SBATCH --time=INFINITE
 #SBATCH --output=/mnt/hdd/experiments/logs/ab42_rev_%A_%a.out
 #SBATCH --error=/mnt/hdd/experiments/logs/ab42_rev_%A_%a.err
@@ -78,9 +78,9 @@ SEED=${SLURM_ARRAY_TASK_ID}
 RUN_DIR=$(printf "/mnt/hdd/experiments/ab42_rev_v1/seed_%02d" "${SEED}")
 
 # --- schedule (faithful: chi -> algebraic init -> joint VAMP-E) ---
-EPOCH_CHI=100     # pretrain chi (VAMP-2); converges by ~epoch 10 on this system
-EPOCH_US=50       # stage 3: gradient U/S with chi frozen (their train_US)
-EPOCH_ALL=200     # joint VAMP-E. Their 1000 (w/ early-stop) is overkill: VAMP-2
+EPOCH_CHI=30      # VAMP-2 saturates ~3.98 by epoch 1 on this system
+EPOCH_US=20       # stage 3: gradient U/S, chi frozen
+EPOCH_ALL=50      # joint VAMP-E (converged; smoke seed hit 3.985 at 350ep, same value)
                   # saturates ~3.98 by epoch 1 (k=4, max 4.0). 100/50/200 = alanine schedule.
 
 JOB_NAME="ab42_rev_seed${SEED}"
