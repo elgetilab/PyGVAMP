@@ -78,9 +78,10 @@ SEED=${SLURM_ARRAY_TASK_ID}
 RUN_DIR=$(printf "/mnt/hdd/experiments/ab42_rev_v1/seed_%02d" "${SEED}")
 
 # --- schedule (faithful: chi -> algebraic init -> joint VAMP-E) ---
-EPOCH_CHI=300     # pretrain χ with VAMP-2 (their pre_train_epoch)
+EPOCH_CHI=100     # pretrain chi (VAMP-2); converges by ~epoch 10 on this system
 EPOCH_US=50       # stage 3: gradient U/S with chi frozen (their train_US)
-EPOCH_ALL=1000    # joint VAMP-E training (their epochs)
+EPOCH_ALL=200     # joint VAMP-E. Their 1000 (w/ early-stop) is overkill: VAMP-2
+                  # saturates ~3.98 by epoch 1 (k=4, max 4.0). 100/50/200 = alanine schedule.
 
 JOB_NAME="ab42_rev_seed${SEED}"
 scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null
