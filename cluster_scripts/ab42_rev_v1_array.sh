@@ -89,7 +89,14 @@ echo "============================================================"
 echo "Aβ42 RevGraphVAMP 3-phase (task ${SLURM_ARRAY_TASK_ID}, seed ${SEED})"
 echo "Target: VAMP-2 3.99±0.002 / VAMP-E 3.99±0.003 (Huang 2024)"
 echo "Phases: chi=${EPOCH_CHI}(5e-4) -> algebraic init -> all=${EPOCH_ALL}(1e-4)"
-echo "Data:   ab42 RED (5119 trajs, 42 CA), lag 10ns @ 0.25 ns/frame"
+# ATOMS = 42 CA ('name CA'). Paper Table 1 says 40, but per user (2026-07-26) the
+# paper's 40 is an error: their GitHub passes --num-atoms 42 and topol.pdb has 42 CA.
+# LAG = 0.25 ns (their --tau 1 = 1 frame at 0.25 ns/frame); the paper's 10 ns is its
+# CK-test/ITS lag, not the training lag (see experiments/revgraphvamp_repro.md).
+# NOTE: keep the pygvamp arg list free of inline '#' comments and backticks — a
+# bare comment line inside a '\'-continued command TERMINATES it, silently dropping
+# every later flag and falling back to config defaults (this bit us 2026-07-26).
+echo "Data:   ab42 RED (5119 trajs, 42 CA), lag 0.25 ns (tau=1) @ 0.25 ns/frame"
 echo "Start:  $(date)   Node: $(hostname)"
 echo "============================================================"
 
@@ -103,11 +110,7 @@ pygvamp \
     --seed         "${SEED}" \
     --model        schnet \
     --encoder_variant v2 \
-    # ATOMS = 42 CA (name CA). Paper Table 1 says 40; per user 2026-07-26 the
-    # paper's 40 is an ERROR — their GitHub uses --num-atoms 42 and topol.pdb has
-    # 42 CA. Run 42.
     --selection    'name CA' \
-    `# paper Table 1 says 40 atoms; GitHub --num-atoms 42; topol.pdb has 42 CA -> OPEN, test both` \
     --stride       1 \
     --lag_times    0.25 \
     --n_states     4 \
