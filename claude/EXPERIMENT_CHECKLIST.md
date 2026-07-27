@@ -17,8 +17,8 @@ Verified against on-disk runs + aggregators on 2026-06-30. **"Paper reproduction
 | Trp-cage | 4.79 ± 0.01 | 4.6516 ± 0.0175 | **−0.138** | 10 ✓ | run done, **below paper** (7.9σ ours) |
 | Villin | 3.78 ± 0.02 | 3.6923 ± 0.0458 | **−0.088** | 10 ✓ | run done, **closest** (1.9σ ours) |
 | NTL9 | 4.59 ± 0.09 | 4.3459 ± 0.0435 | **−0.244** | 10 ✓ | run done, **furthest below** |
-| Alanine dipeptide (Rev) | 4.41 ± 0.01 | — | — | 0 | **NOT STARTED** |
-| Aβ42 combined (Rev) | 3.99 ± 0.002 | — | — | 0 | **NOT STARTED** (only ox/red exploratory exist) |
+| Alanine dipeptide (Rev) | 4.41 ± 0.01 | 4.402 ± 0.244 | **−0.008** | 10 ✓ | **REPRODUCED** (mean matches; our seed variance ~24× theirs) |
+| Aβ42 red (Rev) | 3.99 ± 0.002 | — | — | 0/10 | **RUNNING** (job 838, 2026-07-27; expect ~3.98) |
 
 Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_repro_v11` (10 seeds; the
 `VILLIN_REPRO_V11_LOG.md` text is **stale** — it documents only the single-seed probe), `NTL9_REPRO_V2_LOG.md`.
@@ -32,17 +32,19 @@ Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_r
    normalization. **Decide:** either (a) one focused ablation lane on Trp-cage (smallest/fastest) to close it, or
    (b) formally accept-and-document the gap (Villin at 1.9σ is arguably already within tolerance; Trp-cage/NTL9 are not).
    Nothing else in reproduction should be declared "done" until this is decided.
-2. **Alanine dipeptide — RevGraphVAMP reproduction (NOT STARTED).** No data prepared, no cluster script. Needs:
-   mdshare trajectories (10 heavy atoms), reversible 3-phase training, k=6, lag=20 ps, 10 seeds. Target 4.41 ± 0.01.
-3. **Aβ42 combined — RevGraphVAMP reproduction (NOT STARTED).** Only `ab42_red`/`ab42_ox` *exploratory* splits exist;
-   the strict reproduction is on the **combined** dataset (no ox/red split). Needs combined dataset, reversible,
-   k=4, lag=10 ns, 10 seeds. Target 3.99 ± 0.002. (ox/red split is a *novel contribution*, not reproduction — Category 3.)
+2. ~~Alanine dipeptide — RevGraphVAMP reproduction~~ **DONE 2026-07-25**, 4.402 ± 0.244 vs 4.41 ± 0.01.
+   Training lag is **1 frame (1 ps)**, not the paper's 20 ps CK-test lag — that misread was the whole gap.
+3. **Aβ42 — RevGraphVAMP reproduction (RUNNING, job 838).** Dataset is the **red ensemble alone** (5119 xtc =
+   the paper's trajectory count); the earlier "combined" note was wrong — see `experiments/revgraphvamp_repro.md`.
+   42 CA, k=4, training lag 0.25 ns (their `--tau 1` = 1 frame), 10 seeds. Target 3.99 ± 0.002.
 
 ### Suggested order
 
-1. Decide the gap question (#1) — it gates whether GraphVAMPNet reproduction can be called complete.
-2. Alanine dipeptide (#2) — small/fast; first validation that the **reversible** path reproduces a published number.
-3. Aβ42 combined (#3) — larger; the headline RevGraphVAMP reproduction.
+1. Aβ42 reproduction (#3) — running; closes Category 1 for RevGraphVAMP.
+2. Decide the gap question (#1) — it gates whether **GraphVAMPNet** reproduction can be called complete.
+   Note both reversible systems' gaps turned out to be lag/τ convention, not model deficiency (twice now:
+   villin τ-normalization, then RevGraphVAMP's 1-frame τ) — worth testing that hypothesis here before
+   accepting the gap.
 
 ### Stale docs to sync (accuracy, not new runs)
 
@@ -182,10 +184,18 @@ Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_r
 
 **Decision (2026-07-01):** dropped the de-tuned regime for Villin/NTL9 — the sweep is native-only (SchNet paper-cfg vs GIN/ML3 native). The SchNet reproduction runs (Category 1) serve as the SchNet arm; no re-run.
 **Decision (2026-07-14):** NTL9 native GIN/ML3 left as-is (no retrain) — instability/OOM reported as findings rather than sinking ~2–3 more weeks into reruns; GIN native analysis-only recovery run for the ITS/CK/state artifacts.
-- [ ] **Alanine dipeptide:** SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
-- [ ] **Aβ42** (full dataset, matching RevGraphVAMP): SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
-- [ ] **Aβ42-red** (if you have the split): SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
-- [ ] **Aβ42-ox** (if you have the split): SchNet, GIN, ML3 × 10 seeds = 30 runs (reversible)
+**Decision (2026-07-27): the GIN/ML3 sweep is CLOSED — it will not be run on the
+reversible (RevGraphVAMP) systems.** GIN and ML3 already showed no gain over SchNet
+on all three GraphVAMPNet systems (Trp-cage: GIN ≈ SchNet, ML3 below; Villin: SchNet
+> GIN > ML3; NTL9: GIN unstable, ML3 OOM). Repeating them on alanine/Aβ42 would cost
+~40 runs to re-derive a negative result we already have. The encoder lane resumes with
+a **new encoder (likely PaiNN)**, not with GIN/ML3, and not before the RevGraphVAMP
+reproduction is closed out. The four rows below are struck for that reason, not deferred.
+
+- [~] ~~**Alanine dipeptide:** SchNet, GIN, ML3 × 10 seeds~~ — dropped, see decision above
+- [~] ~~**Aβ42** (full dataset, matching RevGraphVAMP): SchNet, GIN, ML3 × 10 seeds~~ — dropped
+- [~] ~~**Aβ42-red:** SchNet, GIN, ML3 × 10 seeds~~ — dropped (Aβ42-red *is* the reproduction dataset)
+- [~] ~~**Aβ42-ox:** SchNet, GIN, ML3 × 10 seeds~~ — dropped
 
 **Total: 120-180 runs depending on whether you include ox/red split.** At 15 min/run on a 5090 = ~30-45 hours of wall time. About 2 days continuous, or several overnights.
 
