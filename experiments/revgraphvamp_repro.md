@@ -173,6 +173,13 @@ flip.** Non-simplex features are gated out and left untouched.
 - All 9 ceiling tests now pass (were 4 red). Added two more: the projection is
   lossless on well-conditioned data across VAMP1/2/E and k=4/5/6 (agreement <1e-4),
   and it is a strict no-op for non-simplex features.
+- **Full suite verified 2026-07-28: 11 failed, 660 passed, 9 skipped, 2 xfailed**
+  (23 min). Baseline before the test edits was 12 failed / 649 passed. The failure
+  sets are IDENTICAL except the deeptime divergence test, which now passes; passes
+  went +11 = 10 new tests + that one. All 11 remaining failures are the
+  pre-existing Meta / MetaAtt encoder `NameError` / `ModuleNotFoundError` cluster
+  (`test_encoders.py`, plus its two downstream users in `test_training.py` and
+  `test_vampnet_model.py`) — unrelated to scoring, failing before this change.
 - `tests/test_vamp_score_deeptime_equivalence.py::test_villin_like_underpopulated_divergence`
   band updated 1e-4..2e-2 → 1e-6..1e-3. Its |Δ| dropped 0.0017 → 0.000054 **and
   flipped sign**: we are now slightly BELOW deeptime, because deeptime's own
