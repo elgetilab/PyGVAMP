@@ -48,8 +48,53 @@ submit with `--export=ALL,PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP`
 
 | System | SchNet-χ / rev impl | GPU smoke | 10-seed run | result |
 |---|---|---|---|---|
-| Alanine | ✓ implemented; pipeline validated end-to-end on real data | ✓ ran, but **χ VAMP-2 ceilings at ~2.85** (target 4.41) | ☐ BLOCKED | χ-stage ceiling |
-| Aβ42 | ✓ script ready | ☐ (blocked pending alanine diagnosis) | ☐ | — |
+| Alanine | ✓ | ✓ | ✓ 10/10 (2026-07-25) | **4.402 ± 0.244** vs 4.41 ± 0.01 — reproduced |
+| Aβ42 (red) | ✓ | ✓ | ✓ 10/10 (job 838, 2026-07-28) | **3.9828 ± 0.0005** vs 3.99 ± 0.002 — reproduced |
+
+## ✅ Aβ42 REPRODUCED (10-seed, job 838, 2026-07-28)
+
+Config exactly as committed (42 CA, k=4, lag 0.25 ns = their τ=1 frame, batch 500,
+encoder v2, h_g=8, 30/20/50 epochs, stride 1, full 1.26M frames). All 10 seeds ran
+to `PIPELINE COMPLETED`, ~12 h wall for the array at 4 concurrent.
+
+  **VAMP-2 (converged) = 3.9828 ± 0.0005** (paper 3.99 ± 0.002)  Δ = −0.0072
+
+Unlike alanine, the **seed variance matches theirs** (±0.0005 vs their ±0.002) — no
+collapsed seeds. Per-seed converged values span 3.9821–3.9836.
+
+### ⚠️ DO NOT USE the aggregator's headline number (4.0974 ± 0.0596)
+
+`aggregate_reversible_array.py` selects each seed at its **max val VAMP-2 over
+epochs**. On this system that rule selects transient spikes that are **above the
+theoretical ceiling**: VAMP-2 = 1 + Σᵢ₌₂..ₖ σᵢ² with σᵢ ≤ 1, so k=4 ⇒ **VAMP-2 ≤ 4.0**.
+
+| | value |
+|---|---|
+| max-over-epoch selection (what the aggregator prints) | 4.0974 ± 0.0596 |
+| converged (median of last 10 `all` epochs) | 3.9828 ± 0.0005 |
+| k=4 theoretical ceiling | 4.0 |
+
+- **42 of 500** `all`-phase validation epochs exceed 4.0; **all 10 seeds** are affected.
+- Worst single epoch: seed 4 at **4.2489** (+0.25 over the ceiling).
+- The spikes are transient — seeds sit flat at ~3.983 for the surrounding epochs and
+  return to ~3.983 by epoch 50. They are not convergence.
+- **No numerical guard fired** (no clamp/degenerate-v warnings in any log), so this is
+  not the VAMPU/VAMPS `w2 = (1-w_norm)/v` guard — it originates in the validation
+  VAMP-2 estimator itself (`_validate_scores` → `_vamp2_score` on the concatenated
+  validation χ), most plausibly ill-conditioned whitening producing σ > 1.
+
+Because the selection rule maximises over epochs, it is **biased toward exactly the
+most ill-conditioned epoch** — the noisier the estimator, the higher the reported
+score. This inflates the mean by +0.11 and the spread by ~100×.
+
+### Next (not yet done)
+
+1. Add a regression test asserting val VAMP-2 ≤ k + tol, to pin the magnitude first.
+2. Then decide the fix: repair the estimator conditioning vs. reject above-ceiling
+   epochs during model selection. Do **not** simply clip — that hides the cause.
+3. The alanine numbers use the same aggregator and the same rule — **re-check the
+   alanine 10-seed selection against its k=6 ceiling (6.0)** before trusting 4.402.
+   (4.402 < 6.0 so it is not obviously invalid, but the selection bias still applies.)
 
 ## ✅ ALANINE REPRODUCED (10-seed, 2026-07-25)
 
