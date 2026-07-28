@@ -3,12 +3,46 @@ import torch.nn as nn
 from typing import Literal, Optional, Union, List
 
 
+def _has_constant_row_sum(x: torch.Tensor, atol: float = 1e-4) -> bool:
+    """True if every row of ``x`` sums to the same value (e.g. a softmax output).
+
+    For such features the all-ones direction is EXACTLY in the null space of the
+    mean-removed covariance: if ``sum_j x_ij = c`` for all i, then each centred
+    row is orthogonal to ``1``, so ``C00 @ 1 = 0``. See ``_constant_complement_basis``.
+    """
+    if x.dim() != 2 or x.shape[1] < 2:
+        return False
+    sums = x.sum(dim=1)
+    return bool(torch.all(torch.abs(sums - sums[0]) <= atol).item())
+
+
+def _constant_complement_basis(k: int, device, dtype) -> torch.Tensor:
+    """Orthonormal basis (k, k-1) of the complement of the all-ones direction.
+
+    Built from a single Householder reflector that maps ``1/sqrt(k)`` onto e_0;
+    columns 1..k-1 of that reflector then span ``1^perp`` exactly, so no
+    thresholding or numerical rank decision is involved.
+    """
+    ones = torch.ones(k, device=device, dtype=dtype) / (k ** 0.5)
+    e0 = torch.zeros(k, device=device, dtype=dtype)
+    e0[0] = 1.0
+    v = ones - e0
+    nrm = torch.linalg.norm(v)
+    if nrm < 1e-12:  # already aligned; the complement is just e_1..e_{k-1}
+        householder = torch.eye(k, device=device, dtype=dtype)
+    else:
+        v = v / nrm
+        householder = torch.eye(k, device=device, dtype=dtype) - 2.0 * torch.outer(v, v)
+    return householder[:, 1:]
+
+
 class VAMPScore(nn.Module):
     def __init__(
             self,
             method: Literal['VAMP1', 'VAMP2', 'VAMPE', 'VAMPCE'] = 'VAMP2',
             epsilon: float = 1e-6,
-            mode: Literal['trunc', 'regularize'] = 'trunc'
+            mode: Literal['trunc', 'regularize'] = 'trunc',
+            project_constant_direction: bool = True
     ):
         """
         VAMP Score module for evaluating time-lagged embeddings.
@@ -27,12 +61,24 @@ class VAMPScore(nn.Module):
             Mode for handling small eigenvalues:
             - 'trunc': Truncate eigenvalues smaller than epsilon
             - 'regularize': Add epsilon to diagonal for regularization
+        project_constant_direction : bool, default=True
+            When the inputs have a constant row sum (softmax χ, the usual case),
+            project onto the complement of the all-ones direction before
+            whitening. That direction is EXACTLY in the null space of the
+            mean-removed covariance, so this is lossless — but leaving it in
+            means its numerically-nonzero eigenvalue (~1e-6 at validation scale
+            in float32) can survive the ``epsilon`` cutoff and get amplified by
+            ``1/sqrt(epsilon) ≈ 1000``, producing singular values > 1 and scores
+            above the k-state ceiling. See ``tests/test_vamp_score_ceiling.py``
+            and ``experiments/revgraphvamp_repro.md`` (Aβ42, 2026-07-28).
+            Set False to restore the pre-fix behaviour.
         """
         super(VAMPScore, self).__init__()
 
         self.method = method
         self.epsilon = epsilon
         self.mode = mode
+        self.project_constant_direction = project_constant_direction
 
         # Validate parameters
         valid_methods = ['VAMP1', 'VAMP2', 'VAMPE', 'VAMPCE']
@@ -43,6 +89,23 @@ class VAMPScore(nn.Module):
 
         if self.mode not in valid_modes:
             raise ValueError(f"Invalid mode '{self.mode}', supported are {valid_modes}")
+
+    def _project_constant(self, data: torch.Tensor, data_lagged: torch.Tensor):
+        """Drop the structural null direction when the inputs live on a simplex.
+
+        Returns the pair unchanged unless ``project_constant_direction`` is on AND
+        both tensors have a constant row sum. The map is an orthogonal change of
+        basis restricted to ``1^perp``; since ``1`` carries no variance after mean
+        removal, every whitened-Koopman singular value — and hence the score — is
+        mathematically unchanged. What it removes is the 0/0 division that the
+        eigenvalue cutoff would otherwise have to adjudicate.
+        """
+        if not self.project_constant_direction:
+            return data, data_lagged
+        if not (_has_constant_row_sum(data) and _has_constant_row_sum(data_lagged)):
+            return data, data_lagged
+        basis = _constant_complement_basis(data.shape[1], data.device, data.dtype)
+        return data @ basis, data_lagged @ basis
 
     def forward(self, data: torch.Tensor, data_lagged: torch.Tensor) -> torch.Tensor:
         """
@@ -87,6 +150,10 @@ class VAMPScore(nn.Module):
                 score = torch.pow(torch.norm(koopman, p='fro'), 2)
 
         elif self.method == 'VAMPE':
+            # Drop the structural null direction first (see _project_constant);
+            # VAMP1/VAMP2 get this inside _koopman_matrix.
+            data, data_lagged = self._project_constant(data, data_lagged)
+
             # Compute Covariance
             c00, c0t, ctt = self._covariances(data, data_lagged, remove_mean=True)
 
@@ -172,6 +239,10 @@ class VAMPScore(nn.Module):
             epsilon = self.epsilon
         if mode is None:
             mode = self.mode
+
+        # Drop the structural null direction before whitening (see
+        # _project_constant); no-op unless the inputs have a constant row sum.
+        data, data_lagged = self._project_constant(data, data_lagged)
 
         # Compute covariances
         c00, c0t, ctt = self._covariances(data, data_lagged, remove_mean=True)

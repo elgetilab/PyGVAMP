@@ -156,19 +156,44 @@ withdrawn 4.0974 needs revision. Note Villin is also k=4 and does NOT breach —
 alone is not the trigger; it needs the confident χ that the joint VAMP-E phase
 produces (the standard runs train VAMP-2 throughout and keep a softer χ).
 
-### Next (not yet done)
+### ✅ FIXED 2026-07-28 — null-direction projection (option 1)
 
-Decide the fix now that the magnitude is pinned. Options, in rough order of merit:
-1. **Project out the known structural null direction** before whitening (χ rows sum
-   to 1 ⇒ the null vector is known analytically, not something to discover
-   numerically). Most principled; removes the coin flip entirely.
-2. Raise `epsilon` / switch `mode` so the null direction is reliably truncated —
-   simpler, but re-introduces a threshold that scales with ‖C00‖ and N.
-3. Reject above-ceiling epochs at model selection. Treats the symptom only; keeps
-   an estimator that can return impossible numbers. Do **not** clip the score.
+`VAMPScore` gained `project_constant_direction=True` (default on). When the inputs
+have a constant row sum — softmax χ, i.e. every real use — the score is computed in
+an orthonormal basis of the complement of the all-ones direction, built from a
+single Householder reflector. That direction carries exactly zero variance after
+mean removal, so the projection is **lossless**; what it removes is the 0/0 the
+eigenvalue cutoff was previously forced to adjudicate. **No threshold, no coin
+flip.** Non-simplex features are gated out and left untouched.
 
-Whichever is chosen, the Aβ42 headline number does not change: the converged value
-3.9828 ± 0.0005 is computed from unaffected epochs and already reproduces the paper.
+- `pygv/scores/vamp_score_v0.py`: `_has_constant_row_sum`, `_constant_complement_basis`,
+  `VAMPScore._project_constant`, applied in `_koopman_matrix` (VAMP1/VAMP2) and the
+  VAMPE branch of `forward`. `_covariances` deliberately untouched, so the existing
+  numpy/deeptime reference-equivalence tests keep their semantics.
+- All 9 ceiling tests now pass (were 4 red). Added two more: the projection is
+  lossless on well-conditioned data across VAMP1/2/E and k=4/5/6 (agreement <1e-4),
+  and it is a strict no-op for non-simplex features.
+- `tests/test_vamp_score_deeptime_equivalence.py::test_villin_like_underpopulated_divergence`
+  band updated 1e-4..2e-2 → 1e-6..1e-3. Its |Δ| dropped 0.0017 → 0.000054 **and
+  flipped sign**: we are now slightly BELOW deeptime, because deeptime's own
+  trunc-based whitening still rescues that mode. On underpopulated data deeptime is
+  not a gold standard — it inflates for exactly the reason we used to. That test's
+  May-2026 docstring already described the mechanism ("the rescued mode magnifies
+  1/sqrt(λ+ε) ≈ 976×"); it was diagnosed as an ε·I divergence rather than a ceiling
+  breach.
+
+**The Aβ42 headline number does not change**: 3.9828 ± 0.0005 was computed from
+unaffected epochs and already reproduces the paper. Nothing in the clean runs moves
+either — that is what the losslessness test pins.
+
+### Still open
+
+The Aβ42 array has **not** been re-run under the fixed estimator. The converged
+number stands on its own, but the intended model-selection rule (max val VAMP-2)
+has still never been applied to a valid trace on this system. A re-run (~12 h, 4
+concurrent, config unchanged) would produce a headline number selected the intended
+way rather than one rescued by post-hoc median-of-tail. Cheap and worth doing while
+the cluster is free.
 
 ## ✅ ALANINE REPRODUCED (10-seed, 2026-07-25)
 

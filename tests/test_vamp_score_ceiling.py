@@ -90,6 +90,42 @@ def test_whitened_koopman_singular_values_bounded_by_one(sharpness):
     )
 
 
+@pytest.mark.parametrize("method", ["VAMP1", "VAMP2", "VAMPE"])
+@pytest.mark.parametrize("k,sharpness", [(4, 1.0), (5, 1.0), (6, 1.0)])
+def test_projection_is_lossless_on_well_conditioned_data(method, k, sharpness):
+    """The fix must not move scores that were never broken.
+
+    The projected-out direction carries zero variance after mean removal, so on
+    well-conditioned inputs the projection is a no-op mathematically. This pins
+    that the completed Trp-cage / Villin / NTL9 / alanine numbers — all of which
+    the ceiling audit found clean — are unaffected by the fix.
+    """
+    c0, c1 = _chi_pair(20_000, k, sharpness=sharpness)
+    fixed = VAMPScore(method=method, project_constant_direction=True)(c0, c1).item()
+    legacy = VAMPScore(method=method, project_constant_direction=False)(c0, c1).item()
+    assert abs(fixed - legacy) < 1e-4, (
+        f"{method} k={k}: projection shifted a well-conditioned score by "
+        f"{abs(fixed - legacy):.2e} (fixed={fixed:.6f}, legacy={legacy:.6f})"
+    )
+
+
+def test_projection_is_a_noop_for_non_simplex_features():
+    """Guard the gate: arbitrary features must not be silently projected.
+
+    The all-ones direction is only structurally null when rows sum to a constant.
+    For generic features it carries real variance, so projecting would change the
+    answer — the constant-row-sum check must refuse to fire.
+    """
+    g = torch.Generator().manual_seed(7)
+    x = torch.randn(5_000, 4, generator=g)
+    y = 0.8 * x + 0.3 * torch.randn(5_000, 4, generator=g)
+    fixed = VAMPScore(method="VAMP2", project_constant_direction=True)(x, y).item()
+    legacy = VAMPScore(method="VAMP2", project_constant_direction=False)(x, y).item()
+    assert fixed == pytest.approx(legacy, abs=1e-9), (
+        "non-simplex features were projected; the constant-row-sum gate leaked"
+    )
+
+
 def test_structural_null_eigenvalue_is_near_the_truncation_threshold():
     """Documents the trigger: the structural null eigenvalue sits near epsilon=1e-6.
 

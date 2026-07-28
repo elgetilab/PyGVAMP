@@ -346,16 +346,30 @@ class TestScoreDivergence:
         # Sanity: deeptime score is finite and in expected range
         assert 1.0 < ref < 5.0, f"deeptime VAMP-2 out of range: {ref}"
 
-        # Pin the divergence MAGNITUDE.  Empirically observed
-        # 2026-05-05 on this fixture: |Δ| ≈ 0.0017 (≈ 0.07%).
-        # Tight upper bound to detect drift; loose lower bound (>0)
-        # so that if someone removes the +ε·I in _covariances and
-        # the divergence vanishes, this test fires.
-        assert 1e-4 < abs(diff) < 0.02, (
-            f"|ours - deeptime| out of expected band [1e-4, 2e-2]: "
+        # Pin the divergence MAGNITUDE.
+        #
+        # 2026-05-05 (pre-fix): |Δ| ≈ 0.0017 (≈ 0.07%), ours ABOVE deeptime.
+        # 2026-07-28 (post-fix): |Δ| ≈ 0.000054, ours slightly BELOW deeptime.
+        #
+        # The band moved because VAMPScore now projects out the structural null
+        # direction before whitening (`project_constant_direction`, added after
+        # the Aβ42 ceiling defect — see tests/test_vamp_score_ceiling.py). The
+        # "rescued mode magnified ~976×" this docstring describes IS that defect;
+        # removing it is what shrank the divergence by ~30×.
+        #
+        # Note the SIGN FLIP: we are now slightly below the reference, because
+        # the deeptime implementation still rescues that mode (its trunc-based
+        # whitening has the same weakness). On underpopulated data deeptime is
+        # therefore not a gold standard — it inflates for the same reason we used
+        # to. What remains here is the genuine +ε·I divergence in _covariances,
+        # now acting only on well-conditioned directions.
+        #
+        # Lower bound kept > 0 so that removing the +ε·I still fires this test.
+        assert 1e-6 < abs(diff) < 1e-3, (
+            f"|ours - deeptime| out of expected band [1e-6, 1e-3]: "
             f"|Δ|={abs(diff):.6f}.  If +ε·I was removed from "
-            f"_covariances, expect |Δ| → ~0; if a more aggressive "
-            f"regularization was added, expect |Δ| > 0.02."
+            f"_covariances, expect |Δ| → ~0; if the null-direction projection "
+            f"was disabled, expect |Δ| back up around 0.0017."
         )
 
         # The divergence is far too small to account for the residual
