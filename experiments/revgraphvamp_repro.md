@@ -87,14 +87,68 @@ Because the selection rule maximises over epochs, it is **biased toward exactly 
 most ill-conditioned epoch** — the noisier the estimator, the higher the reported
 score. This inflates the mean by +0.11 and the spread by ~100×.
 
+### ROOT CAUSE — identified 2026-07-28, pinned by `tests/test_vamp_score_ceiling.py`
+
+`VAMPScore` (`pygv/scores/vamp_score_v0.py`) defaults to `mode='trunc'`,
+`epsilon=1e-6`, and keeps eigenvalues with `eigval > epsilon`.
+
+χ is a softmax, so its rows sum to 1 ⇒ the all-ones direction lies exactly in the
+null space of the **mean-removed** C00 ⇒ C00 is rank-deficient by exactly one.
+That structural null eigenvalue is not exactly zero in float32 — it is noise whose
+size scales with ‖C00‖ and with the number of frames accumulated. Measured at
+validation scale (378k frames) it sits at **1e-6 to 5e-5**, i.e. straddling the
+cutoff. When it lands *above* 1e-6 it is **retained**, and
+`_sym_inverse(..., return_sqrt=True)` multiplies that direction by
+`1/sqrt(1e-6) ≈ 1000`. Spurious singular values > 1 follow, and the score breaks
+its ceiling. Whether it fires on a given epoch is effectively a coin flip — which
+is exactly the transient-spike pattern seen in the run.
+
+Measured breach magnitudes (from the new tests, k=4, N=378k):
+
+| case | value | ceiling | excess |
+|---|---|---|---|
+| confident χ, sharpness 4 | VAMP-2 **5.0933** | 4.0 | +1.09 |
+| confident χ, sharpness 10 | VAMP-2 **5.0622** | 4.0 | +1.06 |
+| largest whitened-Koopman σ | **1.0538** | 1.0 | +0.054 |
+| diffuse χ (sharpness 1) | passes | 4.0 | — |
+
+**This explains why alanine is unaffected.** At k=6 the variance is spread over
+more dimensions, so ‖C00‖ and hence the noise floor on the structural null
+eigenvalue are lower — it stays below the cutoff and is correctly truncated. The
+k=6 test case passes; the k=4 cases fail. Joint VAMP-E training makes χ more
+confident over time, which raises the noise floor — hence spikes appearing only in
+the `all` phase, never in `chi`/`us`.
+
+### ✅ Alanine re-checked against its k=6 ceiling (2026-07-28) — CLEAN
+
+`python cluster_scripts/check_vamp_ceiling.py --k 6 --paper 4.41 --logs '.../ala_rev_81[45]_*.out'`
+
+  0 / 2010 selection epochs breach the 6.0 ceiling, across 0 / 10 seeds.
+
+| | value |
+|---|---|
+| selected (max-over-epoch, as published above) | 4.4021 ± 0.2437 |
+| converged (last-10 median) | 4.3869 ± 0.2401 |
+
+The two selection rules differ by only 0.015 and both sit within tolerance of the
+paper's 4.41, so **the alanine result stands as reported** (4.402 ± 0.244). The
+selection bias is present in principle but immaterial here because no epoch is
+invalid. The two low seeds (9 = 3.76, 4 = 4.20) are genuine partial collapse, not
+estimator artefacts — their converged and selected values agree to <0.03.
+
 ### Next (not yet done)
 
-1. Add a regression test asserting val VAMP-2 ≤ k + tol, to pin the magnitude first.
-2. Then decide the fix: repair the estimator conditioning vs. reject above-ceiling
-   epochs during model selection. Do **not** simply clip — that hides the cause.
-3. The alanine numbers use the same aggregator and the same rule — **re-check the
-   alanine 10-seed selection against its k=6 ceiling (6.0)** before trusting 4.402.
-   (4.402 < 6.0 so it is not obviously invalid, but the selection bias still applies.)
+Decide the fix now that the magnitude is pinned. Options, in rough order of merit:
+1. **Project out the known structural null direction** before whitening (χ rows sum
+   to 1 ⇒ the null vector is known analytically, not something to discover
+   numerically). Most principled; removes the coin flip entirely.
+2. Raise `epsilon` / switch `mode` so the null direction is reliably truncated —
+   simpler, but re-introduces a threshold that scales with ‖C00‖ and N.
+3. Reject above-ceiling epochs at model selection. Treats the symptom only; keeps
+   an estimator that can return impossible numbers. Do **not** clip the score.
+
+Whichever is chosen, the Aβ42 headline number does not change: the converged value
+3.9828 ± 0.0005 is computed from unaffected epochs and already reproduces the paper.
 
 ## ✅ ALANINE REPRODUCED (10-seed, 2026-07-25)
 
