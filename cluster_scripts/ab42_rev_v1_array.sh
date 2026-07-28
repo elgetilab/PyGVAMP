@@ -75,7 +75,16 @@ if [ -z "${SLURM_ARRAY_TASK_ID}" ]; then
 fi
 
 SEED=${SLURM_ARRAY_TASK_ID}
-RUN_DIR=$(printf "/mnt/hdd/experiments/ab42_rev_v1/seed_%02d" "${SEED}")
+# v1 = the 2026-07-27 run, scored by the PRE-FIX estimator (its max-over-epoch
+#      selection breached the k=4 ceiling on 42/510 epochs — see
+#      experiments/revgraphvamp_repro.md). Kept on disk for comparison.
+# v2 = the 2026-07-28 re-run under the null-direction-projection fix (commit
+#      cf3c4fe). Note this is NOT merely a re-scoring: the chi phase's TRAINING
+#      loss also goes through VAMPScore(VAMP2), so the run is better-conditioned
+#      end to end, not just in its reported numbers.
+# Override with AB42_RUN_TAG=ab42_rev_v1 to reproduce the old layout.
+RUN_TAG=${AB42_RUN_TAG:-ab42_rev_v2}
+RUN_DIR=$(printf "/mnt/hdd/experiments/%s/seed_%02d" "${RUN_TAG}" "${SEED}")
 
 # --- schedule (faithful: chi -> algebraic init -> joint VAMP-E) ---
 EPOCH_CHI=30      # VAMP-2 saturates ~3.98 by epoch 1 on this system
@@ -98,6 +107,8 @@ echo "Phases: chi=${EPOCH_CHI}(5e-4) -> algebraic init -> all=${EPOCH_ALL}(1e-4)
 # bare comment line inside a '\'-continued command TERMINATES it, silently dropping
 # every later flag and falling back to config defaults (this bit us 2026-07-26).
 echo "Data:   ab42 RED (5119 trajs, 42 CA), lag 0.25 ns (tau=1) @ 0.25 ns/frame"
+echo "Run:    ${RUN_TAG}  (out: ${RUN_DIR})"
+echo "Code:   $(cd /home/vi/PycharmProjects/PyGVAMP 2>/dev/null && git rev-parse --short HEAD 2>/dev/null || echo unknown)  (expect >= cf3c4fe for the VAMP-2 ceiling fix)"
 echo "Start:  $(date)   Node: $(hostname)"
 echo "============================================================"
 
