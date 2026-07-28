@@ -136,6 +136,26 @@ selection bias is present in principle but immaterial here because no epoch is
 invalid. The two low seeds (9 = 3.76, 4 = 4.20) are genuine partial collapse, not
 estimator artefacts — their converged and selected values agree to <0.03.
 
+### Blast radius — audited 2026-07-28, confined to this one run
+
+`VAMPScore`'s `epsilon`/`mode` are shared by every VAMP path, so every completed
+10-seed run was re-analysed against its own ceiling with
+`cluster_scripts/check_vamp_ceiling.py` (`--metric concat` and `--metric perbatch`
+for the standard runs):
+
+| run | k | ceiling | epochs breaching | verdict |
+|---|---|---|---|---|
+| **Aβ42 (rev)** | 4 | 4.0 | **42 / 510** | affected — aggregator number invalid |
+| Alanine (rev) | 6 | 6.0 | 0 / 2010 | clean |
+| Trp-cage | 5 | 5.0 | 0 / 1000 (×2 metrics) | clean |
+| Villin | 4 | 4.0 | 0 / 1000 (×2 metrics) | clean |
+| NTL9 | 5 | 5.0 | 0 / 1000 (×2 metrics) | clean |
+
+**Only the Aβ42 reversible run is affected.** No published number other than the
+withdrawn 4.0974 needs revision. Note Villin is also k=4 and does NOT breach — so k
+alone is not the trigger; it needs the confident χ that the joint VAMP-E phase
+produces (the standard runs train VAMP-2 throughout and keep a softer χ).
+
 ### Next (not yet done)
 
 Decide the fix now that the magnitude is pinned. Options, in rough order of merit:

@@ -27,11 +27,33 @@ Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_r
 
 1. **Resolve the systematic GraphVAMPNet gap (BLOCKER).** All three GraphVAMPNet systems undershoot, scaling
    with system size (Villin −0.088 < Trp-cage −0.138 < NTL9 −0.244). Ruled out: encoder choice (SchNet ≈ GIN-native
-   on Trp-cage), split leakage (blocked-split test), per-batch estimator bias. Open candidates: τ-normalization /
+   on Trp-cage), split leakage (blocked-split test), per-batch estimator bias, and — added 2026-07-28 — **VAMP-2
+   ceiling breaches / model-selection artefacts** (see below). Open candidates: τ-normalization /
    lag scaling (see [[project_villin_gap]]), LR schedule / epoch budget vs Ghorbani's, edge-feature (Gaussian)
    normalization. **Decide:** either (a) one focused ablation lane on Trp-cage (smallest/fastest) to close it, or
    (b) formally accept-and-document the gap (Villin at 1.9σ is arguably already within tolerance; Trp-cage/NTL9 are not).
    Nothing else in reproduction should be declared "done" until this is decided.
+
+   **Ceiling audit (2026-07-28) — all three systems CLEAN, the gap is real.** The Aβ42 reversible run exposed a
+   VAMPScore defect where the mean-removed C00's structural null eigenvalue can survive the `epsilon=1e-6`
+   truncation and get amplified ~1000× by the whitening, producing scores above the k-state ceiling
+   (`tests/test_vamp_score_ceiling.py`, `experiments/revgraphvamp_repro.md`). Re-analysed every epoch of all three
+   GraphVAMPNet 10-seed runs against their ceilings with `cluster_scripts/check_vamp_ceiling.py`:
+
+   | system | k | ceiling | epochs breaching | converged (concat) | converged (perbatch) | published | Δ vs paper |
+   |---|---|---|---|---|---|---|---|
+   | Trp-cage | 5 | 5.0 | **0 / 1000** | 4.6487 ± 0.0208 | 4.6448 ± 0.0133 | 4.6516 | −0.145 |
+   | Villin | 4 | 4.0 | **0 / 1000** | 3.7024 ± 0.0377 | 3.6789 ± 0.0428 | 3.6923 | −0.101 |
+   | NTL9 | 5 | 5.0 | **0 / 1000** | 4.4544 ± 0.0753 | 4.3424 ± 0.0416 | 4.3459 | −0.248 |
+
+   0 / 6000 epoch-metric points breach any ceiling, on either the selection metric (`concat`) or the reported
+   metric (`perbatch`). The undershoot is also **unchanged between selection rules** (max-over-epoch vs converged
+   median differ by <0.02 everywhere), so the gap is not a selection artefact either. **The published
+   Trp-cage/Villin/NTL9 numbers stand as reported** and the gap must be explained by something physical.
+
+   Side observation worth a look: NTL9's concat−perbatch spread is 0.11, vs 0.004 (Trp-cage) and 0.024 (Villin).
+   NTL9 is the one system where the two estimators materially disagree — consistent with its k=5 model collapsing
+   toward ~2 effective states.
 2. ~~Alanine dipeptide — RevGraphVAMP reproduction~~ **DONE 2026-07-25**, 4.402 ± 0.244 vs 4.41 ± 0.01.
    Training lag is **1 frame (1 ps)**, not the paper's 20 ps CK-test lag — that misread was the whole gap.
 3. **Aβ42 — RevGraphVAMP reproduction (RUNNING, job 838).** Dataset is the **red ensemble alone** (5119 xtc =
