@@ -193,14 +193,47 @@ flip.** Non-simplex features are gated out and left untouched.
 unaffected epochs and already reproduces the paper. Nothing in the clean runs moves
 either — that is what the losslessness test pins.
 
-### Still open
+### ✅ RE-RUN UNDER THE FIXED ESTIMATOR — `ab42_rev_v2`, job 849, 2026-07-29
 
-The Aβ42 array has **not** been re-run under the fixed estimator. The converged
-number stands on its own, but the intended model-selection rule (max val VAMP-2)
-has still never been applied to a valid trace on this system. A re-run (~12 h, 4
-concurrent, config unchanged) would produce a headline number selected the intended
-way rather than one rescued by post-hoc median-of-tail. Cheap and worth doing while
-the cluster is free.
+10/10 seeds completed. Code `aa08439` (≥ `cf3c4fe`, the fix), config byte-identical
+to v1. Note this was **not** a re-scoring: the χ phase's training loss also runs
+through `VAMPScore(VAMP2).loss()`, so the gradient was better-conditioned too; only
+the `us`/`all` phases (`vampe_trace_loss`) were untouched.
+
+  **VAMP-2 = 3.9830 ± 0.0005** by the intended max-val-VAMP-2 selection rule
+  **VAMP-E = 3.9830 ± 0.0005**   (paper 3.99 ± 0.002 for both)
+
+**0 / 510 epochs breach the k=4 ceiling** (v1: 42 / 510, all seeds). This is the
+first verification of the fix against real χ rather than synthetic fixtures.
+
+| | selection rule | converged (last-10 median) | agree? |
+|---|---|---|---|
+| v1 (pre-fix) | 4.0974 ± 0.0596 — **invalid** | 3.9828 ± 0.0005 | no, 0.11 apart |
+| v2 (post-fix) | **3.9830 ± 0.0005** | 3.9825 ± 0.0005 | yes, 0.0005 apart |
+
+Two things worth reading off this table:
+
+1. **The two selection rules now agree to 0.0005.** That convergence is the
+   signature of a well-behaved trace — it is what a clean run is supposed to look
+   like, and v1 conspicuously did not.
+2. **v2 and v1's converged values agree to 0.0003.** The fix moved the physics by
+   nothing, empirically confirming on real data what
+   `test_projection_is_lossless_on_well_conditioned_data` asserts synthetically.
+   v1's converged number was sound; only its *selection* was corrupted.
+
+### Honest read of the residual Δ = −0.0070
+
+Our 3.9830 ± 0.0005 does **not** overlap the paper's 3.99 ± 0.002 — the gap is 3.5×
+their stated σ, and both error bars are tight, so this is a small systematic rather
+than noise. It **does** pass the checklist's pre-registered criterion (Δ < 0.05), and
+the reproduction is declared on that basis, not on CI overlap.
+
+Candidate sources of the residual, none chased (all < 0.05 territory):
+- **`lr_all` is a guess.** Their `set_optimizer_lr` is defined nowhere in their repo
+  (verified 2026-07-24), so the joint-phase lr is unrecoverable from their source;
+  our 1e-4 reads their "0.2" as a factor on 5e-4.
+- Epoch budget (we run 30/20/50 vs their 300/·/1000 with early stopping).
+- 42 vs 40 atoms — settled as 42 by user decision, but the paper says 40.
 
 ## ✅ ALANINE REPRODUCED (10-seed, 2026-07-25)
 

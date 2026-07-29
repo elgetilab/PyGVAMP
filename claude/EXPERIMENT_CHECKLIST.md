@@ -12,16 +12,22 @@ Verified against on-disk runs + aggregators on 2026-06-30. **"Paper reproduction
 
 ### Reproduction scoreboard (Category 1)
 
-| System | Paper (perbatch VAMP-2) | Ours (10-seed perbatch) | Δ | Seeds | Status |
+| System | Paper VAMP-2 | Ours (10-seed) | Δ | Seeds | Status |
 |---|---|---|---|---|---|
 | Trp-cage | 4.79 ± 0.01 | 4.6516 ± 0.0175 | **−0.138** | 10 ✓ | run done, **below paper** (7.9σ ours) |
 | Villin | 3.78 ± 0.02 | 3.6923 ± 0.0458 | **−0.088** | 10 ✓ | run done, **closest** (1.9σ ours) |
 | NTL9 | 4.59 ± 0.09 | 4.3459 ± 0.0435 | **−0.244** | 10 ✓ | run done, **furthest below** |
 | Alanine dipeptide (Rev) | 4.41 ± 0.01 | 4.402 ± 0.244 | **−0.008** | 10 ✓ | **REPRODUCED** (mean matches; our seed variance ~24× theirs) |
-| Aβ42 red (Rev) | 3.99 ± 0.002 | — | — | 0/10 | **RUNNING** (job 838, 2026-07-27; expect ~3.98) |
+| Aβ42 red (Rev) | 3.99 ± 0.002 | 3.9830 ± 0.0005 | **−0.0070** | 10 ✓ | **REPRODUCED** (job 849, `ab42_rev_v2`, post-ceiling-fix; Δ<0.05 criterion, not CI overlap) |
 
 Sources: `TRPCAGE_REPRO_V1_LOG.md`, `aggregate_villin_v11_array.py` on `villin_repro_v11` (10 seeds; the
-`VILLIN_REPRO_V11_LOG.md` text is **stale** — it documents only the single-seed probe), `NTL9_REPRO_V2_LOG.md`.
+`VILLIN_REPRO_V11_LOG.md` text is **stale** — it documents only the single-seed probe), `NTL9_REPRO_V2_LOG.md`,
+`experiments/revgraphvamp_repro.md` (the two Rev rows).
+
+**Estimator note:** the three GraphVAMPNet rows are *perbatch* scores; the two Rev rows are the
+concatenated-validation score (`fit_three_phase._validate_scores`) — the two estimators are not
+interchangeable, so do not compare a Rev row against a GraphVAMPNet row. All five were audited against
+their k-state ceilings on 2026-07-28/29 and all are now clean.
 
 ### What's missing to *complete* the paper reproduction
 
