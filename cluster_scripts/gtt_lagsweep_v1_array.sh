@@ -24,8 +24,25 @@
 #   (seed, lag) gets its own preparation + discovery so k* is free to vary.
 #
 # LAG LADDER: every value is an integer multiple of the 0.2 ns frame spacing.
-#   Pair retention is >=90% even at 2000 ns (10,000 of 100,000 frames per
-#   chunk), because lagged pairs must lie inside ONE chunk.
+#   Pair retention is >=90% at every rung, because lagged pairs must lie inside
+#   ONE 20 us chunk.
+#
+# ⚠️ LADDER CAPPED AT 500 ns (decision 2026-07-29). The cap is NOT about pair
+#   retention or cost — it is about TRAINING-SET SIZE. Auto-stride targets ~10
+#   frames per lag, so the dataset shrinks as tau grows:
+#     tau      prep_stride  runtime_stride  training frames
+#     1 ns          5             1           1,137,344
+#     10 ns        10             1             568,672
+#     50 ns        10             2             284,336   <-- probe, confirmed
+#     100 ns       10             5             113,734
+#     500 ns       10            25              22,747
+#    (1000 ns      10            50              11,373)  dropped
+#    (2000 ns      10           100               5,687)  dropped
+#   At 1000-2000 ns only ~4k-8k samples survive the 70/30 split, which is too
+#   thin to fit a 35-CA graph net AND run state discovery — k* there would be
+#   noise, at exactly the end of the ladder a k*(tau) curve is read from.
+#   500 ns keeps >=22k training frames everywhere while still spanning nearly
+#   three orders of magnitude.
 #
 # ⚠️ COST: measure before committing. Villin (628k frames, 35 CA) took 3h53m on
 #   a WHOLE gpu + 16 cpu; trpcage (1.04M frames, 20 CA) took ~30h on a shard +
@@ -33,8 +50,8 @@
 #     sbatch --array=5 cluster_scripts/gtt_lagsweep_v1_array.sh   # seed 0, τ=50ns
 #   read the wall time, THEN size the full sweep.
 #
-# Full sweep (33 tasks = 3 seeds × 11 lags), 2 concurrent:
-#   sbatch --array=0-32%2 cluster_scripts/gtt_lagsweep_v1_array.sh
+# Full sweep (27 tasks = 3 seeds × 9 lags), 2 concurrent:
+#   sbatch --array=0-26%2 cluster_scripts/gtt_lagsweep_v1_array.sh
 # ===========================================================================
 
 #SBATCH --job-name=gtt_lag
@@ -68,7 +85,7 @@ if [ -z "${SLURM_ARRAY_TASK_ID}" ]; then
 fi
 
 # --- (seed, lag) grid ------------------------------------------------------
-LAGS=(1.0 2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0 1000.0 2000.0)
+LAGS=(1.0 2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0)
 N_LAGS=${#LAGS[@]}
 
 SEED=$(( SLURM_ARRAY_TASK_ID / N_LAGS ))
