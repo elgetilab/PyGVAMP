@@ -16,6 +16,19 @@
 #   GTT-0 and GTT-1 are SEPARATE runs — correctly loaded as independent
 #   trajectories, never concatenated.
 #
+# ⚠️ WHY --max_states 25 (default is 10). The first probe (job 860, tau=50ns)
+#   searched k in [2,10] and returned silhouette=10, bic=10, aic=10, elbow=3 —
+#   three of four metrics pinned to the TOP of the range. Since
+#   `recommended_n_states` is the MAX across metrics, k* was simply the cap, and
+#   shorter lags resolve MORE states so they would pin there too: k*(tau) would
+#   have been a flat line at 10, measuring the ceiling rather than the physics.
+#   25 gives the metrics room to actually turn over.
+#   NOTE the aggregation rule is itself cap-biased — BIC/AIC often rise
+#   monotonically for clustering. Build k*(tau) from the PER-METRIC values in
+#   each run's state_discovery/discovery_summary.json (elbow is the informative
+#   one here), not from `recommended_n_states`. All metrics are saved per run,
+#   so this is recoverable at analysis time either way.
+#
 # ⚠️ WHY ONE JOB PER (SEED, LAG) rather than one job with --lag_times a b c:
 #   state discovery runs ONCE during preparation (master_pipeline.py:107-123)
 #   and yields a single recommended n_states for the whole invocation. Passing
@@ -121,6 +134,8 @@ pygvamp \
     --selection    'name CA' \
     --lag_times    "${LAG}" \
     --auto_stride \
+    --min_states   2 \
+    --max_states   25 \
     --max_retrains 0 \
     --no_warm_start_retrains \
     --hidden_dim            16 \
