@@ -1,0 +1,142 @@
+#!/usr/bin/env python
+"""Build a Cα topology PDB from a DESRES Schrodinger .mae file.
+
+The DESRES trajectory archives ship topology only as `.mae`; the pipeline needs a
+`.pdb` for `--top`. The existing trpcage/villin `topol.pdb` files were built by
+hand, with no script kept — this is that step made reproducible, because every
+additional DESHAW system needs it.
+
+Validated by regenerating `trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb`
+from its own .mae and diffing against the hand-built original (ATOM records
+identical; see --verify).
+
+Usage:
+  python cluster_scripts/mae_to_topol_pdb.py IN.mae OUT.pdb [--title "..."]
+  python cluster_scripts/mae_to_topol_pdb.py IN.mae --verify EXISTING.pdb
+"""
+import argparse
+import re
+import sys
+from pathlib import Path
+
+# Three-letter residue name -> one-letter, for the sequence REMARK.
+AA3 = {
+    'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C', 'GLN': 'Q',
+    'GLU': 'E', 'GLY': 'G', 'HIS': 'H', 'ILE': 'I', 'LEU': 'L', 'LYS': 'K',
+    'MET': 'M', 'PHE': 'F', 'PRO': 'P', 'SER': 'S', 'THR': 'T', 'TRP': 'W',
+    'TYR': 'Y', 'VAL': 'V', 'HID': 'H', 'HIE': 'H', 'HIP': 'H', 'ASH': 'D',
+    'GLH': 'E', 'LYN': 'K', 'CYX': 'C',
+    # CHARMM histidine protonation states — DESRES .mae files use these.
+    'HSD': 'H', 'HSE': 'H', 'HSP': 'H',
+}
+
+
+def _tokenize(line):
+    """Split a .mae data row, keeping double-quoted fields as single tokens."""
+    return [t[0] or t[1] for t in re.findall(r'"([^"]*)"|(\S+)', line)]
+
+
+def parse_mae_atoms(path):
+    """Return [(resname, chain, resseq, x, y, z), ...] from the m_atom block."""
+    text = Path(path).read_text(errors="ignore")
+
+    m = re.search(r'm_atom\[(\d+)\]\s*\{', text)
+    if not m:
+        raise SystemExit(f"{path}: no m_atom[...] block found")
+    n_declared = int(m.group(1))
+
+    body = text[m.end():]
+    head, sep, rest = body.partition(':::')
+    if not sep:
+        raise SystemExit(f"{path}: malformed m_atom block (no ':::' separator)")
+
+    props = [p.strip() for p in head.strip().splitlines() if p.strip()]
+    # Data rows are index-prefixed, so property i lives at token i+1.
+    try:
+        col = {p: i + 1 for i, p in enumerate(props)}
+        ir = col['s_m_pdb_residue_name']
+        ic = col['s_m_chain_name']
+        iq = col['i_m_residue_number']
+        ix = col['r_m_x_coord']
+        iy = col['r_m_y_coord']
+        iz = col['r_m_z_coord']
+    except KeyError as e:
+        raise SystemExit(f"{path}: m_atom block lacks required property {e}")
+
+    atoms = []
+    for line in rest.splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        if s.startswith(':::') or s.startswith('}'):
+            break
+        tok = _tokenize(s)
+        if len(tok) <= max(ir, ic, iq, ix, iy, iz):
+            continue
+        atoms.append((
+            tok[ir].strip(), tok[ic].strip() or 'A', int(tok[iq]),
+            float(tok[ix]), float(tok[iy]), float(tok[iz]),
+        ))
+
+    if len(atoms) != n_declared:
+        raise SystemExit(
+            f"{path}: parsed {len(atoms)} atoms but header declares {n_declared}")
+    return atoms
+
+
+def to_pdb_lines(atoms):
+    out = []
+    for i, (resn, chain, resseq, x, y, z) in enumerate(atoms, start=1):
+        out.append(
+            f"ATOM  {i:>5}  CA  {resn:>3} {chain}{resseq:>4}    "
+            f"{x:>8.3f}{y:>8.3f}{z:>8.3f}{1.0:>6.2f}{0.0:>6.2f}"
+            f"{'C':>12}"
+        )
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("mae")
+    ap.add_argument("out", nargs="?")
+    ap.add_argument("--title", default=None)
+    ap.add_argument("--verify", metavar="EXISTING_PDB",
+                    help="compare generated ATOM records against an existing PDB "
+                         "instead of writing (exit 1 on mismatch)")
+    args = ap.parse_args()
+
+    atoms = parse_mae_atoms(args.mae)
+    lines = to_pdb_lines(atoms)
+    seq = "".join(AA3.get(a[0], 'X') for a in atoms)
+
+    if args.verify:
+        have = [l.rstrip() for l in Path(args.verify).read_text().splitlines()
+                if l.startswith("ATOM")]
+        want = [l.rstrip() for l in lines]
+        if have == want:
+            print(f"MATCH: {len(want)} ATOM records identical to {args.verify}")
+            return 0
+        print(f"MISMATCH vs {args.verify} ({len(have)} existing vs {len(want)} generated)")
+        for i, (h, w) in enumerate(zip(have, want)):
+            if h != w:
+                print(f"  first diff at record {i+1}:\n    have: {h!r}\n    want: {w!r}")
+                break
+        return 1
+
+    if not args.out:
+        raise SystemExit("OUT.pdb required unless --verify is given")
+
+    title = args.title or Path(args.mae).stem
+    header = [
+        f"REMARK  {title} — Cα topology built from Schrodinger .mae",
+        f"REMARK  Source: {args.mae}",
+        f"REMARK  Cα-only, {len(atoms)} atoms, sequence: {seq}",
+        f"REMARK  Generated by cluster_scripts/mae_to_topol_pdb.py",
+    ]
+    Path(args.out).write_text("\n".join(header + lines + ["END", ""]))
+    print(f"wrote {args.out}: {len(atoms)} CA atoms, sequence {seq}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
