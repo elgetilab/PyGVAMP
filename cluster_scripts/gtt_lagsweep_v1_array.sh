@@ -98,11 +98,28 @@ if [ -z "${SLURM_ARRAY_TASK_ID}" ]; then
 fi
 
 # --- (seed, lag) grid ------------------------------------------------------
-LAGS=(1.0 2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0)
+# STRIDE IS EXPLICIT PER LAG, and must be (corrected 2026-07-30, job 861).
+# The pipeline does NOT adapt the prep stride to the lag: it applies the preset
+# stride (10) and then REJECTS any lag that is not a multiple of the resulting
+# effective timestep (0.2 ns x 10 = 2 ns), erroring out in ~2 s:
+#     "Invalid lag times: 1.0 ns -> closest valid: 0.0 ns"
+# So tau=1 and tau=5 failed on every seed. For each lag we pass the LARGEST
+# stride <= 10 whose effective timestep divides it:
+#     tau      stride  eff dt   lag in frames   cache frames
+#     1 ns        5     1.0 ns        1          1,137,344
+#     2 ns       10     2.0 ns        1            568,672
+#     5 ns        5     1.0 ns        5          1,137,344
+#     10-500 ns  10     2.0 ns      5..250         568,672
+# (An earlier note here predicted the pipeline would pick these strides itself
+#  via _select_compatible_stride. It does not on this path — hence the explicit
+#  table. The two 1.13M-frame rungs cost roughly 2x the others.)
+LAGS=(1.0  2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0)
+STRIDES=(5  10  5   10   10   10   10    10    10)
 N_LAGS=${#LAGS[@]}
 
 SEED=$(( SLURM_ARRAY_TASK_ID / N_LAGS ))
 LAG=${LAGS[$(( SLURM_ARRAY_TASK_ID % N_LAGS ))]}
+STRIDE=${STRIDES[$(( SLURM_ARRAY_TASK_ID % N_LAGS ))]}
 
 RUN_DIR=$(printf "/mnt/hdd/experiments/gtt_lagsweep_v1/seed_%02d/lag_%sns" "${SEED}" "${LAG}")
 
@@ -111,7 +128,7 @@ scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null
 
 echo "============================================================"
 echo "GTT (WW domain FiP35) lag sweep — task ${SLURM_ARRAY_TASK_ID}"
-echo "Seed: ${SEED}   Lag: ${LAG} ns   (ladder: ${LAGS[*]})"
+echo "Seed: ${SEED}   Lag: ${LAG} ns   Stride: ${STRIDE}   (ladder: ${LAGS[*]})"
 echo "Out:  ${RUN_DIR}"
 echo "Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames"
 echo "State discovery: ON (per-lag, so k* may vary with tau)"
@@ -133,6 +150,7 @@ pygvamp \
     --model        schnet \
     --selection    'name CA' \
     --lag_times    "${LAG}" \
+    --stride       "${STRIDE}" \
     --auto_stride \
     --min_states   2 \
     --max_states   25 \
