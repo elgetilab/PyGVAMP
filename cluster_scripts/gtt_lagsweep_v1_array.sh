@@ -16,18 +16,29 @@
 #   GTT-0 and GTT-1 are SEPARATE runs — correctly loaded as independent
 #   trajectories, never concatenated.
 #
-# ⚠️ WHY --max_states 25 (default is 10). The first probe (job 860, tau=50ns)
-#   searched k in [2,10] and returned silhouette=10, bic=10, aic=10, elbow=3 —
-#   three of four metrics pinned to the TOP of the range. Since
-#   `recommended_n_states` is the MAX across metrics, k* was simply the cap, and
-#   shorter lags resolve MORE states so they would pin there too: k*(tau) would
-#   have been a flat line at 10, measuring the ceiling rather than the physics.
-#   25 gives the metrics room to actually turn over.
-#   NOTE the aggregation rule is itself cap-biased — BIC/AIC often rise
-#   monotonically for clustering. Build k*(tau) from the PER-METRIC values in
-#   each run's state_discovery/discovery_summary.json (elbow is the informative
-#   one here), not from `recommended_n_states`. All metrics are saved per run,
-#   so this is recoverable at analysis time either way.
+# ⚠️ HOW k IS DETERMINED — start at 10, let the retrain loop reduce it.
+#   Corrected 2026-07-30 after two wrong turns, both recorded so they are not
+#   repeated:
+#
+#   (1) `--max_states 25` was WRONG. It was raised from 10 to stop the discovery
+#       METRICS pinning at their ceiling — but `recommended_n_states` also feeds
+#       the TRAINED model, so every run trained k=24/25 on a 35-residue protein,
+#       which is not physically defensible. Raising the cap did not fix the
+#       censoring either: BIC/AIC are monotone in k and simply re-pinned at 25.
+#       Discovery's max-across-metrics rule is degenerate here regardless of cap.
+#
+#   (2) `--max_retrains 0 --no_warm_start_retrains` was WRONG for this
+#       experiment. Those flags were copied from the REPRODUCTION scripts, where
+#       pinning k is required because the paper fixes it. This is Category 3
+#       exploration, where `_run_retrain_loop` is precisely the capability being
+#       demonstrated: train at k, run the JSD diagnostic (jsd_threshold 0.05) to
+#       find redundant `merge_groups` + underpopulated states, retrain at the
+#       recommended `effective_n_states`, and repeat until the diagnostic points
+#       at the current model. Warm-start reuses the encoder across rounds.
+#
+#   So: start every lag at k=10 with discovery OFF, and let the diagnostic walk
+#   k down. The converged k per lag IS k*(tau), measured from trained models
+#   rather than from a clustering heuristic — which is what this sweep is for.
 #
 # ⚠️ WHY ONE JOB PER (SEED, LAG) rather than one job with --lag_times a b c:
 #   state discovery runs ONCE during preparation (master_pipeline.py:107-123)
@@ -131,7 +142,7 @@ echo "GTT (WW domain FiP35) lag sweep — task ${SLURM_ARRAY_TASK_ID}"
 echo "Seed: ${SEED}   Lag: ${LAG} ns   Stride: ${STRIDE}   (ladder: ${LAGS[*]})"
 echo "Out:  ${RUN_DIR}"
 echo "Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames"
-echo "State discovery: ON (per-lag, so k* may vary with tau)"
+echo "k: start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)"
 echo "Code: $(cd /home/vi/PycharmProjects/PyGVAMP 2>/dev/null && git rev-parse --short HEAD 2>/dev/null || echo module)"
 echo "Start: $(date)   Node: $(hostname)"
 echo "============================================================"
@@ -152,10 +163,9 @@ pygvamp \
     --lag_times    "${LAG}" \
     --stride       "${STRIDE}" \
     --auto_stride \
-    --min_states   2 \
-    --max_states   25 \
-    --max_retrains 0 \
-    --no_warm_start_retrains \
+    --no_discover_states \
+    --n_states     10 \
+    --max_retrains 5 \
     --hidden_dim            16 \
     --output_dim            16 \
     --n_interactions        4 \
