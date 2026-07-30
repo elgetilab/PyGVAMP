@@ -124,8 +124,8 @@ fi
 # (An earlier note here predicted the pipeline would pick these strides itself
 #  via _select_compatible_stride. It does not on this path — hence the explicit
 #  table. The two 1.13M-frame rungs cost roughly 2x the others.)
-LAGS=(1.0  2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0)
-STRIDES=(5  10  5   10   10   10   10    10    10)
+LAGS=(5.0   10.0 20.0 50.0)
+STRIDES=(5   10   10   10)
 N_LAGS=${#LAGS[@]}
 
 SEED=$(( SLURM_ARRAY_TASK_ID / N_LAGS ))
@@ -142,7 +142,7 @@ echo "GTT (WW domain FiP35) lag sweep — task ${SLURM_ARRAY_TASK_ID}"
 echo "Seed: ${SEED}   Lag: ${LAG} ns   Stride: ${STRIDE}   (ladder: ${LAGS[*]})"
 echo "Out:  ${RUN_DIR}"
 echo "Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames"
-echo "k: start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)"
+echo "k: discovery ON, start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)"
 echo "Code: $(cd /home/vi/PycharmProjects/PyGVAMP 2>/dev/null && git rev-parse --short HEAD 2>/dev/null || echo module)"
 echo "Start: $(date)   Node: $(hostname)"
 echo "============================================================"
@@ -163,7 +163,6 @@ pygvamp \
     --lag_times    "${LAG}" \
     --stride       "${STRIDE}" \
     --auto_stride \
-    --no_discover_states \
     --n_states     10 \
     --max_retrains 5 \
     --hidden_dim            16 \
