@@ -23,11 +23,15 @@ from typing import Optional
 
 # Import pipeline components
 from pygv.pipe.preparation import run_preparation
-from pygv.pipe.training import run_training
+from pygv.pipe.training import run_training, TRAINING_MARKER
 from pygv.pipe.analysis import run_analysis
 from pygv.config import get_config, list_presets
 from pygv.pipe.args import parse_pipeline_args
 from pygv.utils.logging_utils import PipelineLogger
+
+# Marker written into each analysis directory once analysis finishes.  Presence of
+# output files is not sufficient evidence — see PipelineOrchestrator._analysis_is_complete.
+ANALYSIS_MARKER = 'analysis_complete.json'
 
 class PipelineOrchestrator:
     """
@@ -53,9 +57,21 @@ class PipelineOrchestrator:
         self._prep_stride = None
 
     def setup_experiment_directory(self):
-        """Create experiment directory structure"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        exp_name = f"exp_{self.config.protein_name}_{timestamp}"
+        """Create experiment directory structure.
+
+        With --exp_name the directory is deterministic, so a requeued job lands in
+        the same place and reuses its cache and finished phases. Without it the
+        name is timestamped, and every restart starts from scratch — which is how
+        the GTT sweep lost 11 attempts (job 877, 2026-08-03).
+        """
+        exp_name = getattr(self.config, 'exp_name', None)
+        if exp_name:
+            reusing = (Path(self.config.output_dir) / exp_name).is_dir()
+            if reusing:
+                print(f"Reusing existing experiment directory: {exp_name}")
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            exp_name = f"exp_{self.config.protein_name}_{timestamp}"
 
         self.experiment_dir = Path(self.config.output_dir) / exp_name
 
@@ -166,17 +182,34 @@ class PipelineOrchestrator:
                 exp_dir = dirs['training'] / exp_name
                 exp_dir.mkdir(exist_ok=True)
 
-                # Check if model already exists (in timestamped subdirs or direct)
-                existing = sorted(exp_dir.glob('*/models/best_model.pt'))
-                if existing:
-                    model_path = existing[-1]  # latest run
-                    print(f"Model already exists: {model_path}")
-                    trained_models[exp_name] = str(model_path)
+                # Skip only if a PREVIOUS RUN FINISHED.  Testing for best_model.pt
+                # is not sufficient: it is written on every validation improvement
+                # from epoch 1, so an interrupted run leaves one behind and would be
+                # silently accepted as a finished model (job 877, 2026-08-03).
+                completed = self._completed_model_path(exp_dir)
+                if completed is not None:
+                    print(f"Model already complete: {completed}")
+                    trained_models[exp_name] = str(completed)
                     continue
-                if (exp_dir / 'best_model.pt').exists():
-                    print(f"Model already exists: {exp_dir / 'best_model.pt'}")
-                    trained_models[exp_name] = str(exp_dir / 'best_model.pt')
-                    continue
+
+                # An interrupted run leaves its state in a timestamped run directory.
+                # To continue it we must train back into THAT directory — a fresh
+                # timestamp would never find the previous resume_state.pt.
+                resume_run_name = None
+                partial = self._partial_model_path(exp_dir)
+                if partial is not None:
+                    partial_run_dir = Path(partial).parent.parent
+                    if getattr(self.config, 'resume_training', False):
+                        resume_run_name = partial_run_dir.name
+                        has_state = (partial_run_dir / 'models' / 'resume_state.pt').is_file()
+                        print(f"Found INTERRUPTED training at {partial_run_dir} — "
+                              + ("resuming from its resume_state.pt." if has_state else
+                                 "no resume_state.pt (crash before the first --save_every "
+                                 "boundary); restarting this model from epoch 0."))
+                    else:
+                        print(f"Found INTERRUPTED training at {partial} "
+                              f"(no {TRAINING_MARKER}) — retraining from epoch 0. "
+                              f"Pass --resume_training to continue it instead.")
 
                 # Create training args
                 train_args = self._create_train_args(
@@ -184,7 +217,8 @@ class PipelineOrchestrator:
                     dataset_path,
                     lag_time,
                     n_states,
-                    exp_dir
+                    exp_dir,
+                    resume_run_name=resume_run_name,
                 )
 
                 # Run training
@@ -215,6 +249,13 @@ class PipelineOrchestrator:
             analysis_dir = dirs['analysis'] / exp_name
             analysis_dir.mkdir(exist_ok=True)
 
+            # Analysis is the dominant cost (~3.5h vs ~12min training), so on resume
+            # a finished one must not be redone — but only a marker proves it finished.
+            if self._analysis_is_complete(analysis_dir):
+                print(f"Analysis already complete: {analysis_dir}")
+                analysis_results[exp_name] = self._restore_analysis_result(analysis_dir)
+                continue
+
             # Create analysis args
             analysis_args = self._create_analysis_args(
                 dirs,
@@ -226,6 +267,7 @@ class PipelineOrchestrator:
             try:
                 results = run_analysis(analysis_args)
                 analysis_results[exp_name] = results
+                self._write_analysis_marker(analysis_dir, exp_name, model_path, results)
                 print(f"Analysis completed: {analysis_dir}")
             except Exception as e:
                 print(f"Analysis failed: {str(e)}")
@@ -368,8 +410,14 @@ class PipelineOrchestrator:
         runtime_stride = max(1, int(math.floor(lag_ps / (10.0 * cache_frame_dt_ps))))
         return runtime_stride
 
-    def _create_train_args(self, dirs, dataset_path, lag_time, n_states, exp_dir):
-        """Create arguments for training phase"""
+    def _create_train_args(self, dirs, dataset_path, lag_time, n_states, exp_dir,
+                           resume_run_name=None):
+        """Create arguments for training phase.
+
+        ``resume_run_name`` pins the run subdirectory to an interrupted run's own
+        timestamped directory, so its resume_state.pt is found. Left None, training
+        creates a fresh timestamped run directory as usual.
+        """
         # Start with config as base
         args = argparse.Namespace(**self.config.to_dict())
 
@@ -377,6 +425,8 @@ class PipelineOrchestrator:
         args.lag_time = lag_time
         args.n_states = n_states
         args.output_dir = str(exp_dir)
+        if resume_run_name is not None:
+            args.run_name = resume_run_name
         args.cache_dir = dataset_path if self.config.cache else None
         args.use_cache = self.config.cache
 
@@ -458,8 +508,137 @@ class PipelineOrchestrator:
 
         return args
 
+    def _read_training_marker(self, model_dir: Path) -> Optional[dict]:
+        """Read a training completion marker, or None if absent/unreadable."""
+        marker_path = Path(model_dir) / TRAINING_MARKER
+        if not marker_path.is_file():
+            return None
+        try:
+            with open(marker_path) as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: could not read {marker_path}: {e} — treating as incomplete.")
+            return None
+
+    def _marker_satisfies_request(self, marker: dict) -> bool:
+        """Does a finished run cover what is being asked for now?
+
+        The marker is only written after the epoch loop returns, so its presence
+        already proves the run was not interrupted.  The remaining question is
+        whether it was trained to at least the currently requested budget — a run
+        that finished 50 epochs does not satisfy a later request for 100.
+
+        An early-stopped run DOES satisfy the request: it converged, and rerunning
+        it would just early-stop again.
+        """
+        requested_now = int(getattr(self.config, 'epochs', 0))
+        marker_budget = int(marker.get('epochs_requested') or 0)
+        if marker_budget >= requested_now:
+            return True
+        print(f"  marker was trained to a {marker_budget}-epoch budget but "
+              f"{requested_now} epochs are requested now — retraining.")
+        return False
+
+    def _completed_model_path(self, exp_dir: Path) -> Optional[str]:
+        """Path to a model from a run that FINISHED, or None.
+
+        Checks newest-first so a re-run supersedes an older one.
+        """
+        for model_path in sorted(Path(exp_dir).glob('*/models/best_model.pt'), reverse=True):
+            marker = self._read_training_marker(model_path.parent)
+            if marker is not None and self._marker_satisfies_request(marker):
+                return str(model_path)
+        # Orchestrator's own flat layout
+        flat = Path(exp_dir) / 'best_model.pt'
+        if flat.exists():
+            marker = self._read_training_marker(exp_dir)
+            if marker is not None and self._marker_satisfies_request(marker):
+                return str(flat)
+        return None
+
+    def _partial_model_path(self, exp_dir: Path) -> Optional[str]:
+        """Path to a model left behind by an INTERRUPTED run, or None."""
+        for model_path in sorted(Path(exp_dir).glob('*/models/best_model.pt'), reverse=True):
+            if self._read_training_marker(model_path.parent) is None:
+                return str(model_path)
+        return None
+
+    def _restore_analysis_result(self, analysis_dir: Path) -> dict:
+        """Rebuild the analysis result a skipped (already-complete) analysis would return.
+
+        Only the fields :meth:`_run_retrain_loop` consumes are restored — the verdict
+        and the recommended k.  Returning a bare stub here instead would leave
+        ``diagnostic_report`` as None, and the retrain loop skips any experiment
+        whose report is None, silently turning resume into "no retraining".
+        """
+        result = {'analysis_dir': str(analysis_dir), 'skipped': 'already_complete'}
+        try:
+            with open(Path(analysis_dir) / ANALYSIS_MARKER) as f:
+                marker = json.load(f)
+        except Exception as e:
+            print(f"Warning: could not read analysis marker in {analysis_dir}: {e}")
+            return result
+
+        diag = marker.get('diagnostic')
+        if diag is None:
+            return result
+
+        report = argparse.Namespace(
+            recommendation=diag.get('recommendation'),
+            effective_n_states=diag.get('effective_n_states'),
+            original_n_states=diag.get('original_n_states'),
+        )
+        result['diagnostic_report'] = report
+        print(f"  restored diagnostic verdict: {report.recommendation} "
+              f"(effective_n_states={report.effective_n_states})")
+        return result
+
+    def _analysis_is_complete(self, analysis_dir: Path) -> bool:
+        """True only if a previous analysis of this model ran to completion.
+
+        Output files alone are not evidence: job 877 task 3 exited 0 with an
+        analysis directory created and empty, because Phase 3 raised and the
+        pipeline swallowed it.
+        """
+        return (Path(analysis_dir) / ANALYSIS_MARKER).is_file()
+
+    def _write_analysis_marker(self, analysis_dir: Path, exp_name: str, model_path: str,
+                               results: Optional[dict] = None):
+        """Record that an analysis finished (see :meth:`_analysis_is_complete`).
+
+        The state-reduction verdict is persisted alongside, because
+        :meth:`_run_retrain_loop` reads it off the in-memory analysis results.  A
+        resumed run that skips a finished analysis must still be able to act on that
+        analysis's verdict — otherwise resume would silently disable the retrain
+        loop, which is the capability this sweep exists to measure.
+        """
+        report = (results or {}).get('diagnostic_report')
+        marker = {
+            'exp_name': exp_name,
+            'model_path': str(model_path),
+            'completed_at': datetime.now().isoformat(),
+            'diagnostic': None if report is None else {
+                'recommendation': getattr(report, 'recommendation', None),
+                'effective_n_states': getattr(report, 'effective_n_states', None),
+                'original_n_states': getattr(report, 'original_n_states', None),
+            },
+        }
+        marker_path = Path(analysis_dir) / ANALYSIS_MARKER
+        tmp = str(marker_path) + '.tmp'
+        with open(tmp, 'w') as f:
+            json.dump(marker, f, indent=2)
+        os.replace(tmp, marker_path)
+
     def _discover_trained_models(self, dirs) -> dict:
-        """Scan training directory for existing trained models."""
+        """Scan training directory for FINISHED models.
+
+        This feeds the analysis phase, including for retrained models produced by
+        the JSD loop (``lag10ns_9states_retrained`` and friends), which
+        run_training_phase never iterates over.  It must apply the same completion
+        rule as run_training_phase: a bare best_model.pt is written on every
+        validation improvement from epoch 1, so an interrupted retrain round would
+        otherwise be analysed and reported as a converged k.
+        """
         trained_models = {}
         training_dir = dirs['training']
         if not training_dir.exists():
@@ -467,14 +646,12 @@ class PipelineOrchestrator:
         for exp_dir in sorted(training_dir.iterdir()):
             if not exp_dir.is_dir():
                 continue
-            # Find best_model.pt inside timestamped subdirs
-            candidates = sorted(exp_dir.glob('*/models/best_model.pt'))
-            if candidates:
-                # Use the latest (last sorted) timestamped run
-                trained_models[exp_dir.name] = str(candidates[-1])
-            # Also check direct path (orchestrator's own layout)
-            elif (exp_dir / 'best_model.pt').exists():
-                trained_models[exp_dir.name] = str(exp_dir / 'best_model.pt')
+            completed = self._completed_model_path(exp_dir)
+            if completed is not None:
+                trained_models[exp_dir.name] = completed
+            elif self._partial_model_path(exp_dir) is not None:
+                print(f"Skipping {exp_dir.name}: training was interrupted "
+                      f"(no {TRAINING_MARKER}).")
         return trained_models
 
     def _discover_dataset_path(self, dirs) -> Optional[str]:
@@ -492,12 +669,35 @@ class PipelineOrchestrator:
             return str(prep_dir)
         return None
 
+    def _newest_experiment_dir(self) -> Optional[Path]:
+        """Newest exp_* directory under output_dir, or None if there is none."""
+        out = Path(self.config.output_dir)
+        if not out.is_dir():
+            return None
+        candidates = [d for d in out.iterdir() if d.is_dir() and d.name.startswith('exp_')]
+        if not candidates:
+            return None
+        return sorted(candidates, key=lambda d: d.name)[-1]
+
     def resume_experiment_directory(self, experiment_dir: str) -> dict:
-        """Resume from an existing experiment directory."""
-        exp_path = Path(experiment_dir)
+        """Resume from an existing experiment directory.
+
+        ``--resume auto`` picks the newest exp_* directory, which is what a
+        requeued job wants: it cannot know the timestamp its first attempt used.
+        """
+        if str(experiment_dir).lower() == 'auto':
+            newest = self._newest_experiment_dir()
+            if newest is None:
+                print("--resume auto: no existing experiment directory found; "
+                      "starting a new one.")
+                return self.setup_experiment_directory()
+            print(f"--resume auto: resolved to {newest.name}")
+            exp_path = newest
+        else:
+            exp_path = Path(experiment_dir)
         # Resolve relative names against output_dir
         if not exp_path.is_absolute():
-            exp_path = Path(self.config.output_dir) / experiment_dir
+            exp_path = Path(self.config.output_dir) / exp_path
         self.experiment_dir = exp_path
         dirs = {
             'root': self.experiment_dir,
@@ -1052,6 +1252,16 @@ def main():
     config.output_dir = args.output_dir
     config.protein_name = args.protein_name
     config.cpu = args.cpu
+    config.exp_name = args.exp_name
+    config.resume_training = args.resume_training
+    if args.save_every is not None:
+        config.save_every = args.save_every
+    if config.resume_training and int(config.save_every) <= 0:
+        raise SystemExit(
+            "--resume_training requires --save_every > 0: resume_state.pt is written "
+            "on the checkpoint boundary, so with checkpointing off there is nothing "
+            "to resume from."
+        )
 
     # n_states: if explicitly provided, use it and skip discovery for state count
     if args.n_states is not None:

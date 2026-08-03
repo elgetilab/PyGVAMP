@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import random
 import numpy as np
 from typing import Union, Tuple
 from pygv.classifier.SoftmaxMLP import SoftmaxMLP
@@ -637,6 +638,91 @@ class VAMPNet(nn.Module):
         except Exception as e:
             raise RuntimeError(f"Error reconstructing model: {str(e)}")
 
+    def _save_resume_state(self, filepath, *, epoch, optimizer, scheduler, best_score,
+                           plateau_ref, no_improvement_count, global_batch, history,
+                           best_model_state=None):
+        """Write a resumable training state.
+
+        Distinct from ``save_complete_model``, which pickles the model object only.
+        Resuming needs the optimizer moments, the scheduler position, the
+        early-stopping bookkeeping and the RNG state as well — otherwise a resumed
+        run restarts Adam and the data order, which is a different trajectory.
+
+        Written atomically (tmp + replace) because the thing we are defending
+        against is the process dying at an arbitrary instant.
+        """
+        state = {
+            'epoch': epoch,  # last COMPLETED epoch, 0-based
+            'model_state': self.state_dict(),
+            # The best weights are NOT the same as the current weights: the best may
+            # be several epochs back. Carrying them explicitly keeps best_score and
+            # the weights it refers to consistent across a resume.
+            'best_model_state': best_model_state,
+            'optimizer_state': optimizer.state_dict() if optimizer is not None else None,
+            'scheduler_state': scheduler.state_dict() if scheduler is not None else None,
+            'best_score': best_score,
+            'plateau_ref': plateau_ref,
+            'no_improvement_count': no_improvement_count,
+            'global_batch': global_batch,
+            'history': history,
+            'rng': {
+                'python': random.getstate(),
+                'numpy': np.random.get_state(),
+                'torch': torch.get_rng_state(),
+                'cuda': torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+            },
+        }
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        tmp = filepath + '.tmp'
+        torch.save(state, tmp)
+        os.replace(tmp, filepath)
+
+    def _load_resume_state(self, filepath, optimizer, scheduler, history, device, verbose=True):
+        """Restore state written by :meth:`_save_resume_state`.
+
+        Returns
+        -------
+        tuple
+            (start_epoch, best_score, plateau_ref, no_improvement_count,
+             global_batch, history)
+        """
+        state = torch.load(filepath, map_location=device, weights_only=False)
+
+        self.load_state_dict(state['model_state'])
+        if optimizer is not None and state.get('optimizer_state') is not None:
+            optimizer.load_state_dict(state['optimizer_state'])
+        if scheduler is not None and state.get('scheduler_state') is not None:
+            scheduler.load_state_dict(state['scheduler_state'])
+
+        rng = state.get('rng') or {}
+        try:
+            if rng.get('python') is not None:
+                random.setstate(rng['python'])
+            if rng.get('numpy') is not None:
+                np.random.set_state(rng['numpy'])
+            if rng.get('torch') is not None:
+                torch.set_rng_state(rng['torch'].cpu() if hasattr(rng['torch'], 'cpu') else rng['torch'])
+            if rng.get('cuda') is not None and torch.cuda.is_available():
+                torch.cuda.set_rng_state_all(rng['cuda'])
+        except Exception as e:
+            # A restored-but-imperfect RNG is far better than refusing to resume.
+            print(f"Warning: could not fully restore RNG state ({e}); continuing.")
+
+        start_epoch = int(state['epoch']) + 1
+        if verbose:
+            print(f"Loaded resume state from {filepath} (completed {start_epoch} epochs, "
+                  f"best score {state['best_score']:.4f})")
+
+        return (
+            start_epoch,
+            state['best_score'],
+            state.get('plateau_ref', float('-inf')),
+            int(state.get('no_improvement_count', 0)),
+            int(state.get('global_batch', 1)),
+            state.get('history', history),
+            state.get('best_model_state'),
+        )
+
     def save_complete_model(self, filepath):
         """
         Save the complete VAMPNet model to disk.
@@ -751,6 +837,7 @@ class VAMPNet(nn.Module):
             early_stopping=None,  # Number of epochs with no improvement to trigger early stopping
             early_stopping_tol=0.0,       # Relative improvement threshold for "no improvement"
             early_stopping_min_epochs=0,  # Warmup: don't trigger early stopping before this epoch
+            resume_state_path=None,  # Path to a resume_state.pt written by a previous, interrupted run
             callbacks=None
     ):
         """
@@ -862,9 +949,24 @@ class VAMPNet(nn.Module):
         best_model_state = None
         no_improvement_count = 0
         global_batch = 1
+        start_epoch = 0
+        epochs_run = 0
+
+        # Resume from an interrupted run.  Restores optimizer/scheduler moments and
+        # RNG state as well as weights, so a resumed run continues the same
+        # trajectory rather than restarting Adam and the data order.
+        if resume_state_path is not None and os.path.isfile(resume_state_path):
+            (start_epoch, best_score, plateau_ref, no_improvement_count, global_batch,
+             history, best_model_state) = self._load_resume_state(
+                resume_state_path, optimizer, scheduler, history, device, verbose=verbose
+            )
+            if start_epoch >= n_epochs:
+                print(f"Resume state is already at epoch {start_epoch}/{n_epochs}; nothing left to train.")
 
         if verbose:
             print(f"Starting training for {n_epochs} epochs on {device}")
+            if start_epoch:
+                print(f"Resuming at epoch {start_epoch + 1}/{n_epochs}")
             if test_loader is not None:
                 print(f"Using quick validation every {sample_validate_every} batches")
                 print(f"Performing full validation after each epoch")
@@ -875,7 +977,7 @@ class VAMPNet(nn.Module):
                 )
 
         # Training loop over epochs
-        for epoch in range(n_epochs):
+        for epoch in range(start_epoch, n_epochs):
             # Set model to train mode
             self.train()
 
@@ -990,6 +1092,10 @@ class VAMPNet(nn.Module):
                 if verbose:
                     print(f"Epoch {epoch + 1}/{n_epochs}, Train VAMP: {avg_train_score:.4f}")
 
+            # This epoch's work is done — count it, so an early-stopped or resumed
+            # run reports the true number of epochs behind the saved model.
+            epochs_run = epoch + 1
+
             # Model selection — always saves on strict improvement.
             if current_val_score > best_score:
                 best_score = current_val_score
@@ -1027,6 +1133,20 @@ class VAMPNet(nn.Module):
             # Save checkpoint if requested
             if save_every and (epoch + 1) % save_every == 0 and save_dir:
                 self.save_complete_model(os.path.join(save_dir, f"checkpoint_epoch_{epoch + 1}.pt"))
+                # Rolling resume point.  Written alongside the epoch checkpoint so a
+                # crash costs at most `save_every` epochs instead of the whole run.
+                self._save_resume_state(
+                    os.path.join(save_dir, "resume_state.pt"),
+                    epoch=epoch,
+                    optimizer=optimizer,
+                    scheduler=scheduler,
+                    best_score=best_score,
+                    plateau_ref=plateau_ref,
+                    no_improvement_count=no_improvement_count,
+                    global_batch=global_batch,
+                    history=history,
+                    best_model_state=best_model_state,
+                )
 
             # Step LR scheduler (once per epoch) and log the new rate
             if scheduler is not None:
@@ -1050,6 +1170,7 @@ class VAMPNet(nn.Module):
             print(f"Loaded best model with score: {best_score:.4f}")
 
         # Add best score to history
+        history['epochs_run'] = max(epochs_run, start_epoch)
         history['best_score'] = best_score
         history['best_epoch'] = len(
             history['train_scores']) - no_improvement_count - 1 if no_improvement_count > 0 else len(

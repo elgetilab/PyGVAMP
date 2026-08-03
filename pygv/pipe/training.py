@@ -12,6 +12,7 @@ on molecular dynamics data.
 from pygv.args import parse_train_args
 
 
+import json
 import os
 import torch
 import numpy as np
@@ -68,6 +69,44 @@ def setup_output_directory(args):
     }
 
     return paths
+
+
+TRAINING_MARKER = 'training_complete.json'
+
+
+def write_training_marker(paths, args, scores):
+    """Record that a training run finished, and how much of it actually ran.
+
+    Resume correctness depends on this file: ``best_model.pt`` is saved on every
+    validation improvement starting at epoch 1, so a run killed at epoch 61/100
+    leaves one behind that is indistinguishable from a finished run. Only this
+    marker, written after the epoch loop returns, distinguishes them.
+
+    ``epochs_run`` may legitimately be less than ``epochs_requested`` when early
+    stopping fires; ``early_stopped`` records which case it was so the resume
+    check does not mistake a converged run for an interrupted one.
+    """
+    history = scores if isinstance(scores, dict) else {}
+    epochs_requested = int(getattr(args, 'epochs', 0) or 0)
+    epochs_run = int(history.get('epochs_run') or epochs_requested)
+    marker = {
+        'epochs_run': epochs_run,
+        'epochs_requested': epochs_requested,
+        'early_stopped': epochs_run < epochs_requested,
+        'best_score': history.get('best_score'),
+        'best_epoch': history.get('best_epoch'),
+        'lag_time': getattr(args, 'lag_time', None),
+        'n_states': getattr(args, 'n_states', None),
+        'completed_at': datetime.now().isoformat(),
+    }
+    marker_path = os.path.join(paths['model_dir'], TRAINING_MARKER)
+    tmp = marker_path + '.tmp'
+    with open(tmp, 'w') as f:
+        json.dump(marker, f, indent=2)
+    os.replace(tmp, marker_path)
+    print(f"Training marker written: {marker_path} "
+          f"(epochs_run={epochs_run}/{epochs_requested})")
+    return marker_path
 
 
 def save_config(args, paths):
@@ -435,6 +474,25 @@ def _train_reversible_three_phase(args, model, train_loader, test_loader, paths,
 
 def train_model(args, model, train_loader, test_loader, paths):
     """Train the model"""
+    # Resume capability is checked FIRST, before any expensive setup.  Only
+    # VAMPNet.fit supports it: RevVAMPNet overrides fit() with its own loop, and the
+    # three-phase path below bypasses fit() entirely.  Requesting resume where it
+    # cannot be honoured must fail loudly — silently dropping it would leave a
+    # multi-hour run believing it is crash-safe when it is not.
+    resume_requested = bool(getattr(args, 'resume_training', False))
+    if resume_requested:
+        import inspect
+        three_phase = (getattr(args, 'reversible', False)
+                       and getattr(args, 'rev_three_phase', False))
+        if three_phase or 'resume_state_path' not in inspect.signature(model.fit).parameters:
+            raise RuntimeError(
+                f"--resume_training was requested but this training path "
+                f"({'three-phase reversible' if three_phase else type(model).__name__ + '.fit()'}) "
+                "does not support resuming. Rerun without --resume_training (accepting "
+                "that a crash restarts this model from epoch 0), or add resume support "
+                "to that training loop."
+            )
+
     # Set device
     device = torch.device("cpu" if args.cpu else "cuda" if torch.cuda.is_available() else "cpu")
 
@@ -488,6 +546,12 @@ def train_model(args, model, train_loader, test_loader, paths):
 
 
 
+    # Only pass the kwarg when resuming — fit() implementations that do not accept it
+    # must not see it at all (capability already validated at the top of this function).
+    fit_kwargs = {}
+    if resume_requested:
+        fit_kwargs['resume_state_path'] = os.path.join(paths['model_dir'], 'resume_state.pt')
+
     # Train the model
     print(f"Training model on {device}...")
     scores = model.fit(
@@ -511,6 +575,7 @@ def train_model(args, model, train_loader, test_loader, paths):
         early_stopping=getattr(args, 'early_stopping_patience', None),
         early_stopping_tol=getattr(args, 'early_stopping_tol', 0.0),
         early_stopping_min_epochs=getattr(args, 'early_stopping_min_epochs', 0),
+        **fit_kwargs,
     )
 
     return scores
@@ -584,6 +649,12 @@ def run_training(args, pre_built_model=None):
                          paths=paths)
 
     print(f"Training completed successfully. Results saved to {paths['run_dir']}")
+
+    # Completion marker.  Written ONLY after the epoch loop returns, so an
+    # interrupted run never leaves one behind.  best_model.pt is written on every
+    # validation improvement from epoch 1, so its mere existence proves nothing —
+    # the orchestrator's resume check reads this file instead (job 877, 2026-08-03).
+    write_training_marker(paths, args, scores)
 
     # Determine device
     if args.cpu is True:

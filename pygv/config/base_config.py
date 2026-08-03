@@ -58,6 +58,12 @@ class BaseConfig:
     warm_start_retrains: bool = True   # retrain by swapping only the classifier head (+rev_score)
     max_retrains: int = 5              # safety cap on retrain iterations per experiment
     convergence_check: bool = True     # stop when diagnostic recommends the current k (no change)
+    # Requeue survival (job 877 post-mortem, 2026-08-03).  exp_name pins the
+    # experiment directory so a restarted job reuses its cache and finished phases;
+    # resume_training continues an interrupted model from resume_state.pt rather
+    # than restarting it at epoch 0.
+    exp_name: Optional[str] = None
+    resume_training: bool = False
     # Early-stopping / plateau detection (off by default — patience=None).
     # Typical non-default values:   patience=8, tol=5e-4, min_epochs=10
     # (tol=5e-4 ≈ 0.05%/epoch — sits above the Val-VAMP plateau noise floor

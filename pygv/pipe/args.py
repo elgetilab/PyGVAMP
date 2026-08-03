@@ -269,7 +269,21 @@ Examples:
 
     # Resume options
     parser.add_argument('--resume', type=str, default=None,
-                        help='Resume from experiment directory')
+                        help="Resume from experiment directory. Pass 'auto' to reuse the "
+                             "newest exp_* directory under --output_dir, which is what a "
+                             "requeued SLURM job wants.")
+    parser.add_argument('--exp_name', type=str, default=None,
+                        help='Fixed experiment directory name instead of the default '
+                             'exp_<protein>_<timestamp>. Makes a requeued job land in the '
+                             'same directory and reuse its cache and finished phases.')
+    parser.add_argument('--resume_training', action='store_true',
+                        help='Resume interrupted training from the newest resume_state.pt '
+                             '(optimizer, scheduler, epoch and RNG state), instead of '
+                             'restarting that model from epoch 0. Requires --save_every > 0.')
+    parser.add_argument('--save_every', type=int, default=None,
+                        help='Write a checkpoint and refresh resume_state.pt every N epochs. '
+                             'Sets how much work a crash costs when --resume_training is on. '
+                             '0 disables checkpointing entirely (and with it, resume).')
     parser.add_argument('--skip_preparation', action='store_true',
                         help='Skip preparation phase')
     parser.add_argument('--skip_training', action='store_true',

@@ -74,6 +74,27 @@
 #     sbatch --array=5 cluster_scripts/gtt_lagsweep_v1_array.sh   # seed 0, τ=50ns
 #   read the wall time, THEN size the full sweep.
 #
+# ⚠️ REQUEUE SURVIVAL (added 2026-08-03 after the job 877 post-mortem).
+#   hugin hard-crashed 4x between Jul 30 15:30 and Jul 31 07:25 (no shutdown
+#   sequence in the journal, no I/O / MCE / OOM / Xid signature), then was powered
+#   off Fri->Mon. It is NOT a time limit: the partition is MaxTime=UNLIMITED with
+#   preemption off. SLURM requeues the tasks, but before this change each attempt
+#   started a fresh exp_gtt_<timestamp> directory and retrained from epoch 0, so
+#   11 attempts across 4 lags produced zero usable results.
+#
+#   Three flags make a requeued attempt continue instead of restart:
+#     --exp_name        deterministic per-(seed,lag) directory -> reuses the prep
+#                       cache, and skips training/analysis that already FINISHED
+#     --resume_training continues an interrupted model from resume_state.pt
+#                       (optimizer moments, scheduler, epoch, RNG), not epoch 0
+#     --save_every 10   how often resume_state.pt is refreshed; a crash now costs
+#                       at most 10 epochs
+#
+#   "Finished" is decided by marker files (training_complete.json /
+#   analysis_complete.json), NOT by the presence of best_model.pt — that file is
+#   written on every validation improvement from epoch 1, so an interrupted run
+#   leaves one behind and would otherwise be accepted as a finished model.
+#
 # Full sweep (27 tasks = 3 seeds × 9 lags), 2 concurrent:
 #   sbatch --array=0-26%2 cluster_scripts/gtt_lagsweep_v1_array.sh
 # ===========================================================================
@@ -86,8 +107,16 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --time=INFINITE
+#SBATCH --requeue
+#SBATCH --open-mode=append
 #SBATCH --output=/mnt/hdd/experiments/logs/gtt_lag_%A_%a.out
 #SBATCH --error=/mnt/hdd/experiments/logs/gtt_lag_%A_%a.err
+
+# ⚠️ --open-mode=append is REQUIRED, not cosmetic. Without it every requeue
+#   TRUNCATES the .out/.err, so the crash evidence from earlier attempts is gone.
+#   Job 877 task 0 was requeued 4 times and left exactly one "Start:" banner —
+#   which is why the Jul 30/31 crashes had to be reconstructed from journalctl.
+# ⚠️ --requeue is explicit so a node crash re-queues the task rather than failing it.
 
 module purge
 source /etc/profile.d/modules.sh
@@ -102,6 +131,19 @@ if [ -n "${PYGVAMP_SRC_OVERRIDE}" ]; then
 fi
 
 mkdir -p /mnt/hdd/experiments/logs
+
+# PREFLIGHT: the resume flags below were added 2026-08-03 and do NOT exist in the
+# deployed pygvamp/1.0.0 module. Without them argparse rejects the whole command in
+# ~2 s and every array task dies instantly. Fail here with a readable message rather
+# than as an unrecognized-arguments dump 27 times.
+if ! pygvamp --help 2>&1 | grep -q -- '--exp_name'; then
+    echo "ERROR: the pygvamp on PATH does not support --exp_name/--resume_training."
+    echo "       Either redeploy the module, or rerun with:"
+    echo "         PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP sbatch ... $0"
+    echo "       (without these flags a requeued task restarts from epoch 0 — the"
+    echo "        exact failure this script was changed to prevent)"
+    exit 1
+fi
 
 if [ -z "${SLURM_ARRAY_TASK_ID}" ]; then
     echo "ERROR: submit as an array job, e.g. sbatch --array=5 $0"
@@ -134,17 +176,24 @@ STRIDE=${STRIDES[$(( SLURM_ARRAY_TASK_ID % N_LAGS ))]}
 
 RUN_DIR=$(printf "/mnt/hdd/experiments/gtt_lagsweep_v1/seed_%02d/lag_%sns" "${SEED}" "${LAG}")
 
+# Deterministic experiment directory. Every requeue of this (seed, lag) lands in
+# the SAME directory, so the prep cache (0.2-0.5 GB), any finished training and any
+# finished analysis are reused instead of rebuilt. Without --exp_name the pipeline
+# mints exp_gtt_<timestamp> per attempt: that is why job 877 burned 11 attempts
+# across 4 lags and produced zero usable results.
+EXP_NAME=$(printf "exp_gtt_s%02d_lag%s" "${SEED}" "${LAG}")
+
 JOB_NAME="gtt_s${SEED}_lag${LAG}"
 scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null
 
 echo "============================================================"
 echo "GTT (WW domain FiP35) lag sweep — task ${SLURM_ARRAY_TASK_ID}"
 echo "Seed: ${SEED}   Lag: ${LAG} ns   Stride: ${STRIDE}   (ladder: ${LAGS[*]})"
-echo "Out:  ${RUN_DIR}"
+echo "Out:  ${RUN_DIR}/${EXP_NAME}"
 echo "Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames"
 echo "k: discovery ON, start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)"
 echo "Code: $(cd /home/vi/PycharmProjects/PyGVAMP 2>/dev/null && git rev-parse --short HEAD 2>/dev/null || echo module)"
-echo "Start: $(date)   Node: $(hostname)"
+echo "Attempt: ${SLURM_RESTART_COUNT:-0}   Start: $(date)   Node: $(hostname)"
 echo "============================================================"
 
 # NOTE: keep this arg list free of inline '#' comments — a bare comment line
@@ -174,6 +223,9 @@ pygvamp \
     --epochs       100 \
     --batch_size   1000 \
     --val_split    0.3 \
+    --exp_name     "${EXP_NAME}" \
+    --resume_training \
+    --save_every   10 \
     --cache
 
 EXIT_CODE=$?
