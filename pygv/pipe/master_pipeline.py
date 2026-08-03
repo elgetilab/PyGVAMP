@@ -458,7 +458,7 @@ class PipelineOrchestrator:
 
         # Processing parameters (match training)
         args.selection = self.config.selection
-        args.stride = self.config.stride
+        # args.stride is set at the end of this method — see the note there.
         args.n_neighbors = self.config.n_neighbors
         args.node_embedding_dim = self.config.node_embedding_dim
         args.gaussian_expansion_dim = self.config.gaussian_expansion_dim
@@ -496,15 +496,23 @@ class PipelineOrchestrator:
             args.lag_time = self.config.lag_times[0] if isinstance(self.config.lag_times,
                                                                    list) else self.config.lag_time
 
-        # When auto-stride is on, analysis must match training's effective stride
-        # so transition matrices and implied timescales use the correct time
-        # resolution.  We collapse prep_stride × runtime_stride into a single
-        # stride value for analysis so analysis.py does not need to know about
-        # runtime_stride.  (This may create a second cache at the coarser
-        # stride; that's acceptable.)
-        if getattr(self.config, 'auto_stride', False):
-            runtime_stride = self._compute_auto_stride(args.lag_time)
-            args.stride = self.config.stride * runtime_stride
+        # Analysis runs on the PREPROCESSING time grid — the stride the cache on
+        # disk was actually built with.  It must NOT be multiplied by auto-stride's
+        # runtime_stride, which is a pair subsample: VAMPNetDataset applies it to the
+        # (t0, t1) index lists after the pairs are built, leaving the time grid
+        # untouched (vampnet_dataset.py:184-190).  Training's time resolution is
+        # therefore the prep stride too, so this is what "match training" means.
+        #
+        # Folding runtime_stride in here (the behaviour until 2026-08-03) coarsened
+        # the analysis grid and broke two things:
+        #   * lag validation — τ=50 ns on GTT became 50000ps % 4000ps != 0 and Phase 3
+        #     died with "cannot be achieved with timestep of 200.0 ps and stride of 20"
+        #     (job 877 task 3, and job 861 task 5 before it);
+        #   * cache reuse — analysis looked for ..._str20_cont.pkl while prep had
+        #     written ..._str10_cont.pkl, so every lag with runtime_stride > 1
+        #     (τ=50, 100, 500) rebuilt the entire dataset.
+        # Analysis cost is already bounded by --analysis_max_frames, not by stride.
+        args.stride = self._prep_stride or self.config.stride
 
         return args
 

@@ -145,8 +145,8 @@ re-derives it from whatever models happen to exist on disk.
 Ordered by dependency. Steps 1–2 are the blocking correctness work; 4–5 are what
 actually make requeue cheap; 3 is the deepest win and can follow.
 
-> **Status 2026-08-03: steps 1–5 implemented, 15/15 tests in `tests/test_resume.py` green.**
-> Step 6 (τ=50 stride bug) is still open. See "What changed" at the end.
+> **Status 2026-08-03: steps 1–6 implemented.** 19/19 in `tests/test_resume.py`,
+> 33/33 in `tests/test_auto_stride.py`. See "What changed" at the end.
 
 ### Step 1 — regression test first
 Build a fixture exp dir containing a `best_model.pt` written at epoch 61 of a
@@ -188,9 +188,34 @@ rather than rebuilt.
 - `--signal=B:USR1@120` + a trap that forces a checkpoint before the job dies
 - pass `--resume auto --resume_training`
 
-### Step 6 — separate issue, already scoped
-τ=50 ns analysis-stride divisibility bug (Phase 3 collapses prep × runtime stride;
-50 ns is not a multiple of the resulting 4 ns). Independent of resume.
+### Step 6 — τ=50 analysis-stride bug *(fixed 2026-08-03)*
+`_create_analysis_args` multiplied the prep stride by auto-stride's
+`runtime_stride`. That is a category error: `runtime_stride` is a **pair**
+subsample — VAMPNetDataset applies it to the (t0, t1) index lists after the pairs
+are built (`vampnet_dataset.py:184-190`) and never touches the time grid — whereas
+`stride` is the preprocessing **frame** stride and does set the time grid.
+Training's own time resolution is therefore the prep stride, so "match training"
+meant not multiplying at all.
+
+Measured before fixing (4 red in `tests/test_auto_stride.py`):
+- **Divisibility**: τ=50 is the *only* rung of 5/10/20/50/100/500 that breaks —
+  prep grid 2 ns × runtime_stride 2 = 4 ns, and 50000 ps % 4000 ps ≠ 0.
+- **Cache reuse**: every rung with `runtime_stride > 1` — τ=50, 100 **and 500** —
+  looked for `..._str{20,50,250}_cont.pkl` while prep had written `..._str10_...`,
+  so each rebuilt the entire dataset. This was the larger hidden cost and was not
+  visible in the τ=50 crash.
+- **Consistency**: the training phase already ran its ITS/CK at the prep stride, so
+  analysis at the folded stride produced a second, differently-calibrated ITS curve
+  for the same model. Now both use the prep grid.
+
+Fix: `args.stride = self._prep_stride or self.config.stride`, preferring the stride
+`dataset_stats.json` says the cache was actually built with. Analysis cost stays
+bounded by `--analysis_max_frames`, which is what it was always bounded by.
+
+Not addressed (pre-existing, unchanged by this fix): the analysis decimates to
+`analysis_max_frames` non-contiguously, so ITS/CK absolute timescales are still not
+time-calibrated — see the standing note on that. The decimation spans the same
+total trajectory time before and after this fix, so its magnitude is unaffected.
 
 ### Infrastructure asks (need sudo / not ours)
 - Fix `slurm-auto-resume.service` ("Invalid node state specified")

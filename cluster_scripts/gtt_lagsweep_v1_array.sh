@@ -166,6 +166,13 @@ fi
 # (An earlier note here predicted the pipeline would pick these strides itself
 #  via _select_compatible_stride. It does not on this path — hence the explicit
 #  table. The two 1.13M-frame rungs cost roughly 2x the others.)
+#
+# The table above governs PREP. Phase 3 used to multiply it by auto-stride's
+# runtime_stride, which coarsened the analysis time grid and killed tau=50
+# ("cannot be achieved with timestep of 200.0 ps and stride of 20"); it also made
+# tau=50/100/500 miss the prepared cache and rebuild the dataset. Fixed
+# 2026-08-03: analysis now runs on the prep grid, because runtime_stride is a PAIR
+# subsample and never changes the time grid. All four rungs are safe to run.
 LAGS=(5.0   10.0 20.0 50.0)
 STRIDES=(5   10   10   10)
 N_LAGS=${#LAGS[@]}

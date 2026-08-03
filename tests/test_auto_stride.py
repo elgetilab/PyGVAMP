@@ -13,6 +13,7 @@ Covers:
 import argparse
 import math
 import pytest
+from pathlib import Path
 
 from pygv.config.base_config import BaseConfig
 from pygv.pipe.master_pipeline import PipelineOrchestrator
@@ -188,3 +189,106 @@ def test_preprocessing_stride_floor_when_target_below_cache_density():
     assert runtime_stride == 1
     effective = 10 * runtime_stride
     assert effective == 10
+
+
+# ---------------------------------------------------------------------------
+# 7. analysis-side stride  (job 877 τ=50 ns failure, 2026-08-03)
+#
+# runtime_stride is a PAIR subsample: VAMPNetDataset applies it to the
+# (t0, t1) index lists after the pairs are built (vampnet_dataset.py:184-190).
+# It does not change the time grid.  `stride` is the preprocessing frame stride
+# and DOES change the time grid.  Folding one into the other for the analysis
+# phase changes the analysis's time resolution, which:
+#   (a) makes lag times that are fine at the prep grid indivisible at the
+#       coarser one — τ=50 ns died with "cannot be achieved with timestep of
+#       200.0 ps and stride of 20"; and
+#   (b) forces a cache miss, because prep wrote its cache at the prep stride.
+# ---------------------------------------------------------------------------
+
+def _make_analysis_args(orch, lag_time_ns, model_path=None):
+    """Call _create_analysis_args with minimal filler."""
+    import tempfile
+    dirs = {"cache": None, "preparation": Path(tempfile.gettempdir()) / "no_such_prep_dir"}
+    if model_path is None:
+        model_path = f"training/lag{lag_time_ns}ns_10states/20260730_124941/models/best_model.pt"
+    orch.config.lag_times = [lag_time_ns]
+    return orch._create_analysis_args(dirs, model_path, "/tmp/test_analysis_dummy")
+
+
+def test_analysis_stride_does_not_fold_in_runtime_stride():
+    """Analysis must keep the preprocessing time grid, not the pair-subsampled one.
+
+    GTT τ=50 ns: frame_dt 0.2 ns, prep stride 10 -> cache grid 2 ns.
+    auto_stride gives runtime_stride 2, and folding it in made the analysis grid
+    4 ns, which does not divide 50 ns.
+    """
+    orch = _make_orchestrator(
+        auto_stride=True, frame_dt_ps=200.0, prep_stride=10, stride=10, timestep_ns=0.2
+    )
+    args = _make_analysis_args(orch, 50.0)
+    assert args.stride == 10, (
+        f"analysis stride is {args.stride}; folding runtime_stride into the frame "
+        "stride changes the analysis time grid and breaks lag divisibility"
+    )
+
+
+@pytest.mark.parametrize("lag_ns,prep_stride", [
+    (5.0, 5), (10.0, 10), (20.0, 10), (50.0, 10), (100.0, 10), (500.0, 10),
+])
+def test_analysis_lag_is_divisible_by_effective_timestep(lag_ns, prep_stride):
+    """Every rung of the GTT ladder must survive VAMPNetDataset's lag validation.
+
+    That check is `lag_ps % (frame_dt_ps * stride) != 0 -> raise`
+    (vampnet_dataset.py:668). Reproduced here so a stride change that breaks a rung
+    fails in unit tests instead of three hours into a cluster job.
+    """
+    frame_dt_ps = 200.0
+    orch = _make_orchestrator(
+        auto_stride=True, frame_dt_ps=frame_dt_ps, prep_stride=prep_stride,
+        stride=prep_stride, timestep_ns=0.2,
+    )
+    args = _make_analysis_args(orch, lag_ns)
+
+    effective_dt_ps = frame_dt_ps * args.stride
+    lag_ps = lag_ns * 1000.0
+    assert lag_ps % effective_dt_ps == 0, (
+        f"τ={lag_ns}ns with analysis stride {args.stride} gives an effective "
+        f"timestep of {effective_dt_ps}ps; {lag_ps} % {effective_dt_ps} != 0, so "
+        "VAMPNetDataset will reject this lag and Phase 3 dies"
+    )
+
+
+def test_analysis_stride_matches_prep_so_the_cache_is_reused():
+    """Analysis must look for the cache prep actually wrote.
+
+    Prep wrote vampnet_data_<hash>_lag50.0_nn10_str10_cont.pkl; the folded stride
+    made analysis look for _str20_ and rebuild the whole dataset (job 877 logged
+    "No cache file found at ..._str20_cont.pkl" immediately before failing).
+    """
+    prep_stride = 10
+    orch = _make_orchestrator(
+        auto_stride=True, frame_dt_ps=200.0, prep_stride=prep_stride,
+        stride=prep_stride, timestep_ns=0.2,
+    )
+    for lag in (5.0, 10.0, 20.0, 50.0, 100.0, 500.0):
+        args = _make_analysis_args(orch, lag)
+        assert args.stride == prep_stride, (
+            f"τ={lag}: analysis stride {args.stride} != prep stride {prep_stride}, "
+            "so the prepared cache cannot be reused"
+        )
+
+
+def test_analysis_stride_prefers_the_stride_prep_actually_used():
+    """When prep applied a stride different from the CLI value, follow prep.
+
+    dataset_stats.json is authoritative: it records what the cache on disk was
+    actually built with, and that is what the cache lookup and the time grid must
+    agree with.
+    """
+    orch = _make_orchestrator(
+        auto_stride=True, frame_dt_ps=200.0, prep_stride=4, stride=10, timestep_ns=0.2
+    )
+    args = _make_analysis_args(orch, 20.0)
+    assert args.stride == 4, (
+        f"analysis used {args.stride}, but prep built the cache at stride 4"
+    )
