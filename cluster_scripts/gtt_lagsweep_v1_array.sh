@@ -173,8 +173,35 @@ fi
 # tau=50/100/500 miss the prepared cache and rebuild the dataset. Fixed
 # 2026-08-03: analysis now runs on the prep grid, because runtime_stride is a PAIR
 # subsample and never changes the time grid. All four rungs are safe to run.
-LAGS=(5.0   10.0 20.0 50.0)
-STRIDES=(5   10   10   10)
+#
+# ⚠️ SHORT END ADDED 2026-08-04 (tau=1, 2 ns), because the 5-50 ns sweep returned
+#   k*=2 at EVERY rung — flat at the diagnostic's hard floor
+#   (state_diagnostics.py:303, effective_n_states = max(2, ...)), with identical
+#   0.77/0.23 populations to three decimals. That ladder sits entirely above
+#   FiP35's slow process, so it carries no lag dependence. Sub-states, if any,
+#   live below 5 ns.
+#
+# ⚠️ tau=0.5 ns IS NOT ACHIEVABLE and was NOT added. The raw frame spacing is
+#   200 ps, so 0.5 ns is 2.5 frames. No stride fixes this — stride only makes the
+#   grid COARSER, never finer, so every achievable lag is an integer multiple of
+#   0.2 ns. Achievable neighbours: 0.4 ns (2 frames, needs stride<=2 -> 2.84M
+#   cache frames) and 0.6 ns (3 frames, stride<=3 -> 1.90M). Both are far more
+#   expensive than tau=1/2 — see the cost note below — so they are held pending
+#   the tau=1/2 result rather than launched blind.
+#
+# ⚠️ APPEND-ONLY ORDERING. New lags go at the END of LAGS, never in ascending
+#   position, because SLURM array index maps to lag by position: indices 0-3 were
+#   5/10/20/50 ns for the completed jobs 883 and 886. Re-sorting would silently
+#   redefine what "array=2" meant in those runs.
+#
+# COST, from measured runs (not estimated): the three completed 5-50 ns rungs cost
+#   ~285 min per (model x million training pairs) — tau=10 was 8h23m/3 models at
+#   568k pairs, tau=5 16h28m/3 models at 1.14M, tau=20 10h26m/4 models at 568k.
+#   Projected at 3 models:  tau=2 ~8h (568k pairs),  tau=1 ~16h (1.14M pairs).
+#   Model count is NOT fixed — it is however many retrain rounds fire, and tau=50
+#   needed 6. Short lags may well need more, so treat these as lower bounds.
+LAGS=(5.0   10.0 20.0 50.0 1.0 2.0)
+STRIDES=(5   10   10   10   5  10)
 N_LAGS=${#LAGS[@]}
 
 SEED=$(( SLURM_ARRAY_TASK_ID / N_LAGS ))
