@@ -204,6 +204,27 @@ LAGS=(5.0   10.0 20.0 50.0 1.0 2.0)
 STRIDES=(5   10   10   10   5  10)
 N_LAGS=${#LAGS[@]}
 
+# --- overridable knobs (same pattern as AB42_RUN_TAG) ----------------------
+# GTT_MAX_RETRAINS  cap on JSD retrain rounds. Default 5.
+# GTT_RUN_TAG       suffix on the experiment dir, so a rerun with different
+#                   settings does not overwrite or resume into the original.
+#
+# ⚠️ tau=1 ns EXHAUSTED the default cap of 5 (job 888/889, 2026-08-05):
+#     10 -> 9 -> 8 -> 7 -> 6 -> 3, then
+#     "retrain loop exhausted (5 iterations) without convergence ...
+#      latest recommendation was k=2"
+#   so k*(tau=1) was never measured — 3 is just where the budget ran out. The
+#   k=3 model's populations were [0.004, 0.772, 0.224]: a 0.4% sliver on top of
+#   the same two-state split every other rung found. Rerun to convergence with:
+#     GTT_MAX_RETRAINS=10 GTT_RUN_TAG=_r10 sbatch --array=4 <this script>
+#
+#   This is the THIRD cap to bias this experiment, after --max_states from above
+#   (6392da1) and the max(2,...) floor in state_diagnostics.py:303 from below.
+#   Any k* must be checked against the cap that produced it before it is read as
+#   physics; the loop warns on exhaustion, so grep the log for "exhausted".
+MAX_RETRAINS="${GTT_MAX_RETRAINS:-5}"
+RUN_TAG="${GTT_RUN_TAG:-}"
+
 SEED=$(( SLURM_ARRAY_TASK_ID / N_LAGS ))
 LAG=${LAGS[$(( SLURM_ARRAY_TASK_ID % N_LAGS ))]}
 STRIDE=${STRIDES[$(( SLURM_ARRAY_TASK_ID % N_LAGS ))]}
@@ -215,7 +236,7 @@ RUN_DIR=$(printf "/mnt/hdd/experiments/gtt_lagsweep_v1/seed_%02d/lag_%sns" "${SE
 # finished analysis are reused instead of rebuilt. Without --exp_name the pipeline
 # mints exp_gtt_<timestamp> per attempt: that is why job 877 burned 11 attempts
 # across 4 lags and produced zero usable results.
-EXP_NAME=$(printf "exp_gtt_s%02d_lag%s" "${SEED}" "${LAG}")
+EXP_NAME=$(printf "exp_gtt_s%02d_lag%s%s" "${SEED}" "${LAG}" "${RUN_TAG}")
 
 JOB_NAME="gtt_s${SEED}_lag${LAG}"
 scontrol update JobId=${SLURM_JOB_ID} Name=${JOB_NAME} 2>/dev/null
@@ -225,7 +246,7 @@ echo "GTT (WW domain FiP35) lag sweep — task ${SLURM_ARRAY_TASK_ID}"
 echo "Seed: ${SEED}   Lag: ${LAG} ns   Stride: ${STRIDE}   (ladder: ${LAGS[*]})"
 echo "Out:  ${RUN_DIR}/${EXP_NAME}"
 echo "Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames"
-echo "k: discovery ON, start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)"
+echo "k: discovery ON, start 10 -> JSD retrain loop reduces it (max ${MAX_RETRAINS} rounds, warm-started)"
 echo "Code: $(cd /home/vi/PycharmProjects/PyGVAMP 2>/dev/null && git rev-parse --short HEAD 2>/dev/null || echo module)"
 echo "Attempt: ${SLURM_RESTART_COUNT:-0}   Start: $(date)   Node: $(hostname)"
 echo "============================================================"
@@ -247,7 +268,7 @@ pygvamp \
     --stride       "${STRIDE}" \
     --auto_stride \
     --n_states     10 \
-    --max_retrains 5 \
+    --max_retrains "${MAX_RETRAINS}" \
     --hidden_dim            16 \
     --output_dim            16 \
     --n_interactions        4 \
