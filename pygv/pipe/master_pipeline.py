@@ -1262,6 +1262,10 @@ def main():
     config.cpu = args.cpu
     config.exp_name = args.exp_name
     config.resume_training = args.resume_training
+    if args.angular_features is not None:
+        config.angular_features = args.angular_features
+    if args.angular_bins is not None:
+        config.angular_bins = args.angular_bins
     if args.save_every is not None:
         config.save_every = args.save_every
     if config.resume_training and int(config.save_every) <= 0:

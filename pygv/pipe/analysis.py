@@ -123,6 +123,8 @@ def create_dataset_and_loader(args):
         use_cache=True if args.cache_dir is not None else False,
         timestep=getattr(args, 'timestep', None),
         continuous=getattr(args, 'continuous', True),
+        angular_features=getattr(args, 'angular_features', 'none'),
+        angular_bins=getattr(args, 'angular_bins', 8),
     )
 
     # Get frames dataset instead of time-lagged pairs dataset

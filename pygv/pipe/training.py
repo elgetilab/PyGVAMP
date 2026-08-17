@@ -172,6 +172,8 @@ def create_dataset_and_loader(args,
         use_cache=args.use_cache,
         timestep=getattr(args, 'timestep', None),
         continuous=getattr(args, 'continuous', True),
+        angular_features=getattr(args, 'angular_features', 'none'),
+        angular_bins=getattr(args, 'angular_bins', 8),
         runtime_stride=getattr(args, 'runtime_stride', 1),
         seed=seed,
     )

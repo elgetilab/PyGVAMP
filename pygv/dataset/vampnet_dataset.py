@@ -16,6 +16,7 @@ import pickle
 from tqdm import tqdm
 
 from pygv.utils.features import get_amino_acid_features, get_amino_acid_labels
+from pygv.dataset.angular import build_angular_features, angular_feature_dim
 
 
 class VAMPNetDataset(Dataset):
@@ -101,6 +102,8 @@ class VAMPNetDataset(Dataset):
             continuous: bool = True,
             timestep: Optional[float] = None,
             runtime_stride: int = 1,
+            angular_features: str = 'none',
+            angular_bins: int = 8,
     ):
         super(VAMPNetDataset, self).__init__()
 
@@ -122,6 +125,13 @@ class VAMPNetDataset(Dataset):
         if runtime_stride < 1:
             raise ValueError(f"runtime_stride must be >= 1, got {runtime_stride}")
         self.runtime_stride = int(runtime_stride)
+        # Angular node features (PaiNN pre-test, see pygv/dataset/angular.py).
+        # Computed per frame at graph-build time, NOT cached: the cache stores raw
+        # frames, so enabling this does not invalidate any existing cache.
+        # Validated here so a typo fails at construction, not 3 hours into a run.
+        angular_feature_dim(angular_features, angular_bins)
+        self.angular_features = angular_features or 'none'
+        self.angular_bins = int(angular_bins)
         # Populated by _infer_timestep() or _load_from_cache().  Used by the
         # auto-stride feature in the orchestrator.
         self.raw_timestep_ps: Optional[float] = None
@@ -479,6 +489,16 @@ class VAMPNetDataset(Dataset):
         edge_attr = self._compute_gaussian_expanded_distances(edge_distances)
 
         node_attr = self._create_node_features(use_amino_acid_encoding)
+
+        # Append per-frame angular features.  These are frame-DEPENDENT, so they
+        # cannot live in the frame-invariant _create_node_features cache.
+        # getattr, not attribute access: tests and legacy paths build stubs via
+        # VAMPNetDataset.__new__ which never runs __init__.
+        _ang_mode = getattr(self, 'angular_features', 'none')
+        if _ang_mode != 'none':
+            ang = build_angular_features(
+                _ang_mode, coords, edge_index, getattr(self, 'angular_bins', 8))
+            node_attr = torch.cat([node_attr, ang], dim=1)
 
         graph = Data(
             x=node_attr,

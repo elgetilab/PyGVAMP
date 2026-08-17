@@ -280,6 +280,17 @@ Examples:
                         help='Resume interrupted training from the newest resume_state.pt '
                              '(optimizer, scheduler, epoch and RNG state), instead of '
                              'restarting that model from epoch 0. Requires --save_every > 0.')
+    parser.add_argument('--angular_features', type=str, default=None,
+                        choices=['none', 'chain', 'knn', 'both'],
+                        help="Append angular node features to the graph (PaiNN pre-test). "
+                             "'chain' = Ca pseudo bond angle + SIGNED pseudo dihedral (carries "
+                             "handedness, which a pairwise distance matrix cannot represent); "
+                             "'knn' = Gaussian-expanded neighbour-centre-neighbour angle "
+                             "distribution (reflection-even, adds angular resolution only); "
+                             "'both' = concatenation. Default 'none' (baseline unchanged). "
+                             "Computed per frame at graph-build time, so existing caches stay valid.")
+    parser.add_argument('--angular_bins', type=int, default=None,
+                        help="Soft bins for the 'knn' angular descriptor (default 8).")
     parser.add_argument('--save_every', type=int, default=None,
                         help='Write a checkpoint and refresh resume_state.pt every N epochs. '
                              'Sets how much work a crash costs when --resume_training is on. '

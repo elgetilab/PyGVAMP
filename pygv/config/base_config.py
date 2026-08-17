@@ -64,6 +64,10 @@ class BaseConfig:
     # than restarting it at epoch 0.
     exp_name: Optional[str] = None
     resume_training: bool = False
+    # Angular node features (PaiNN pre-test, pygv/dataset/angular.py).
+    # 'none' keeps the baseline descriptor exactly as published.
+    angular_features: str = 'none'
+    angular_bins: int = 8
     # Early-stopping / plateau detection (off by default — patience=None).
     # Typical non-default values:   patience=8, tol=5e-4, min_epochs=10
     # (tol=5e-4 ≈ 0.05%/epoch — sits above the Val-VAMP plateau noise floor

@@ -328,6 +328,8 @@ def create_and_analyze_dataset(args, paths):
         amino_acid_feature_type=amino_acid_feature_type,
         timestep=getattr(args, 'timestep', None),
         continuous=getattr(args, 'continuous', True),
+        angular_features=getattr(args, 'angular_features', 'none'),
+        angular_bins=getattr(args, 'angular_bins', 8),
     )
 
     print(f"Dataset created with {len(dataset)} samples")
