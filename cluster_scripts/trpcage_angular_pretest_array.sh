@@ -37,12 +37,27 @@
 #   roughly >0.022 in VAMP-2. A smaller true effect will read as null. Say so when
 #   reporting: "no effect larger than ~0.02", not "no effect".
 #
-# KNOWN CONFOUND.
-#   `both` widens node features 20 -> 32, which also adds ~192 first-layer weights
-#   (~3% of the ~7k total). So this arm changes information AND a little capacity.
-#   If the result is POSITIVE, run a capacity control (12 columns of fixed random
-#   noise instead of angles) before claiming the angles did it. If NULL, the
-#   confound does not matter — extra capacity did not help either.
+# KNOWN CONFOUND — MEASURED 2026-08-17, and much larger than first estimated.
+#   `both` widens node features 20 -> 32. Measured parameter counts (job 905 probe
+#   vs control job 522), same 56 tensors, same architecture:
+#       control  node_dim=20   7,685 params
+#       angular  node_dim=32  12,821 params      -> +5,136 (+67%)
+#   An earlier note here guessed "~192 weights (~3%)". That was wrong by ~27x:
+#   node_dim feeds more than the single first-layer projection. So this arm changes
+#   information AND substantially more capacity.
+#
+# PRE-REGISTERED DECISION RULE (fixed before any result is read, so a positive
+# cannot be rationalised after the fact):
+#   * NULL (angular CI overlaps 4.6516 +- 0.011, or is lower)
+#       -> conclusive for the cheap test. Even with +67% parameters AND explicit
+#          angular information, nothing improved. Do not run the control arm.
+#          Report as "no effect larger than ~0.02" and treat PaiNN as unmotivated.
+#   * POSITIVE (angular CI clears the baseline CI upward)
+#       -> NOT attributable to angular information yet. +67% params is a live
+#          alternative explanation. Run the capacity control (12 columns of fixed
+#          per-node random features: identical width, identical parameter count,
+#          zero geometric content) for 10 seeds and compare angular vs control
+#          before making any claim about angles.
 #
 # Caches are NOT invalidated: angular features are computed per frame at
 # graph-build time, and the cache stores raw frames.
