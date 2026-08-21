@@ -273,9 +273,20 @@ class TestConfigRegistry:
         assert 'large_ml3' in CONFIG_REGISTRY
 
     def test_registry_count(self):
-        """Registry has expected number of entries."""
-        # 5 base + 4 small + 4 medium + 4 large = 17
-        assert len(CONFIG_REGISTRY) == 17
+        """Registry holds exactly the expected entries.
+
+        Asserts the NAMES, not a magic number: a bare count tells you something
+        changed but not what, and it was the only thing that flagged the PaiNN
+        registration (2026-08-21). Note the preset families cover schnet/meta/ml3/gin
+        only — PaiNN has a base config but no small/medium/large presets yet.
+        """
+        expected = {
+            'base', 'schnet', 'meta', 'ml3', 'gin', 'painn',
+            'small_schnet', 'small_meta', 'small_ml3', 'small_gin',
+            'medium_schnet', 'medium_meta', 'medium_ml3', 'medium_gin',
+            'large_schnet', 'large_meta', 'large_ml3', 'large_gin',
+        }
+        assert set(CONFIG_REGISTRY) == expected
 
     def test_registry_values_are_classes(self):
         """Registry values are config classes."""
