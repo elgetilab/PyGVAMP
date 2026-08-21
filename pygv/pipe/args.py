@@ -113,6 +113,26 @@ Examples:
     # its own ml3_* dims, so expose them here too (otherwise ML3 can only run
     # at its preset width via the pipeline CLI, and can't be capacity-matched
     # to the SchNet/GIN baselines).
+    # PaiNN encoder (equivariant). Dims default to None -> fall back to the
+    # generic --hidden_dim/--output_dim/--n_interactions, so a single-variable
+    # encoder swap against the SchNet baseline needs only --model painn.
+    parser.add_argument('--painn_hidden_dim', type=int, default=None,
+                        help='PaiNN scalar+vector channel width (default: --hidden_dim). '
+                             'NOTE PaiNN stores 1 scalar + 3 vector components per '
+                             'channel, so equal width is NOT equal capacity vs SchNet.')
+    parser.add_argument('--painn_output_dim', type=int, default=None,
+                        help='PaiNN graph embedding width (default: --output_dim).')
+    parser.add_argument('--painn_n_interactions', type=int, default=None,
+                        help='PaiNN (message, update) block pairs (default: --n_interactions).')
+    parser.add_argument('--painn_activation', type=str, default=None,
+                        choices=['silu', 'tanh', 'relu'],
+                        help='Activation inside PaiNN blocks (default silu, as in the paper).')
+    parser.add_argument('--painn_cutoff', type=float, default=None,
+                        help='PaiNN cosine cutoff radius in coordinate units. Default none: '
+                             'the graphs are k-NN, so a hard cutoff would drop neighbours '
+                             'the k-NN build deliberately kept.')
+    parser.add_argument('--painn_shared_interactions', action='store_true',
+                        help='Reuse one PaiNN interaction block across all layers.')
     parser.add_argument('--ml3_node_dim', type=int, default=None,
                         help='ML3 encoder node feature dimension.')
     parser.add_argument('--ml3_edge_dim', type=int, default=None,

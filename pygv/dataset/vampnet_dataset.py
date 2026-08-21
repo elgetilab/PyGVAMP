@@ -504,6 +504,11 @@ class VAMPNetDataset(Dataset):
             x=node_attr,
             edge_index=edge_index,
             edge_attr=edge_attr,
+            # Node positions. Required by equivariant encoders (PaiNN), which need
+            # the DIRECTION of r_ij and not just its magnitude -- the pairwise
+            # distance computed above discards direction. Cheap (n_atoms x 3, far
+            # smaller than edge_attr) and inert for the distance-only encoders.
+            pos=coords,
             num_nodes=self.n_atoms,
         )
 

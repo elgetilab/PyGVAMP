@@ -40,6 +40,18 @@ mirrored structures, so this blindness likely costs nothing in practice. Do **no
 lead with chirality; the real claim is angular resolution, which is weaker but
 honest.
 
+> **Stronger correction, established during implementation (2026-08-21).**
+> PaiNN's scalar readout is **also reflection-invariant**, so it does not capture
+> chirality either. The vector channel couples back to scalars only through
+> orthogonally-invariant contractions — norms ‖v‖ and dot products ⟨v, w⟩ — and
+> ⟨Rv, Rw⟩ = ⟨v, w⟩ holds for improper R (det = −1). Detecting handedness would
+> need an odd-order invariant such as a triple product v₁·(v₂×v₃), which standard
+> PaiNN does not form. Pinned by
+> `test_scalar_readout_is_reflection_invariant_documents_a_limitation`.
+> **The chirality framing is therefore dead for PaiNN as well, not just for the
+> angular pre-test.** PaiNN's only claim over a distance-only descriptor is
+> angular resolution through directional message passing.
+
 ---
 
 ## 2. Blocking prerequisite — the graphs carry no direction
@@ -86,7 +98,7 @@ load a stale, wrong-shaped cache. Add a `schema_version` to the key or the paylo
 | D2 | Invariance boundary | readout from scalar channel only, vs any vector use | Scalar-only readout. The VAMP states **must** be rotation-invariant; PaiNN gives this for free if the readout ignores the vector channel |
 | D3 | Frame alignment | require superposed frames, or not | Not required — equivariance is precisely what removes the need. Confirm current frames are unaligned so SchNet's invariance was doing the work |
 | D4 | Node features | reuse learned embeddings / amino-acid encodings | Reuse. PaiNN conventionally takes species embeddings; the existing path is compatible |
-| D5 | Capacity matching vs SchNet | equal width, or equal parameter count | **Decide before running.** PaiNN carries scalar+vector state per node (~4× the per-node state at equal width), so equal-width is not a fair comparison. Recommend parameter-matched |
+| D5 | Capacity matching vs SchNet | equal width, or equal parameter count | **MEASURED 2026-08-21** — see table below. Equal width is 2.1× SchNet's parameters on Trp-cage. Recommend parameter-matched |
 | D6 | Which regime | de-tuned (single-variable swap vs paper-SchNet) or native preset | **De-tuned.** The known weakness of the existing table is that it was whole-recipe vs paper-SchNet, not encoder-in-isolation. A matched swap makes the claim clean |
 
 ---
@@ -166,3 +178,52 @@ considering before committing.
   equivariant encoders) or a **scientific claim** (angular information matters for
   VAMP states)? The former justifies 1 system; the latter needs all 3.
 - Should §7's cheap pre-test run first, or go straight to PaiNN?
+
+---
+
+## Implementation record (2026-08-21)
+
+Built: `pygv/encoder/painn.py`, `tests/test_painn_encoder.py` (17 tests),
+`PaiNNConfig`, `--model painn` + six `--painn_*` flags, `pos` on the graph,
+`requires_pos` plumbing in VAMPNet and RevVAMPNet.
+
+**The blocking prerequisite cost nothing, as predicted.** The cache stores raw
+frames and graphs are built per `__getitem__`, so adding `pos` invalidated no
+existing cache (Trp-cage, Villin, NTL9, GTT all still valid).
+
+### D5 resolved with measurements, not estimates
+
+Encoder-only parameter counts, `edge_dim=16, output_dim=16, n_interactions=4`:
+
+| | SchNet | PaiNN (equal width 16) | ratio |
+|---|---|---|---|
+| node_dim=20 (Trp-cage) | 7,600 | 15,952 | **2.10×** |
+| node_dim=35 (Villin/GTT) | 14,200 | 16,192 | 1.14× |
+
+The ratio is strongly system-dependent, because SchNet's parameter count scales
+with `node_dim` (one-hot node features = n_atoms wide) while PaiNN's is dominated
+by `hidden_dim`. **Parameter-matched setting for Trp-cage: `--painn_hidden_dim 10`
+→ 7,276 params (0.96× SchNet).** Recompute per system; do not reuse this number.
+
+An earlier note here guessed "~4× per-node state". Wrong on the parameter question
+— per-node *state* is ~4×, per-*parameter* count is 2.1× at node_dim=20 and only
+1.14× at node_dim=35. Use the measurement.
+
+### Two corrections established while building
+
+1. **Chirality framing is dead for PaiNN too** (see §1 blockquote). Standard PaiNN
+   with a scalar readout is reflection-invariant. Angular resolution is the only
+   claim.
+2. **§4 was a real defect, not a hypothetical.** The first end-to-end run exited 0
+   with `analysis_completed: []` and 11 stray files: no attention → the atom-count
+   inference in `calculate_state_edge_attention_maps` raised → Phase 3 swallowed
+   it. Fixed with an announced skip; the same run now yields
+   `analysis_completed: ['lag20.0ns_5states']` and 77 artifacts. Option (a) from
+   §4, as recommended.
+
+### Still open
+- `knn_angular_features` has a per-centre Python loop (fine at 20 atoms, would hurt
+  at NTL9 scale). Only matters if the angular features are used in a production arm.
+- PaiNN runs leave an empty `edge_attentions/` directory. Harmless; no misleading
+  files are written.
+- **Not yet benchmarked.** No PaiNN number exists on any system.

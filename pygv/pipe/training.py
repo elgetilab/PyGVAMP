@@ -34,6 +34,7 @@ from pygv.encoder.schnet_v2 import SchNetEncoderNoEmbedV2
 from pygv.encoder.meta_att import Meta
 from pygv.encoder.gin import GINEncoder
 from pygv.encoder.ml3 import ML3Encoder
+from pygv.encoder.painn import PaiNNEncoder
 
 from pygv.scores.vamp_score_v0 import VAMPScore
 from pygv.scores.reversible_score import ReversibleVAMPScore
@@ -331,9 +332,20 @@ def create_model(args):
             nout1=args.ml3_nout1,
             nout2=args.ml3_nout2,
         )
+    elif args.encoder_type.lower() == 'painn':
+        encoder = PaiNNEncoder(
+            node_dim=args.node_dim,
+            edge_dim=args.edge_dim,
+            hidden_dim=args.painn_hidden_dim or args.hidden_dim,
+            output_dim=args.painn_output_dim or args.output_dim,
+            n_interactions=args.painn_n_interactions or args.n_interactions,
+            activation=args.painn_activation,
+            cutoff=args.painn_cutoff,
+            shared_interactions=args.painn_shared_interactions,
+        )
     else:
         raise ValueError(f"Unsupported encoder type: {args.encoder_type}. "
-                         f"Choose from 'schnet', 'meta', 'gin', or 'ml3'.")
+                         f"Choose from 'schnet', 'meta', 'gin', 'ml3', or 'painn'.")
 
     # Get output dimension based on encoder type
     if args.encoder_type.lower() in ('schnet', 'gin'):
@@ -342,6 +354,8 @@ def create_model(args):
         output_dim = args.meta_output_dim
     elif args.encoder_type.lower() == 'ml3':
         output_dim = args.ml3_output_dim
+    elif args.encoder_type.lower() == 'painn':
+        output_dim = args.painn_output_dim or args.output_dim
 
     # Create VAMP score module
     vamp_score = VAMPScore(epsilon=args.vamp_epsilon, mode='regularize')
@@ -349,7 +363,7 @@ def create_model(args):
     # Create classifier if requested
     classifier = None
     if args.n_states > 0:
-        if args.encoder_type in ('schnet', 'gin'):
+        if args.encoder_type in ('schnet', 'gin', 'painn'):
             classifier = SoftmaxMLP(
                 in_channels=args.output_dim,
                 hidden_channels=args.clf_hidden_dim,

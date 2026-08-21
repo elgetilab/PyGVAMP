@@ -220,6 +220,21 @@ on all three GraphVAMPNet systems (Trp-cage: GIN ≈ SchNet, ML3 below; Villin: 
 a **new encoder (likely PaiNN)**, not with GIN/ML3, and not before the RevGraphVAMP
 reproduction is closed out. The four rows below are struck for that reason, not deferred.
 
+**Result (2026-08-20): ANGULAR PRE-TEST IS NULL.** Before committing ~30 runs to
+PaiNN, the same hypothesis was tested cheaply by adding explicit angular features
+(incl. the signed Cα dihedral, which carries handedness a distance matrix provably
+cannot represent) to the existing SchNet path on Trp-cage, 10 seeds:
+**4.6545 ± 0.0095 vs control 4.6516 ± 0.0175, Δ=+0.0029**, CIs overlap, Welch
+t=0.465, paired t=0.729 — null despite the arm also carrying **+67% parameters**.
+Resolves shifts >~0.022 only, so: "no effect larger than ~0.02". The Cα distance
+map appears information-sufficient for VAMP state assignment here.
+See [experiments/trpcage_encoders.md](../experiments/trpcage_encoders.md).
+
+**Decision (2026-08-21): PaiNN implemented anyway, for completeness.** The pre-test
+is circumstantial (hand-built angular features are strictly weaker than an
+equivariant vector channel), so the encoder is built and threaded through the
+pipeline, to be evaluated on a more complex system than Trp-cage.
+
 - [~] ~~**Alanine dipeptide:** SchNet, GIN, ML3 × 10 seeds~~ — dropped, see decision above
 - [~] ~~**Aβ42** (full dataset, matching RevGraphVAMP): SchNet, GIN, ML3 × 10 seeds~~ — dropped
 - [~] ~~**Aβ42-red:** SchNet, GIN, ML3 × 10 seeds~~ — dropped (Aβ42-red *is* the reproduction dataset)

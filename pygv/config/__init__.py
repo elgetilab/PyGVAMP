@@ -2,7 +2,7 @@
 Configuration management for PyGVAMP
 """
 from .base_config import BaseConfig
-from .model_configs import SchNetConfig, MetaConfig, ML3Config, GINConfig
+from .model_configs import SchNetConfig, MetaConfig, ML3Config, GINConfig, PaiNNConfig
 from .presets.small import SmallSchNetConfig, SmallMetaConfig, SmallML3Config, SmallGINConfig
 from .presets.medium import MediumSchNetConfig, MediumMetaConfig, MediumML3Config, MediumGINConfig
 from .presets.large import LargeSchNetConfig, LargeMetaConfig, LargeML3Config, LargeGINConfig
@@ -15,6 +15,7 @@ CONFIG_REGISTRY = {
     'meta': MetaConfig,
     'ml3': ML3Config,
     'gin': GINConfig,
+    'painn': PaiNNConfig,
 
     # Small presets (small molecules, ligands)
     'small_schnet': SmallSchNetConfig,
@@ -75,7 +76,7 @@ def list_presets():
     """List all available configuration presets"""
     print("Available configuration presets:")
     print("\nBase configurations:")
-    for name in ['base', 'schnet', 'meta', 'ml3', 'gin']:
+    for name in ['base', 'schnet', 'meta', 'ml3', 'gin', 'painn']:
         if name in CONFIG_REGISTRY:
             print(f"  - {name}")
 

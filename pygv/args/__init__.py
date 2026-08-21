@@ -30,6 +30,7 @@ from .args_encoder import (
     add_schnet_args,
     add_meta_args,
     add_ml3_args,
+    add_painn_args,
 )
 
 # Training argument functions
@@ -77,6 +78,7 @@ __all__ = [
     'add_schnet_args',
     'add_meta_args',
     'add_ml3_args',
+    'add_painn_args',
     # Training
     'parse_train_args',
     'get_train_parser',

@@ -137,6 +137,25 @@ class VAMPNet(nn.Module):
         self.add_module('encoder', encoder)
         self.add_module('classifier_module', classifier_module)
 
+    def _encoder_kwargs(self, data):
+        """Extra kwargs for encoders that need more than (x, edge_index, edge_attr).
+
+        Equivariant encoders (PaiNN) declare ``requires_pos`` and receive node
+        positions; every other encoder keeps the original signature untouched.
+        Failing loudly here beats a silent fallback to a distance-only path, which
+        would quietly turn PaiNN into an expensive SchNet.
+        """
+        if not getattr(self.encoder, 'requires_pos', False):
+            return {}
+        pos = getattr(data, 'pos', None)
+        if pos is None:
+            raise ValueError(
+                f"{type(self.encoder).__name__} requires node positions, but the "
+                "graph has no `pos`. Rebuild the dataset with a version that "
+                "attaches positions (pygv/dataset/vampnet_dataset.py)."
+            )
+        return {'pos': pos}
+
     def forward(
             self,
             data,
@@ -201,7 +220,8 @@ class VAMPNet(nn.Module):
                 x=x,
                 edge_index=edge_index,
                 edge_attr=edge_attr,
-                batch=batch
+                batch=batch,
+                **self._encoder_kwargs(data)
             )
 
             # Handle case where encoder returns a tuple
@@ -299,7 +319,8 @@ class VAMPNet(nn.Module):
                     x = self.embedding_module(x)
 
             # Pass through encoder to get features and attention
-            encoder_output = self.encoder(x, edge_index, edge_attr, batch)
+            encoder_output = self.encoder(x, edge_index, edge_attr, batch,
+                                          **self._encoder_kwargs(data))
 
             # Handle different return types from the encoder
             if isinstance(encoder_output, tuple) and len(encoder_output) > 1:

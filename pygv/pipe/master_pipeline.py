@@ -1332,6 +1332,12 @@ def main():
     if args.gaussian_expansion_dim is not None:
         config.gaussian_expansion_dim = args.gaussian_expansion_dim
     # ML3 encoder width/depth (the ML3 path reads ml3_* dims, not the generic ones)
+    for _p in ('painn_hidden_dim', 'painn_output_dim', 'painn_n_interactions',
+               'painn_activation', 'painn_cutoff'):
+        if getattr(args, _p, None) is not None:
+            setattr(config, _p, getattr(args, _p))
+    if getattr(args, 'painn_shared_interactions', False):
+        config.painn_shared_interactions = True
     if getattr(args, 'ml3_node_dim', None) is not None:
         config.ml3_node_dim = args.ml3_node_dim
     if getattr(args, 'ml3_edge_dim', None) is not None:

@@ -373,24 +373,37 @@ def run_analysis(args=None):
         protein_name=args.protein_name,
     )
 
-    plot_state_edge_attention_maps(
-        state_attention_maps=state_attention_maps,
-        state_populations=state_populations,
-        save_dir=paths['analysis_dir'],
-        protein_name=args.protein_name,
-        threshold=0.001,
-        residue_indices=residue_indices
-    )
+    # Equivariant encoders (PaiNN) have no attention mechanism, so
+    # calculate_state_edge_attention_maps returns None. That is legitimate, not a
+    # failure — skip the attention artifacts loudly and let the rest of the
+    # analysis (ITS/CK, transition matrices, state structures) proceed. Before this
+    # guard, a PaiNN run raised here, Phase 3 swallowed it, and the job exited 0
+    # with analysis_completed: [] — producing nothing at all.
+    has_attention = state_attention_maps is not None
+    if has_attention:
+        plot_state_edge_attention_maps(
+            state_attention_maps=state_attention_maps,
+            state_populations=state_populations,
+            save_dir=paths['analysis_dir'],
+            protein_name=args.protein_name,
+            threshold=0.001,
+            residue_indices=residue_indices
+        )
 
-    plot_state_attention_weights(
-        state_attention_maps=state_attention_maps,
-        topology_file=args.top,
-        save_dir=paths['analysis_dir'],
-        protein_name=args.protein_name,
-        plot_sum_direction="target",
-        atom_selection=args.selection,
-    )
-    print("Attention analysis complete")
+        plot_state_attention_weights(
+            state_attention_maps=state_attention_maps,
+            topology_file=args.top,
+            save_dir=paths['analysis_dir'],
+            protein_name=args.protein_name,
+            plot_sum_direction="target",
+            atom_selection=args.selection,
+        )
+        print("Attention analysis complete")
+    else:
+        print("SKIPPED: attention artifacts (maps, weights, residue directions, "
+              "attention-coloured structures) — this encoder exposes no attention. "
+              "ITS/CK, transition matrices, populations and state structures are "
+              "unaffected.")
 
     # ---- Step 9: Generate state structures ----
     # Use full-protein visualization topology if available (for cartoon rendering)
@@ -423,25 +436,26 @@ def run_analysis(args=None):
     except Exception as e:
         print(f"Warning: PyMOL visualization skipped: {e}")
 
-    save_attention_colored_structures(
-        state_structures=state_structures,
-        state_attention_maps=state_attention_maps,
-        save_dir=paths['analysis_dir'],
-        protein_name=args.protein_name,
-        residue_indices=residue_indices,
-        residue_names=residue_names
-    )
-
-    try:
-        visualize_attention_ensemble(
+    if has_attention:
+        save_attention_colored_structures(
             state_structures=state_structures,
             state_attention_maps=state_attention_maps,
             save_dir=paths['analysis_dir'],
             protein_name=args.protein_name,
+            residue_indices=residue_indices,
+            residue_names=residue_names
         )
-        print("Attention-colored visualizations generated")
-    except Exception as e:
-        print(f"Warning: PyMOL attention visualization skipped: {e}")
+
+        try:
+            visualize_attention_ensemble(
+                state_structures=state_structures,
+                state_attention_maps=state_attention_maps,
+                save_dir=paths['analysis_dir'],
+                protein_name=args.protein_name,
+            )
+            print("Attention-colored visualizations generated")
+        except Exception as e:
+            print(f"Warning: PyMOL attention visualization skipped: {e}")
 
     # ---- Step 11: State network plot ----
     plot_state_network(

@@ -407,7 +407,22 @@ def calculate_state_edge_attention_maps(
             break
 
     if num_atoms == 0:
-        raise ValueError("Could not determine the number of atoms from edge indices")
+        # No attention was produced. This is legitimate, not an error: PaiNN (and
+        # any future equivariant encoder) has no attention mechanism, so
+        # analyze_vampnet_outputs fills edge_indices/edge_attentions with None.
+        # Raising here made Phase 3 die for every PaiNN run -- and because the
+        # pipeline swallows Phase 3 exceptions, the job still exited 0 with
+        # analysis_completed: [] (the job-877 masking pattern). Skip the attention
+        # artifacts, say so, and still return populations so the rest of the
+        # analysis (ITS/CK, transition matrices, state structures) proceeds.
+        print("No edge attention available (encoder exposes none) - skipping "
+              "attention maps. State populations are still computed.")
+        state_assignments = np.argmax(probs, axis=1)
+        unique, counts = np.unique(state_assignments, return_counts=True)
+        state_populations = np.zeros(num_classes)
+        state_populations[unique] = counts
+        state_populations = state_populations / np.sum(state_populations)
+        return None, state_populations
 
     # Determine state assignments from probabilities
     state_assignments = np.argmax(probs, axis=1)

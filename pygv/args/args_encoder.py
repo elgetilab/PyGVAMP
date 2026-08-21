@@ -13,7 +13,7 @@ def add_encoder_selection_args(parser: argparse.ArgumentParser):
     """Add encoder type selection argument."""
     encoder_group = parser.add_argument_group('Encoder Selection')
     encoder_group.add_argument('--encoder_type', type=str, default='schnet',
-                               choices=['schnet', 'meta', 'ml3', 'gin'],
+                               choices=['schnet', 'meta', 'ml3', 'gin', 'painn'],
                                help='Type of graph neural network encoder')
     return encoder_group
 
@@ -131,6 +131,42 @@ def add_ml3_args(parser: argparse.ArgumentParser):
     return ml3_group
 
 
+def add_painn_args(parser: argparse.ArgumentParser):
+    """Add PaiNN encoder arguments.
+
+    PaiNN maintains an equivariant vector channel built from the unit
+    displacement vectors r_hat_ij, so it carries directional information that the
+    distance-only encoders (SchNet/GIN/ML3) discard. It requires node positions on
+    the graph; the dataset attaches them as `pos`.
+
+    Dimensions default to None, meaning "fall back to the generic --hidden_dim /
+    --output_dim / --n_interactions". That keeps a single-variable encoder swap
+    against the SchNet baseline possible without restating every dimension.
+    """
+    painn_group = parser.add_argument_group('PaiNN Encoder')
+    painn_group.add_argument('--painn_hidden_dim', type=int, default=None,
+                             help='Width of the scalar AND vector channels. '
+                                  'Defaults to --hidden_dim. NOTE PaiNN carries '
+                                  '(1 + 3) values per channel per node, so equal '
+                                  'width is NOT equal capacity vs SchNet.')
+    painn_group.add_argument('--painn_output_dim', type=int, default=None,
+                             help='Graph embedding width. Defaults to --output_dim.')
+    painn_group.add_argument('--painn_n_interactions', type=int, default=None,
+                             help='Number of (message, update) block pairs. '
+                                  'Defaults to --n_interactions.')
+    painn_group.add_argument('--painn_activation', type=str, default='silu',
+                             choices=['silu', 'tanh', 'relu'],
+                             help="Activation inside PaiNN blocks (paper uses silu).")
+    painn_group.add_argument('--painn_cutoff', type=float, default=None,
+                             help='Cosine cutoff radius, same length units as the '
+                                  'coordinates. Default None = no cutoff, which is '
+                                  'correct for k-NN graphs: a hard cutoff would '
+                                  'silently drop neighbours the k-NN build kept.')
+    painn_group.add_argument('--painn_shared_interactions', action='store_true',
+                             help='Reuse one interaction block across all layers.')
+    return painn_group
+
+
 def add_encoder_args(parser: argparse.ArgumentParser):
     """
     Add all encoder arguments to a parser.
@@ -151,4 +187,5 @@ def add_encoder_args(parser: argparse.ArgumentParser):
     add_schnet_args(parser)
     add_meta_args(parser)
     add_ml3_args(parser)
+    add_painn_args(parser)
     return parser

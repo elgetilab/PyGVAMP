@@ -30,13 +30,73 @@ epochs 100, **n_neighbors 7**, **val_split 0.3**, seeds 0–9.
 
 | Encoder | Regime | Seeds | VAMP-2 | std | params | Δ vs SchNet | script |
 |---------|--------|-------|--------|-----|--------|-------------|--------|
-| **SchNet** | baseline | 10 | **4.6516** | ±0.0175 | ~7k | — | `trpcage_repro_v1_array.sh` |
+| **SchNet** | baseline | 10 | **4.6516** | ±0.0175 | 7,685 | — | `trpcage_repro_v1_array.sh` |
 | GIN | de-tuned | 10 | 4.5955 | ±0.0750 | ~7k | −0.056 | `trpcage_gin_v1_array.sh` |
 | **GIN** | **native** | 10 | **4.6481** | ±0.0343 | 76,328 | ≈ tie | `trpcage_gin_native_v1_array.sh` |
 | ML3 | de-tuned | 10 | 4.6209 | ±0.0335 | ~46k | −0.031 | `trpcage_ml3_v1_array.sh` |
 | **ML3** | **native** | 10 | **4.5743** | ±0.0770 | 86,905 | **−0.077** | `trpcage_ml3_native_v1_array.sh` |
+| **SchNet + angular** | de-tuned + angular | 10 | **4.6545** | ±0.0095 | 12,821 | **+0.0029 (null)** | `trpcage_angular_pretest_array.sh` |
 
 All native encoders sit ~0.14 below the paper's 4.79.
+
+---
+
+## Angular pre-test (2026-08-20) — NULL
+
+**Question.** GIN and ML3 both changed the *aggregation* over the same two-body Cα
+distance inputs, and neither beat SchNet. That is consistent with the binding
+constraint being the **information in the descriptor**, not the expressiveness of
+the network. This arm tested the descriptor axis directly, as a cheap
+falsification before committing ~30 runs to PaiNN.
+
+**Arm.** `trpcage_repro_v1_array.sh` with exactly one flag added,
+`--angular_features both` (verified by diffing the flag lists):
+- `chain` — Cα pseudo bond angle + **signed** pseudo dihedral. The sign carries
+  handedness, which a pairwise distance matrix provably *cannot* represent
+  (pinned as a test pair in `tests/test_angular_features.py`:
+  `test_distance_matrix_is_blind_to_reflection` + `test_signed_dihedral_flips_under_reflection`).
+- `knn` — Gaussian-expanded neighbour–centre–neighbour angle distribution.
+  Reflection-**even**: angular resolution, no chirality.
+
+**Result.** Both arms aggregated in one session with the *same* tool
+(`aggregate_trpcage_v1_array.py`, which takes perbatch at the best-**concat**
+epoch, avoiding max-over-epoch bias). The control re-aggregated to 4.6516 ± 0.0175
+exactly, so this is not a comparison against a remembered number.
+
+| arm | n | perbatch_mean | 95% CI | params |
+|---|---|---|---|---|
+| control (SchNet) | 10 | 4.6516 ± 0.0175 | [4.6407, 4.6624] | 7,685 |
+| angular `both` | 10 | 4.6545 ± 0.0095 | [4.6486, 4.6604] | 12,821 |
+
+- **Δ = +0.0029.** CIs overlap; the angular interval sits *inside* the control's.
+- Welch t = 0.465 (|t| ≈ 2.1 needed at p=0.05, df 13.9).
+- Paired t = 0.729 — the arms share seeds and therefore train/val splits, so the
+  paired test is the more appropriate one. Same null.
+
+**Why this is a strong null.** The arm was stacked toward a positive and still
+found nothing: it carried explicit angular information *including chirality*, and
+it also got **+67% parameters** (12,821 vs 7,685 — measured, not assumed). Extra
+information *and* extra capacity, and neither moved the mean. A pre-registered
+decision rule (fixed in the script header before any result was read) specified
+that a null needs no capacity-control arm, precisely because the confound only
+matters for a positive.
+
+**Bound, stated honestly.** With n=10 and these spreads the test resolves shifts
+above ~0.022. This is **"no effect larger than ~0.02"**, not "no effect".
+
+**Variance observation — did NOT survive.** At n=4 the angular arm's spread looked
+~5× tighter. At n=10 it is 3.4× (0.0095 vs 0.0175), F = 3.41 against a 4.03
+threshold on (9,9) df — **fails significance at p=0.05**. Reported here so it is
+not mistaken for a finding. Shared splits across arms are the likely driver
+(seed 7 is the best seed in *both* arms, seed 1/3 the worst).
+
+**Interpretation.** For VAMP state assignment on Trp-cage, the Cα distance map
+appears **information-sufficient**. GIN/ML3 failed by changing the aggregation;
+this arm failed by changing the information, which was the untested axis.
+
+**Caveat.** PaiNN's equivariant vector channel is strictly richer than hand-built
+angular node features, so this is strong *circumstantial* evidence, not proof. The
+PaiNN encoder is implemented regardless, for completeness (decision 2026-08-21).
 
 ### Regime definitions
 - **De-tuned** (matched to SchNet repro): hidden=16, output=16, n_interactions=4,
