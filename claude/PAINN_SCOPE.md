@@ -227,3 +227,63 @@ An earlier note here guessed "~4× per-node state". Wrong on the parameter quest
 - PaiNN runs leave an empty `edge_attentions/` directory. Harmless; no misleading
   files are written.
 - **Not yet benchmarked.** No PaiNN number exists on any system.
+
+---
+
+## k-NN truncation measurement (2026-08-23) — does NOT support the size argument
+
+Ran `cluster_scripts/measure_knn_truncation.py` over four controls and three
+candidates, 3000 frames each, k as used in production.
+
+| system | atoms | retention | hop_cov | unexpl_var | state_lev |
+|---|---|---|---|---|---|
+| trpcage *(angular test NULL here)* | 20 | 0.446 | 1.000 | **0.719** | 0.768 |
+| villin | 35 | 0.345 | 0.994 | 0.628 | 0.896 |
+| gtt | 35 | 0.351 | 0.991 | 0.730 | 0.893 |
+| ntl9 | 39 | 0.309 | 0.995 | 0.482 | 0.798 |
+| a3d | 73 | 0.160 | 0.946 | 0.452 | 0.726 |
+| nug2 | 56 | 0.211 | 1.000 | 0.058 | 0.781 |
+| lambda | 80 | 0.148 | 0.967 | 0.743 | 0.729 |
+
+### The size argument was half right and it was the wrong half
+Retention falls with system size exactly as predicted (0.45 → 0.15). But retention
+is not what matters — what matters is whether the *discarded* pairs carry
+information the retained ones lack, and that does **not** track size:
+α3D (0.45) and NuG2 (0.06) are BELOW every control; λ (0.74) is level with
+Trp-cage (0.72) and GTT (0.73). Bigger proteins are more geometrically
+over-determined, so knowing 16% of the distances pins much of the rest.
+
+### The decisive calibration
+**Trp-cage sits at 0.72 unexplained variance and the angular pre-test was still
+null there.** So a high value does not predict any angular benefit, and no
+candidate exceeds Trp-cage by enough to matter. On the information axis, none of
+these systems is better motivated for PaiNN than the one already tested.
+
+### Hop coverage kills the weaker version of the argument too
+At `n_interactions=4`, message passing already reaches **95–100%** of all pairs on
+every system. A pair missing from the k-NN graph is not invisible to the network.
+The strongest form of "the truncation hides geometry" therefore does not hold.
+
+### An artifact that inverted the answer — caught before reporting
+The first pass fitted the retained→discarded regression **in-sample**. On α3D (423
+predictors vs 400 frames) and λ (467 vs 400) the fit is perfect by construction, so
+it reported unexplained variance ≈ 0.006 and 0.038 — i.e. "the big proteins discard
+nothing", the exact opposite of the corrected result. Fixed with a 70/30 held-out
+split, ridge chosen on the hold-out, 3000 frames, plus a `predictors_ge_samples`
+flag so the condition cannot recur silently.
+
+### What this does and does NOT establish
+It bounds the **information** argument only: the discarded geometry is largely
+recoverable, and the receptive field already covers it. It does **not** bound an
+**inductive-bias** argument — explicit directional features might still make the
+same information easier to *learn*. Neither this measurement nor the angular
+pre-test tests that. A PaiNN run remains legitimate as a capability demonstration
+or an optimisation question; it is just no longer supported as an information one.
+
+### Recommendation
+Do not pick a target using the truncation argument — it does not discriminate.
+If PaiNN runs for completeness, choose on the system's own scientific interest:
+**α3D** (73 CA, three-helix bundle, misfolding-rich landscape, plausible k*>2) or
+**λ-repressor** (80 CA, five helices, richest landscape, most expensive).
+**NuG2 is the worst candidate** (unexpl_var 0.058 — β-sheet rigidity makes its
+long-range geometry almost fully determined by local contacts).
