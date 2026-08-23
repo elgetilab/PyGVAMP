@@ -386,3 +386,68 @@ def test_attention_maps_skip_gracefully_when_there_is_no_attention():
     assert maps is None, "no attention must yield None, not fabricated maps"
     assert pops is not None and len(pops) == n_states
     assert abs(float(np.sum(pops)) - 1.0) < 1e-6, "populations must still be computed"
+
+
+# ---------------------------------------------------------------------------
+# 5. PaiNN must survive the pipeline's weight re-initialisation
+# ---------------------------------------------------------------------------
+
+def test_painn_is_not_destroyed_by_init_for_vamp():
+    """`init_for_vamp` must not re-initialise PaiNN into producing NaNs.
+
+    Root cause of the alpha3D collapse (job 922, 2026-08-23). training.py:436
+    applies init_for_vamp(model, 'kaiming_normal') to the WHOLE model. Its
+    graph-model detection matches 'GCN|GAT|GraphConv|GIN|EdgeConv' in module type
+    names — SchNet's GCNInteraction matches, PaiNN's modules match nothing, so the
+    two encoders take different init paths. Kaiming re-init blew up PaiNN's
+    residual scalar/vector accumulation across 4 blocks, the forward produced NaN,
+    and VAMPNet's guard silently rewrote NaN -> 1e-6, giving a constant output and
+    VAMP-2 = 1.0000 (the degenerate value) for all 100 epochs. The run still
+    exited 0 with a complete analysis, and logged 37,762 NaN warnings that a
+    grep for 'Error|Traceback' does not catch.
+
+    PaiNN declares `self_initialized`; the training path must honour it.
+    """
+    import torch
+    from pygv.utils.nn_utils import init_for_vamp
+    import io, contextlib
+
+    assert getattr(PaiNNEncoder, 'self_initialized', False) is True, (
+        "PaiNNEncoder must declare self_initialized so the pipeline preserves its init"
+    )
+
+    torch.manual_seed(0)
+    enc = _encoder()
+    before = {k: v.clone() for k, v in enc.state_dict().items()}
+
+    from pygv.pipe.training import apply_vamp_init
+    with contextlib.redirect_stdout(io.StringIO()):
+        apply_vamp_init(enc, method='kaiming_normal')
+
+    after = enc.state_dict()
+    assert all(torch.equal(before[k], after[k]) for k in before), (
+        "apply_vamp_init modified a self-initialised encoder's weights"
+    )
+
+    # and the forward is still finite
+    x, pos, ei, ea = _system()
+    with torch.no_grad():
+        out, _ = enc(x, ei, ea, batch=None, pos=pos)
+    assert torch.isfinite(out).all()
+
+
+def test_apply_vamp_init_still_initialises_normal_encoders():
+    """The guard must be narrow: SchNet and friends must still be re-initialised."""
+    import torch, io, contextlib
+    from pygv.encoder.schnet import SchNetEncoderNoEmbed
+    from pygv.pipe.training import apply_vamp_init
+
+    torch.manual_seed(0)
+    enc = SchNetEncoderNoEmbed(node_dim=NODE_DIM, edge_dim=EDGE_DIM,
+                               hidden_dim=HIDDEN, output_dim=OUT, n_interactions=2)
+    before = {k: v.clone() for k, v in enc.state_dict().items()}
+    with contextlib.redirect_stdout(io.StringIO()):
+        apply_vamp_init(enc, method='kaiming_normal')
+    after = enc.state_dict()
+    changed = sum(0 if torch.equal(before[k], after[k]) else 1 for k in before)
+    assert changed > 0, "apply_vamp_init became a no-op for a normal encoder"

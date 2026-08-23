@@ -433,7 +433,7 @@ def create_model(args):
         )
 
     # Apply to your model
-    init_for_vamp(model, method=getattr(args, 'init_method', 'kaiming_normal'))
+    apply_vamp_init(model, method=getattr(args, 'init_method', 'kaiming_normal'))
 
     # Move model to appropriate device
     device = torch.device("cpu" if args.cpu else "cuda" if torch.cuda.is_available() else "cpu")
@@ -486,6 +486,32 @@ def _train_reversible_three_phase(args, model, train_loader, test_loader, paths,
         save_dir=paths['model_dir'],
         verbose=True,
     )
+
+
+
+def apply_vamp_init(model, method='kaiming_normal'):
+    """Run init_for_vamp, but preserve encoders that initialise themselves.
+
+    init_for_vamp picks its scheme by sniffing module type names for
+    'GCN|GAT|GraphConv|GIN|EdgeConv'. Encoders that match nothing fall through to
+    a generic path that is not necessarily appropriate for them -- for PaiNN it is
+    actively destructive (NaN forward, silent collapse to VAMP-2 = 1.0; alpha3D
+    job 922). Such encoders set ``self_initialized = True`` and keep their weights.
+    """
+    # Accept either a full VAMPNet (protect model.encoder) or a bare encoder.
+    if getattr(model, 'self_initialized', False):
+        enc = model
+    else:
+        enc = getattr(model, 'encoder', None)
+    protect = enc is not None and getattr(enc, 'self_initialized', False)
+    if protect:
+        saved = {k: v.detach().clone() for k, v in enc.state_dict().items()}
+    init_for_vamp(model, method=method)
+    if protect:
+        enc.load_state_dict(saved)
+        print(f"init: preserved self-initialised encoder {type(enc).__name__} "
+              f"(skipped {method})")
+    return model
 
 
 def train_model(args, model, train_loader, test_loader, paths):

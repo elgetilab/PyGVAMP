@@ -169,6 +169,15 @@ class PaiNNEncoder(nn.Module):
 
     requires_pos = True   # VAMPNet passes node positions to encoders that ask
 
+    # Do NOT let the pipeline's init_for_vamp re-initialise this encoder.
+    # kaiming_normal (tuned for SchNet-style GCN stacks) blows up PaiNN's residual
+    # scalar/vector accumulation across interaction blocks: the forward produces
+    # NaN, VAMPNet's guard silently rewrites NaN -> 1e-6, and the model trains at
+    # the degenerate VAMP-2 = 1.0 for every epoch while still exiting 0.
+    # Diagnosed on alpha3D, job 922, 2026-08-23. PaiNN relies on the default
+    # PyTorch init the reference implementation assumes.
+    self_initialized = True
+
     def __init__(self, node_dim, edge_dim, hidden_dim=64, output_dim=32,
                  n_interactions=3, activation='silu', cutoff=None,
                  shared_interactions=False, use_attention=False):
