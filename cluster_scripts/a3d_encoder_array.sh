@@ -50,15 +50,26 @@
 # Submit ONE PaiNN seed first to measure the rate:
 #   A3D_ENCODER=painn sbatch --array=0 cluster_scripts/a3d_encoder_array.sh
 # Then the arms:
-#   A3D_ENCODER=painn  sbatch --array=1-9%4 cluster_scripts/a3d_encoder_array.sh
-#   A3D_ENCODER=schnet sbatch --array=0-9%4 cluster_scripts/a3d_encoder_array.sh
+#   A3D_ENCODER=painn  sbatch --array=1-9 cluster_scripts/a3d_encoder_array.sh
+#   A3D_ENCODER=schnet sbatch --array=0-9 cluster_scripts/a3d_encoder_array.sh
+# No %throttle needed: shard:3 caps concurrency at 2 GPU-wide, which composes
+# correctly across independently submitted arrays (a %throttle does not).
+# Already-finished seeds are skipped by their completion markers, so re-submitting
+# a whole array is safe and is how you resume after a partial failure.
 # ===========================================================================
 
+# ⚠️ shard:3 (~12.2 GB), NOT shard:2. Measured peak is ~7.7 GB, which exceeds
+#   shard:2's 8.15 GB once the CUDA context is added. Under-requesting also broke
+#   concurrency control: two arrays each submitted at %2 do NOT compose to 2 --
+#   they gave 4 concurrent, ~31 GB on a 32 GB GPU, and every task died with
+#   "CUDA out of memory in encoder" while still exiting 0 (job 925/926,
+#   2026-08-24). An honest GRES request lets SLURM cap concurrency at 8/3 = 2
+#   regardless of how many arrays are submitted.
 #SBATCH --job-name=a3d_enc
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=gputraining
-#SBATCH --gres=shard:2
+#SBATCH --gres=shard:3
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48G
 #SBATCH --time=INFINITE
