@@ -235,6 +235,32 @@ is circumstantial (hand-built angular features are strictly weaker than an
 equivariant vector channel), so the encoder is built and threaded through the
 pipeline, to be evaluated on a more complex system than Trp-cage.
 
+- [x] **alpha3D (A3D): SchNet vs PaiNN × 10 seeds — DONE 2026-08-25. NULL.**
+  First non-two-state system in the campaign (k*=3 from probe 921, populations
+  0.469/0.362/0.169). Parameter-matched single-variable swap.
+  **SchNet 2.9633 ± 0.0063 vs PaiNN 2.9637 ± 0.0060, Δ = +0.0004**, paired
+  t = 0.203, paired 95% CI [−0.0032, +0.0039], MDE ~0.005. 0 collapses / 0 OOM /
+  0 NaN across 20 runs. **⚠️ Both arms sit at 98.8% of the k=3 ceiling**, so the
+  null is partly a statement about the task; the seed effect dwarfs the encoder
+  effect. See [experiments/a3d_encoders.md](../experiments/a3d_encoders.md).
+
+**CATEGORY 2 STATUS: the encoder lane is closed on a consistent negative.**
+Five encoder variants across four systems and three independent lines of evidence
+have failed to beat SchNet:
+
+| line of evidence | variant | result |
+|---|---|---|
+| aggregation | GIN | ties Trp-cage, −0.10 Villin, unstable NTL9 |
+| aggregation | ML3 | below everywhere, least stable |
+| descriptor **information** | SchNet + angular features | null, ≤0.02 (Trp-cage) |
+| descriptor **information** | k-NN truncation measurement | discarded geometry is recoverable; hop coverage 95–100% |
+| **equivariant inductive bias** | PaiNN | null, ≤0.005 (alpha3D, k=3) |
+
+**For Cα-graph VAMPNets on these systems, the encoder is not the lever.**
+Remaining uncertainty is the ceiling caveat above — a discriminating operating
+point (larger k, shorter lag) was not tested, and the prior after five negatives
+is that it would also be flat.
+
 - [~] ~~**Alanine dipeptide:** SchNet, GIN, ML3 × 10 seeds~~ — dropped, see decision above
 - [~] ~~**Aβ42** (full dataset, matching RevGraphVAMP): SchNet, GIN, ML3 × 10 seeds~~ — dropped
 - [~] ~~**Aβ42-red:** SchNet, GIN, ML3 × 10 seeds~~ — dropped (Aβ42-red *is* the reproduction dataset)
