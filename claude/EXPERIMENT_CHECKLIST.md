@@ -10,6 +10,9 @@ The experiments fall into three categories with different scientific goals and d
 
 Verified against on-disk runs + aggregators on 2026-06-30. **"Paper reproduction" = Category 1 below.**
 
+> **All categories' VAMP-2 numbers are consolidated in [`RESULTS.md`](../RESULTS.md).**
+> The scoreboard below covers Category 1 only.
+
 ### Reproduction scoreboard (Category 1)
 
 | System | Paper VAMP-2 | Ours (10-seed) | Δ | Seeds | Status |

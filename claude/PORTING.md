@@ -175,4 +175,5 @@ appeared in any comparison, and would need its own baseline before use as an arm
 | Category 3 lag exploration | `experiments/gtt_lagsweep.md` |
 | PaiNN design + measurements | `claude/PAINN_SCOPE.md` |
 | Requeue/resume design | `claude/RESUME_PLAN_2026-08-03.md` |
+| **All VAMP-2 numbers, one page** | **`RESULTS.md`** (start here) |
 | Master status | `claude/EXPERIMENT_CHECKLIST.md` |
