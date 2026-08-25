@@ -276,6 +276,18 @@ is that it would also be flat.
 
 ## Category 3: Multi-Lag-Time Exploration
 
+- [x] **GTT / FiP35 WW domain lag ladder — DONE 2026-08-11.**
+  τ = 1, 2, 5, 10, 20, 50 ns, seed 0, JSD retrain loop (not a clustering heuristic).
+  **k\*(τ) = 2 at every rung**, all converged (`keep`, confidence high, no cap
+  exhaustion), populations 0.228/0.772 identical to ~3 decimals across a 50× range
+  in τ. The richer result is **t₂ converging to ~12.6–12.9 µs with a plateau from
+  τ ≈ 20 ns** (derived from validation VAMP-2, not the uncalibrated ITS path).
+  Three separate caps biased k\* en route (`--max_states` from above, the
+  `max(2,…)` floor from below, `--max_retrains` truncating mid-descent) — always
+  check a k\* against the cap that produced it. The descent *path* is not
+  reproducible under a fixed seed; only the endpoint is.
+  See [experiments/gtt_lagsweep.md](../experiments/gtt_lagsweep.md).
+
 **Scientific goal:** Use PyGVAMP's auto-stride and auto-discovery features to explore Aβ42 dynamics across multiple timescales, demonstrating the framework's exploratory power. Not a comparison to the baselines — a novel analysis enabled by the framework. **The ox vs red comparison itself is novel** — RevGraphVAMP doesn't separate them, so any finding here is your contribution, not a reproduction.
 
 **Protocol:**
