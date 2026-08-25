@@ -140,20 +140,31 @@ Standing rule from three wrong GTT estimates: **run one full seed and read the w
 time before sizing a campaign.** Also note per-epoch rates degrade with concurrency
 (α3D PaiNN: 20 s/epoch alone, ~50 s at 2-way).
 
-## 8. Known-broken, deliberately left alone
+## 8. Test baseline — the suite is fully green
 
-`--model meta` / MetaAtt are CLI-selectable but **raise on the first forward**:
-`meta.py` falls back to `pygv/utils/alternative_torch_scatter` when `torch_scatter`
-is absent (it is), but imports only `scatter_mean` while line 61 calls
-`scatter_add`; MetaAtt additionally needs `scatter_softmax`, which the fallback does
-not provide. This is the entire remaining test-suite failure set (11 of 11). Fix the
-two fallback imports or de-register the encoders — a broken option is worse than an
-absent one.
+`pytest tests/ -q` → **744 passed, 0 failed, 9 skipped, 2 xfailed**.
+**Any failure on the new machine is a porting problem, not a pre-existing one.**
 
-Baseline for the new machine: `pytest tests/ -q` should give **11 failed / ~740
-passed**, all 11 in the Meta cluster. Anything else is a porting problem.
-Note the suite's wall time is dominated by two disk-bound integration files; the
-other ~700 tests run in ~13 s.
+Wall time is dominated by two disk-bound integration files that read real MD data
+(~58 min total here, and it varies a lot with I/O). The other ~700 tests run in
+~13 s:
+
+```bash
+pytest tests/ -q -m "not integration" \
+    --ignore=tests/test_phase5_integration.py \
+    --ignore=tests/test_pipeline_integration.py     # ~13 s smoke check
+```
+
+Those two integration files hardcode data paths — they are the first thing to
+repoint on a new machine.
+
+**Meta / MetaAtt** were broken until 2026-08-25 (the fallback for `torch_scatter`
+exported only a subset of what they call, and `scatter_min/max/mul` inside the
+"fallback" called `torch.ops.torch_scatter.*` — requiring the very extension they
+substitute for). Now fixed and pinned by `tests/test_scatter_fallback.py`, which
+checks the contract structurally so it cannot drift. **The crash is fixed; the
+encoder is not validated** — Meta still warns that it is experimental, has never
+appeared in any comparison, and would need its own baseline before use as an arm.
 
 ## Where the results live
 

@@ -3,9 +3,15 @@ import torch
 import torch.nn as nn
 from torch_geometric.nn import MetaLayer, MLP, global_mean_pool
 try:
-    from torch_scatter import scatter_mean, scatter_add
+    from torch_scatter import scatter_mean, scatter_add, scatter_softmax
 except ImportError:
-    from pygv.utils.alternative_torch_scatter import scatter_mean
+    # torch_scatter is NOT installed in the deployed environment. The fallback
+    # must import EVERY symbol used below -- previously it imported only
+    # scatter_mean while the code also calls scatter_add (and, in meta_att,
+    # scatter_softmax), so these encoders raised NameError on the first forward
+    # while remaining selectable from the CLI. Fixed 2026-08-25.
+    from pygv.utils.alternative_torch_scatter import (
+        scatter_mean, scatter_add, scatter_softmax)
 from typing import Optional, Union, Callable, Literal
 
 
@@ -86,7 +92,8 @@ class NodeAttention(torch.nn.Module):
         attn_scores = torch.sum(src_q * dst_k, dim=1)  # [num_edges]
 
         # Normalize attention scores per source node using scatter_softmax
-        from torch_scatter import scatter_softmax
+        # (imported at module level with a fallback -- a hard import here meant
+        # this line raised ModuleNotFoundError on every forward pass)
         attn_weights = scatter_softmax(attn_scores, src, dim=0)  # [num_edges]
 
         # Apply dropout

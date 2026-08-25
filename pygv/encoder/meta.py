@@ -3,9 +3,15 @@ import torch
 import torch.nn as nn
 from torch_geometric.nn import MetaLayer, MLP, global_mean_pool
 try:
-    from torch_scatter import scatter_mean, scatter_add
+    from torch_scatter import scatter_mean, scatter_add, scatter_softmax
 except ImportError:
-    from pygv.utils.alternative_torch_scatter import scatter_mean
+    # torch_scatter is NOT installed in the deployed environment. The fallback
+    # must import EVERY symbol used below -- previously it imported only
+    # scatter_mean while the code also calls scatter_add (and, in meta_att,
+    # scatter_softmax), so these encoders raised NameError on the first forward
+    # while remaining selectable from the CLI. Fixed 2026-08-25.
+    from pygv.utils.alternative_torch_scatter import (
+        scatter_mean, scatter_add, scatter_softmax)
 from typing import Optional, Union, Callable, Literal
 
 

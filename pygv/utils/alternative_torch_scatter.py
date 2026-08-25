@@ -47,7 +47,16 @@ def scatter_mul(src: torch.Tensor,
                 dim: int = -1,
                 out: Optional[torch.Tensor] = None,
                 dim_size: Optional[int] = None) -> torch.Tensor:
-    return torch.ops.torch_scatter.scatter_mul(src, index, dim, out, dim_size)
+    """Product over groups, in pure torch (was another torch.ops call)."""
+    if dim < 0:
+        dim = src.dim() + dim
+    if dim_size is None:
+        dim_size = int(index.max()) + 1 if index.numel() > 0 else 0
+    idx = broadcast(index, src, dim)
+    size = list(src.size())
+    size[dim] = dim_size
+    base = torch.ones(size, dtype=src.dtype, device=src.device)
+    return base.scatter_reduce(dim, idx, src, reduce='prod', include_self=False)
 
 
 def scatter_mean(src: torch.Tensor,
@@ -75,13 +84,47 @@ def scatter_mean(src: torch.Tensor,
     return out
 
 
+def _normalize_dim_and_size(src, index, dim, dim_size):
+    """Shared prologue: resolve a negative dim and infer dim_size from index."""
+    if dim < 0:
+        dim = src.dim() + dim
+    if dim_size is None:
+        dim_size = int(index.max()) + 1 if index.numel() > 0 else 0
+    return dim, dim_size
+
+
+def _scatter_extremum(src, index, dim, dim_size, reduce, fill):
+    """amin/amax via torch.scatter_reduce, plus the argument index.
+
+    Pure torch on purpose.  The previous implementations here called
+    ``torch.ops.torch_scatter.*``, i.e. this "fallback" required the very C++
+    extension it is supposed to substitute for -- it would have raised exactly
+    like the missing import it was meant to cover.
+    """
+    dim, dim_size = _normalize_dim_and_size(src, index, dim, dim_size)
+    idx = broadcast(index, src, dim)
+    size = list(src.size())
+    size[dim] = dim_size
+    out = torch.full(size, fill, dtype=src.dtype, device=src.device)
+    out = out.scatter_reduce(dim, idx, src, reduce=reduce, include_self=False)
+    # argument index: position of the winning element per group (-1 if empty)
+    arg = torch.full(size, -1, dtype=torch.long, device=src.device)
+    hit = src == out.gather(dim, idx)
+    positions = torch.arange(src.size(dim), device=src.device)
+    positions = broadcast(positions, src, dim).clone()
+    positions[~hit] = torch.iinfo(torch.long).max
+    arg = arg.scatter_reduce(dim, idx, positions, reduce='amin', include_self=False)
+    arg[arg == torch.iinfo(torch.long).max] = -1
+    return out, arg
+
+
 def scatter_min(
         src: torch.Tensor,
         index: torch.Tensor,
         dim: int = -1,
         out: Optional[torch.Tensor] = None,
         dim_size: Optional[int] = None) -> Tuple[torch.Tensor, torch.Tensor]:
-    return torch.ops.torch_scatter.scatter_min(src, index, dim, out, dim_size)
+    return _scatter_extremum(src, index, dim, dim_size, 'amin', float('inf'))
 
 
 def scatter_max(
@@ -90,7 +133,34 @@ def scatter_max(
         dim: int = -1,
         out: Optional[torch.Tensor] = None,
         dim_size: Optional[int] = None) -> Tuple[torch.Tensor, torch.Tensor]:
-    return torch.ops.torch_scatter.scatter_max(src, index, dim, out, dim_size)
+    return _scatter_extremum(src, index, dim, dim_size, 'amax', float('-inf'))
+
+
+def scatter_softmax(src: torch.Tensor,
+                    index: torch.Tensor,
+                    dim: int = -1,
+                    dim_size: Optional[int] = None,
+                    eps: float = 1e-12) -> torch.Tensor:
+    """Softmax over groups defined by ``index`` along ``dim``.
+
+    Needed by the MetaAtt encoder, which previously imported it from
+    ``torch_scatter`` with NO fallback at all -- a hard import inside forward().
+    Numerically stabilised by subtracting the per-group maximum.
+    """
+    dim, dim_size = _normalize_dim_and_size(src, index, dim, dim_size)
+    idx = broadcast(index, src, dim)
+    size = list(src.size())
+    size[dim] = dim_size
+
+    max_per_group = torch.full(size, float('-inf'), dtype=src.dtype, device=src.device)
+    max_per_group = max_per_group.scatter_reduce(dim, idx, src, reduce='amax',
+                                                 include_self=False)
+    shifted = src - max_per_group.gather(dim, idx)
+    exp_ = shifted.exp()
+
+    denom = torch.zeros(size, dtype=src.dtype, device=src.device)
+    denom = denom.scatter_add(dim, idx, exp_)
+    return exp_ / (denom.gather(dim, idx) + eps)
 
 
 def scatter(src: torch.Tensor,
