@@ -96,7 +96,7 @@ Decision rule (vs v10 = 3.7298 concat, paper = 3.78 perbatch):
   somewhere; investigate before any sweep.
 - v11 perbatch substantially below 3.77 → check for batch-size /
   loader-shuffle differences vs the offline audit script
-  (`/mnt/hdd/experiments/villin_tau_scan/villin_tau_scan.py`).
+  (`experiments/scripts/villin_tau_scan.py`; outputs in `/mnt/hdd/experiments/villin_tau_scan/`).
 
 ## Submission
 
@@ -181,7 +181,7 @@ no-improvement at the end — consistent with v10's tail behavior).
 | Reported in paper | n/a | n/a | (see below) | **3.78 ± 0.02** |
 
 v10's 3.7649 was computed *post-hoc* on a saved chi via the offline
-audit script (`/mnt/hdd/experiments/villin_tau_scan/villin_tau_scan.py`),
+audit script (`experiments/scripts/villin_tau_scan.py`; outputs in `/mnt/hdd/experiments/villin_tau_scan/`),
 using a different val-split convention (perm[:n_val]) than training-time
 random_split (perm[train_size:]) and contiguous batch grouping.  v11's
 3.6710 is the **live in-loop** number that matches paper methodology
