@@ -1,0 +1,95 @@
+{
+  "num_samples": 353520,
+  "trajectories": [
+    "A3D-0-c-alpha-000.dcd",
+    "A3D-0-c-alpha-001.dcd",
+    "A3D-0-c-alpha-002.dcd",
+    "A3D-0-c-alpha-003.dcd",
+    "A3D-0-c-alpha-004.dcd",
+    "A3D-0-c-alpha-005.dcd",
+    "A3D-0-c-alpha-006.dcd",
+    "A3D-0-c-alpha-007.dcd",
+    "A3D-0-c-alpha-008.dcd",
+    "A3D-0-c-alpha-009.dcd",
+    "A3D-0-c-alpha-010.dcd",
+    "A3D-0-c-alpha-011.dcd",
+    "A3D-0-c-alpha-012.dcd",
+    "A3D-0-c-alpha-013.dcd",
+    "A3D-0-c-alpha-014.dcd",
+    "A3D-0-c-alpha-015.dcd",
+    "A3D-0-c-alpha-016.dcd",
+    "A3D-0-c-alpha-017.dcd",
+    "A3D-1-c-alpha-000.dcd",
+    "A3D-1-c-alpha-001.dcd",
+    "A3D-1-c-alpha-002.dcd",
+    "A3D-1-c-alpha-003.dcd",
+    "A3D-1-c-alpha-004.dcd",
+    "A3D-1-c-alpha-005.dcd",
+    "A3D-1-c-alpha-006.dcd",
+    "A3D-1-c-alpha-007.dcd",
+    "A3D-1-c-alpha-008.dcd",
+    "A3D-1-c-alpha-009.dcd",
+    "A3D-1-c-alpha-010.dcd",
+    "A3D-1-c-alpha-011.dcd",
+    "A3D-1-c-alpha-012.dcd",
+    "A3D-1-c-alpha-013.dcd",
+    "A3D-1-c-alpha-014.dcd",
+    "A3D-1-c-alpha-015.dcd",
+    "A3D-1-c-alpha-016.dcd",
+    "A3D-1-c-alpha-017.dcd",
+    "A3D-1-c-alpha-018.dcd"
+  ],
+  "topology": {
+    "input_file": "/mnt/hdd/data/a3d/topol.pdb",
+    "output_pdb": "/mnt/hdd/experiments/a3d_probe/exp_a3d_schnet_s00_lag50.0/preparation/prep_20260823_092340/topology.pdb",
+    "viz_topology_pdb": "/mnt/hdd/experiments/a3d_probe/exp_a3d_schnet_s00_lag50.0/preparation/prep_20260823_092340/visualization_topology.pdb",
+    "n_atoms_selected": 73,
+    "n_residues": 73
+  },
+  "parameters": {
+    "lag_time": 50.0,
+    "n_neighbors": 10,
+    "node_embedding_dim": 16,
+    "gaussian_expansion_dim": 16,
+    "selection": "name CA",
+    "stride": 10,
+    "frame_dt_ps": 200.0
+  },
+  "structure": {
+    "num_nodes": 73,
+    "num_edges": 730,
+    "node_feature_dim": 73,
+    "edge_feature_dim": 16
+  },
+  "state_discovery": {
+    "recommended_n_states": 10,
+    "chosen_source": "umap_2",
+    "sweep_sources": [
+      "raw",
+      "umap_2",
+      "umap_3",
+      "umap_5",
+      "umap_6",
+      "umap_7",
+      "tsne_2",
+      "tsne_3"
+    ],
+    "embeddings_shape": [
+      353545,
+      512
+    ],
+    "silhouette_scores": {
+      "2": 0.505257785320282,
+      "3": 0.4196000099182129,
+      "4": 0.44200819730758667,
+      "5": 0.47443172335624695,
+      "6": 0.4890744388103485,
+      "7": 0.46683937311172485,
+      "8": 0.48753589391708374,
+      "9": 0.4631941020488739,
+      "10": 0.4504443109035492
+    },
+    "best_silhouette_k": 10,
+    "elbow_k": 3
+  }
+}

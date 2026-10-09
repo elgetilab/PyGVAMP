@@ -1,0 +1,34 @@
+{
+  "num_samples": 627807,
+  "trajectories": [
+    "2F4K-0-c-alpha-000.dcd",
+    "2F4K-0-c-alpha-001.dcd",
+    "2F4K-0-c-alpha-002.dcd",
+    "2F4K-0-c-alpha-003.dcd",
+    "2F4K-0-c-alpha-004.dcd",
+    "2F4K-0-c-alpha-005.dcd",
+    "2F4K-0-c-alpha-006.dcd"
+  ],
+  "topology": {
+    "input_file": "/mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/topol.pdb",
+    "output_pdb": "/mnt/hdd/experiments/villin_repro_v5/seed_00/exp_villin_20260503_132534/preparation/prep_20260503_132534/topology.pdb",
+    "viz_topology_pdb": "/mnt/hdd/experiments/villin_repro_v5/seed_00/exp_villin_20260503_132534/preparation/prep_20260503_132534/visualization_topology.pdb",
+    "n_atoms_selected": 35,
+    "n_residues": 35
+  },
+  "parameters": {
+    "lag_time": 20.0,
+    "n_neighbors": 10,
+    "node_embedding_dim": 16,
+    "gaussian_expansion_dim": 16,
+    "selection": "name CA",
+    "stride": 1,
+    "frame_dt_ps": 200.0
+  },
+  "structure": {
+    "num_nodes": 35,
+    "num_edges": 350,
+    "node_feature_dim": 35,
+    "edge_feature_dim": 16
+  }
+}

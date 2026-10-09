@@ -1,0 +1,439 @@
+PyGVAMP Log - 2026-07-22 12:57:45
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --only_analysis --resume exp_ntl9_20260710_221606 --output_dir /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09 --traj_dir /mnt/hdd/data/ntl9/ --top /mnt/hdd/data/ntl9/topol.pdb --file_pattern NTL9-*-c-alpha-*.dcd --protein_name ntl9 --timestep 0.2 --seed 9 --model gin --selection name CA --stride 1 --lag_times 200.0 --n_states 5 --no_discover_states --max_retrains 0 --no_warm_start_retrains --n_neighbors 10 --batch_size 1000 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: ntl9
+Model: gin
+Preset: custom
+Cache: True
+Hurry mode: False
+Skipping preparation phase.
+Skipping training phase.
+============================================================
+PHASE 3: ANALYSIS
+============================================================
+Analyzing: lag200.0ns_5states
+Model loaded to cuda (type: VAMPNet)
+Loaded model: VAMPNet
+Total parameters: 77544
+Model component overview:
+Embedding type: MLP
+Encoder type: GINEncoder
+Classifier type: SoftmaxMLP
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Successfully loaded dataset from cache: 14755430 frames, 39 atoms
+Subsampling 14755430 → 50000 frames for analysis
+Dataset created with 50000 frames for analysis
+Analysis complete. Results saved to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states
+State probabilities shape: (50000, 5)
+Embeddings shape: (50000, 64)
+Number of edge attention arrays: 50000
+Number of edge index arrays: 50000
+Number of samples processed: 50000
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Calculating transition matrix with lag time 200.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 1000
+Transition counts:
+[[1.1870e+03 6.7670e+03 5.1000e+01 0.0000e+00 2.0000e+00]
+ [6.1340e+03 3.4087e+04 2.1600e+02 7.0000e+01 7.3000e+01]
+ [1.0300e+02 1.6500e+02 0.0000e+00 0.0000e+00 0.0000e+00]
+ [2.7000e+01 4.3000e+01 0.0000e+00 0.0000e+00 0.0000e+00]
+ [1.0000e+00 7.4000e+01 0.0000e+00 0.0000e+00 0.0000e+00]]
+Transition matrix shape: (5, 5)
+Calculating transition matrix with lag time 200.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 1000
+Transition counts:
+[[1.1870e+03 6.7670e+03 5.1000e+01 0.0000e+00 2.0000e+00]
+ [6.1340e+03 3.4087e+04 2.1600e+02 7.0000e+01 7.3000e+01]
+ [1.0300e+02 1.6500e+02 0.0000e+00 0.0000e+00 0.0000e+00]
+ [2.7000e+01 4.3000e+01 0.0000e+00 0.0000e+00 0.0000e+00]
+ [1.0000e+00 7.4000e+01 0.0000e+00 0.0000e+00 0.0000e+00]]
+Transition matrix shape: (5, 5)
+Saved all transition matrix plot to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_transition_matrix_all_lag200.0ns.png
+Saved all transition matrix to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_transition_matrix_all_lag200.0ns.csv
+Saved no_self transition matrix plot to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_transition_matrix_no_self_lag200.0ns.png
+Saved no_self transition matrix to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_transition_matrix_no_self_lag200.0ns.csv
+============================================================
+STATE QUALITY DIAGNOSTICS
+============================================================
+State Reduction Diagnostics (original: 5 states)
+============================================================
+Eigenvalue gap suggests: 4 states
+  Eigenvalues: [1.0000e+00, 1.6810e-02, 1.6810e-02, 1.2676e-02, 1.2690e-19]
+  Gap ratios:  [5.949e+01, 1.000e+00, 1.326e+00, 1.268e+10]
+Underpopulated states: [2, 3, 4]
+  Populations: [0.1601, 0.8316, 0.0054, 0.0014, 0.0015]
+  Entropy:     0.494 (max=1.609)
+Merge groups (JSD-based): [[0, 1], [2, 3]]
+Effective n_states: 3
+Confidence: medium
+Recommendation: retrain
+Recommendation: RETRAIN with ~3 states (reduction from 5).
+Diagnostic report saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_diagnostics.json
+Saved eigenvalue spectrum to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_eigenvalue_spectrum.png
+Saved JSD heatmap to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_jsd_heatmap.png
+Saved diagnostic summary to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_diagnostic_summary.png
+Diagnostic plots saved.
+Calculating state attention maps for 5 states...
+State populations:
+State 1: 16.01%
+State 2: 83.16%
+State 3: 0.54%
+State 4: 0.14%
+State 5: 0.15%
+Saved state attention maps to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_attention_maps.npy
+Saved state populations to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_populations.npy
+Saved state counts to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_counts.txt
+Saved state 2 attention map to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_2_attention.png
+Saved state 1 attention map to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_1_attention.png
+Saved state 3 attention map to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_3_attention.png
+Saved state 5 attention map to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_5_attention.png
+Saved state 4 attention map to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_4_attention.png
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+Saved combined attention maps to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_all_states_attention.png
+Processing attention maps: 5 states, 39 selected atoms
+Selected 39 atoms using selection: 'name CA'
+Using atom-level attention with residue labels for 39 atoms
+Saved residue attention plot to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_residue_attention_target.png
+Attention analysis complete
+Generating state structures
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Found 149 trajectory files matching 'NTL9-*-c-alpha-*.dcd' under /mnt/hdd/data/ntl9/ (recursive)
+Total trajectory files found: 149
+Applying selection 'protein': 39 atoms
+Found probabilities for 50000 frames with 5 states
+Processing trajectories with stride 1...
+Original frames: 50000, Strided frames: 50000
+Loading trajectories...
+Combining trajectories...
+Combined trajectory has 14755430 frames
+Warning: Fewer probability entries (50000) than trajectory frames (14755430)
+State assignment statistics (from most probable state):
+State 1: 8007 frames (16.01%)
+State 2: 41580 frames (83.16%)
+State 3: 268 frames (0.54%)
+State 4: 70 frames (0.14%)
+State 5: 75 frames (0.15%)
+Processing states...
+Found 50000 frames for state 1 with probability >= 0.0
+State 1: Saved average structure and 10 representative structures
+Found 50000 frames for state 2 with probability >= 0.0
+State 2: Saved average structure and 10 representative structures
+Found 50000 frames for state 3 with probability >= 0.0
+State 3: Saved average structure and 10 representative structures
+Found 50000 frames for state 4 with probability >= 0.0
+State 4: Saved average structure and 10 representative structures
+Found 50000 frames for state 5 with probability >= 0.0
+State 5: Saved average structure and 10 representative structures
+Summary saved to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_structures_summary.txt
+PyMOL failed to start, dumping diagnostics...
+pymol-3.1.7.2-py312hc70acc6_0.json
+conda build: py312hc70acc6_0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-bundle-3.1.6.1-0.json
+conda build: 0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-web-examples-2.4-1.json
+conda build: 1 https://conda.anaconda.org/schrodinger/noarch
+Operating System:
+Linux-6.17.0-35-generic-x86_64-with-glibc2.39
+#35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2
+PyQt5 5.15.11 (Qt 5.15.2)
+Python:
+3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+prefix=/opt/software/pygvamp/1.0.0/conda_env
+executable=/opt/software/pygvamp/1.0.0/conda_env/bin/python3.12
+filesystemencoding=utf-8
+Qt, Python and PyMOL Environment Variables:
+LANG=en_US.UTF-8
+PYGVAMP_ROOT=/opt/software/pygvamp/1.0.0
+PYGVAMP_VERSION=1.0.0
+PYMOL_DATA=/opt/software/pygvamp/1.0.0/conda_env/share/pymol/data
+PYMOL_PATH=/opt/software/pygvamp/1.0.0/conda_env/share/pymol
+PYTHONPATH=/opt/software/pygvamp/1.0.0/source
+QT_ACCESSIBILITY=1
+QT_API=pyqt5
+QT_IM_MODULE=ibus
+QT_XKB_CONFIG_ROOT=/opt/software/pygvamp/1.0.0/conda_env/lib
+PATH:
+/opt/software/pygvamp/1.0.0/conda_env/bin:/opt/cuda/12.8/bin:/home/vi/.local/b
+in:/home/vi/.nvm/versions/node/v24.15.0/bin:/opt/anaconda/2024.10-
+1/bin:/opt/anaconda/2024.10-
+1/condabin:/home/vi/.local/bin:/home/vi/.local/bin:/usr/local/sbin:/usr/local/
+bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/
+bin
+WARNING: Could not import PyMOL Python module.
+Will attempt to run PyMOL via command line instead.
+Using command-line approach for PyMOL visualization
+Created PyMOL script at /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_pymol_script.py
+Warning: PyMOL visualization skipped: name 'pymol_executable' is not defined
+Processing state 1 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_1_frame_39780_rmsd_0.375_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_1_frame_39780_rmsd_0.375_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_2_frame_39782_rmsd_0.440_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_2_frame_39782_rmsd_0.440_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_3_frame_22111_rmsd_0.489_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_3_frame_22111_rmsd_0.489_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_4_frame_13437_rmsd_0.513_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_4_frame_13437_rmsd_0.513_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_5_frame_13587_rmsd_0.553_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_5_frame_13587_rmsd_0.553_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_6_frame_42448_rmsd_0.607_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_6_frame_42448_rmsd_0.607_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_7_frame_28620_rmsd_0.749_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_7_frame_28620_rmsd_0.749_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_8_frame_32512_rmsd_0.904_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_8_frame_32512_rmsd_0.904_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_9_frame_41009_rmsd_0.937_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_9_frame_41009_rmsd_0.937_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_10_frame_295_rmsd_0.948_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_rank_10_frame_295_rmsd_0.948_prob_1.000_attention_view.pml
+Processing state 2 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_1_frame_37024_rmsd_0.477_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_1_frame_37024_rmsd_0.477_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_2_frame_24909_rmsd_0.492_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_2_frame_24909_rmsd_0.492_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_3_frame_34394_rmsd_0.573_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_3_frame_34394_rmsd_0.573_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_4_frame_18497_rmsd_0.583_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_4_frame_18497_rmsd_0.583_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_5_frame_6096_rmsd_0.609_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_5_frame_6096_rmsd_0.609_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_6_frame_32263_rmsd_0.666_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_6_frame_32263_rmsd_0.666_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_7_frame_16476_rmsd_0.702_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_7_frame_16476_rmsd_0.702_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_8_frame_19525_rmsd_0.716_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_8_frame_19525_rmsd_0.716_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_9_frame_30343_rmsd_0.855_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_9_frame_30343_rmsd_0.855_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_10_frame_45145_rmsd_1.697_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_rank_10_frame_45145_rmsd_1.697_prob_1.000_attention_view.pml
+Processing state 3 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_1_frame_37116_rmsd_0.499_prob_0.971_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_1_frame_37116_rmsd_0.499_prob_0.971_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_2_frame_37115_rmsd_0.520_prob_0.975_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_2_frame_37115_rmsd_0.520_prob_0.975_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_3_frame_45933_rmsd_0.552_prob_0.976_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_3_frame_45933_rmsd_0.552_prob_0.976_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_4_frame_37124_rmsd_0.637_prob_0.972_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_4_frame_37124_rmsd_0.637_prob_0.972_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_5_frame_41382_rmsd_0.692_prob_0.975_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_5_frame_41382_rmsd_0.692_prob_0.975_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_6_frame_22207_rmsd_0.708_prob_0.970_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_6_frame_22207_rmsd_0.708_prob_0.970_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_7_frame_41368_rmsd_0.708_prob_0.972_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_7_frame_41368_rmsd_0.708_prob_0.972_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_8_frame_41383_rmsd_0.711_prob_0.971_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_8_frame_41383_rmsd_0.711_prob_0.971_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_9_frame_19130_rmsd_0.723_prob_0.971_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_9_frame_19130_rmsd_0.723_prob_0.971_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_10_frame_28404_rmsd_0.980_prob_0.973_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_rank_10_frame_28404_rmsd_0.980_prob_0.973_attention_view.pml
+Processing state 4 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_1_frame_39940_rmsd_0.171_prob_0.995_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_1_frame_39940_rmsd_0.171_prob_0.995_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_2_frame_39945_rmsd_0.174_prob_0.995_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_2_frame_39945_rmsd_0.174_prob_0.995_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_3_frame_39943_rmsd_0.187_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_3_frame_39943_rmsd_0.187_prob_0.996_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_4_frame_39944_rmsd_0.189_prob_0.995_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_4_frame_39944_rmsd_0.189_prob_0.995_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_5_frame_39956_rmsd_0.198_prob_0.997_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_5_frame_39956_rmsd_0.198_prob_0.997_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_6_frame_39958_rmsd_0.214_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_6_frame_39958_rmsd_0.214_prob_0.996_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_7_frame_39955_rmsd_0.222_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_7_frame_39955_rmsd_0.222_prob_0.996_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_8_frame_39938_rmsd_0.230_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_8_frame_39938_rmsd_0.230_prob_0.996_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_9_frame_39966_rmsd_0.275_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_9_frame_39966_rmsd_0.275_prob_0.996_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_10_frame_27279_rmsd_0.847_prob_0.996_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_rank_10_frame_27279_rmsd_0.847_prob_0.996_attention_view.pml
+Processing state 5 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_1_frame_41663_rmsd_0.235_prob_0.994_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_1_frame_41663_rmsd_0.235_prob_0.994_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_2_frame_41659_rmsd_0.256_prob_0.994_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_2_frame_41659_rmsd_0.256_prob_0.994_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_3_frame_41661_rmsd_0.265_prob_0.997_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_3_frame_41661_rmsd_0.265_prob_0.997_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_4_frame_41660_rmsd_0.290_prob_0.995_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_4_frame_41660_rmsd_0.290_prob_0.995_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_5_frame_41664_rmsd_0.315_prob_0.995_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_5_frame_41664_rmsd_0.315_prob_0.995_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_6_frame_41669_rmsd_0.329_prob_0.994_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_6_frame_41669_rmsd_0.329_prob_0.994_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_7_frame_41680_rmsd_0.386_prob_0.992_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_7_frame_41680_rmsd_0.386_prob_0.992_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_8_frame_41670_rmsd_0.400_prob_0.992_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_8_frame_41670_rmsd_0.400_prob_0.992_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_9_frame_41658_rmsd_0.433_prob_0.993_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_9_frame_41658_rmsd_0.433_prob_0.993_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_10_frame_41656_rmsd_0.478_prob_0.994_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_rank_10_frame_41656_rmsd_0.478_prob_0.994_attention_view.pml
+PyMOL failed to start, dumping diagnostics...
+pymol-3.1.7.2-py312hc70acc6_0.json
+conda build: py312hc70acc6_0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-bundle-3.1.6.1-0.json
+conda build: 0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-web-examples-2.4-1.json
+conda build: 1 https://conda.anaconda.org/schrodinger/noarch
+Operating System:
+Linux-6.17.0-35-generic-x86_64-with-glibc2.39
+#35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2
+PyQt5 5.15.11 (Qt 5.15.2)
+Python:
+3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+prefix=/opt/software/pygvamp/1.0.0/conda_env
+executable=/opt/software/pygvamp/1.0.0/conda_env/bin/python3.12
+filesystemencoding=utf-8
+Qt, Python and PyMOL Environment Variables:
+LANG=en_US.UTF-8
+PYGVAMP_ROOT=/opt/software/pygvamp/1.0.0
+PYGVAMP_VERSION=1.0.0
+PYMOL_DATA=/opt/software/pygvamp/1.0.0/conda_env/share/pymol/data
+PYMOL_PATH=/opt/software/pygvamp/1.0.0/conda_env/share/pymol
+PYTHONPATH=/opt/software/pygvamp/1.0.0/source
+QT_ACCESSIBILITY=1
+QT_API=pyqt5
+QT_IM_MODULE=ibus
+QT_XKB_CONFIG_ROOT=/opt/software/pygvamp/1.0.0/conda_env/lib
+PATH:
+/opt/software/pygvamp/1.0.0/conda_env/bin:/opt/cuda/12.8/bin:/home/vi/.local/b
+in:/home/vi/.nvm/versions/node/v24.15.0/bin:/opt/anaconda/2024.10-
+1/bin:/opt/anaconda/2024.10-
+1/condabin:/home/vi/.local/bin:/home/vi/.local/bin:/usr/local/sbin:/usr/local/
+bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/
+bin
+WARNING: Could not import PyMOL Python API.
+Will create PyMOL script files instead that you can run manually.
+Processing state 1 with attention coloring...
+Generated PyMOL script for state 1: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1_attention/ntl9_state_1_attention_view.pml
+Processing state 2 with attention coloring...
+Generated PyMOL script for state 2: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2_attention/ntl9_state_2_attention_view.pml
+Processing state 3 with attention coloring...
+Generated PyMOL script for state 3: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3_attention/ntl9_state_3_attention_view.pml
+Processing state 4 with attention coloring...
+Generated PyMOL script for state 4: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4_attention/ntl9_state_4_attention_view.pml
+Processing state 5 with attention coloring...
+Generated PyMOL script for state 5: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5_attention/ntl9_state_5_attention_view.pml
+Created master PyMOL script: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_run_all_attention_visualizations.pml
+To visualize all states, run PyMOL and execute:
+    @/mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_run_all_attention_visualizations.pml
+Attention-colored visualizations generated
+Calculating transition matrix with lag time 200.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 1000
+Transition counts:
+[[1.1870e+03 6.7670e+03 5.1000e+01 0.0000e+00 2.0000e+00]
+ [6.1340e+03 3.4087e+04 2.1600e+02 7.0000e+01 7.3000e+01]
+ [1.0300e+02 1.6500e+02 0.0000e+00 0.0000e+00 0.0000e+00]
+ [2.7000e+01 4.3000e+01 0.0000e+00 0.0000e+00 0.0000e+00]
+ [1.0000e+00 7.4000e+01 0.0000e+00 0.0000e+00 0.0000e+00]]
+Transition matrix shape: (5, 5)
+Warning: Image file not found: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_1/images/ntl9_state_1_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_2/images/ntl9_state_2_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_3/images/ntl9_state_3_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_4/images/ntl9_state_4_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/state_5/images/ntl9_state_5_iso.png
+Saved state network plot to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/ntl9_state_network_lag200.0.png with 5 non-empty states.
+Original states included: S1, S2, S3, S4, S5
+State network plotted
+Running implied timescales analysis...
+Analyzing implied timescales for ntl9 with lag times: [0.2, 111.28888888888889, 222.37777777777777, 333.46666666666664, 444.55555555555554, 555.6444444444445, 666.7333333333333, 777.8222222222223, 888.9111111111112, 1000.0] ns
+Calculating ITS for 5 states with 10 lag times
+Trajectory timestep: 0.2 ns, Stride: 1, Effective timestep: 0.2 ns
+Lag time 0.2 ns corresponds to 1 frames
+Lag time 111.28888888888889 ns corresponds to 556 frames
+Lag time 222.37777777777777 ns corresponds to 1112 frames
+Lag time 333.46666666666664 ns corresponds to 1667 frames
+Lag time 444.55555555555554 ns corresponds to 2223 frames
+Lag time 555.6444444444445 ns corresponds to 2778 frames
+Lag time 666.7333333333333 ns corresponds to 3334 frames
+Lag time 777.8222222222223 ns corresponds to 3889 frames
+Lag time 888.9111111111112 ns corresponds to 4445 frames
+Lag time 1000.0 ns corresponds to 5000 frames
+Saved ITS data to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/implied_timescales/ntl9_its_data.npz
+Saved implied timescales plot to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/implied_timescales/ntl9_implied_timescales.png
+Saved ITS summary to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/implied_timescales/ntl9_its_summary.txt
+Running Chapman-Kolmogorov test...
+Trajectory timestep: 0.2 ns
+Stride: 1
+Effective timestep: 0.2 ns
+Running Chapman-Kolmogorov test with lag time 100.0 ns...
+Lag time 100.0 ns corresponds to 500 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/chapman_kolmogorov/ntl9_ck_test_lag100.0ns.png
+Lag time 100.0 ns: MSE = 0.0220, MAE = 0.0495
+Running Chapman-Kolmogorov test with lag time 200.0 ns...
+Lag time 200.0 ns corresponds to 1000 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/chapman_kolmogorov/ntl9_ck_test_lag200.0ns.png
+Lag time 200.0 ns: MSE = 0.0114, MAE = 0.0360
+Running Chapman-Kolmogorov test with lag time 400.0 ns...
+Lag time 400.0 ns corresponds to 2000 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/chapman_kolmogorov/ntl9_ck_test_lag400.0ns.png
+Lag time 400.0 ns: MSE = 0.0073, MAE = 0.0337
+Saved lag time comparison plot to /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states/chapman_kolmogorov/ntl9_ck_test_comparison.png
+Generating merged interactive report...
+  Residue mapping: 39 training residues → resSeq values
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+  Large dataset (14900000 est. frames) — loading with stride=2980 (target ≤5000)
+  Loaded trajectory: 5019 frames, 39 atoms for per-frame structures.
+  Loading artifacts from lag200.0ns_5states...
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+Calculating transition matrix with lag time 200.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 1000
+Transition counts:
+[[1.230e+02 4.810e+02 4.000e+00 0.000e+00 0.000e+00]
+ [5.450e+02 2.781e+03 2.300e+01 7.000e+00 8.000e+00]
+ [5.000e+00 1.600e+01 0.000e+00 0.000e+00 0.000e+00]
+ [0.000e+00 2.000e+00 0.000e+00 0.000e+00 0.000e+00]
+ [0.000e+00 5.000e+00 0.000e+00 0.000e+00 0.000e+00]]
+Transition matrix shape: (5, 5)
+    Loaded edge attention maps: 5 states, 39x39 matrix
+    Added timescale: lag=200.0ns, 5000 frames (subsampled), 5/5 state structures, 3 diagnostic plots.
+Visualization saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/ntl9_interactive_report.html
+Merged interactive report: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/ntl9_interactive_report.html
+Results saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states
+Analysis completed: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/analysis/lag200.0ns_5states
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606
+Log file: /mnt/hdd/experiments/ntl9_gin_native_v1/seed_09/exp_ntl9_20260710_221606/logs/log_20260722_125745.txt
+============================================================
+Log ended: 2026-07-22 13:01:01

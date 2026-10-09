@@ -1,0 +1,3 @@
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+  its = -lag_ns / np.log(k_eigvals)

@@ -1,0 +1,42 @@
+PyGVAMP Log - 2026-05-16 00:11:59
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/ntl9/ --top /mnt/hdd/data/ntl9/topol.pdb --file_pattern NTL9-*-c-alpha-*.dcd --protein_name ntl9 --output_dir /mnt/hdd/experiments/ntl9_repro_v1/seed_01 --timestep 0.2 --seed 1 --model schnet --selection name CA --stride 1 --lag_times 200.0 --n_states 5 --no_discover_states --max_retrains 0 --no_warm_start_retrains --hidden_dim 16 --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --use_attention --no_use_embedding --clf_num_layers 1 --clf_dropout 0 --clf_norm none --init_method xavier_normal --lr 5e-4 --weight_decay 1e-5 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: ntl9
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/ntl9_repro_v1/seed_01/exp_ntl9_20260516_001159/preparation/prep_20260516_001159/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v1/seed_01/exp_ntl9_20260516_001159/preparation/prep_20260516_001159/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v1/seed_01/exp_ntl9_20260516_001159/preparation/prep_20260516_001159/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/ntl9/
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset with 149 trajectory files
+No cache file found at /mnt/hdd/experiments/ntl9_repro_v1/seed_01/exp_ntl9_20260516_001159/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Processing 149 trajectory files...
+Loaded 149 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 60828, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 65777, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 45226, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 83599]
+Total frames: 14755430, Atoms per frame: 39
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.71 Å
+Created 14754430 time-lagged pairs with lag time 200.0 and 1000 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/ntl9_repro_v1/seed_01/exp_ntl9_20260516_001159/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl

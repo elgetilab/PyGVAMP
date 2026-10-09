@@ -1,0 +1,31 @@
+{
+  "traj_dir": "/mnt/hdd/data/ab42/trajectories/red/",
+  "top": "/mnt/hdd/data/ab42/trajectories/red/topol.pdb",
+  "file_pattern": "*.xtc",
+  "recursive": true,
+  "selection": "name CA",
+  "stride": 1,
+  "lag_time": 1.0,
+  "n_neighbors": 4,
+  "node_embedding_dim": 16,
+  "gaussian_expansion_dim": 16,
+  "output_dir": "/mnt/hdd/experiments/ab42_red_std/lag1/run_99/exp_ab42_red_20260410_141005/preparation",
+  "cache_dir": "/mnt/hdd/experiments/ab42_red_std/lag1/run_99/exp_ab42_red_20260410_141005/cache",
+  "use_cache": true,
+  "discover_states": false,
+  "g2v_embedding_dim": 512,
+  "g2v_max_degree": 3,
+  "g2v_epochs": 50,
+  "g2v_min_count": 10,
+  "g2v_umap_dim": [
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "min_states": 2,
+  "max_states": 10,
+  "batch_size": 2048,
+  "timestep": null
+}

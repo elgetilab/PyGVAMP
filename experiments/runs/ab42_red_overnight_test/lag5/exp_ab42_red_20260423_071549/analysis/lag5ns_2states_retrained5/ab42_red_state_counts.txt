@@ -1,0 +1,3 @@
+State	Count	Population
+1	43913	0.878260
+2	6087	0.121740

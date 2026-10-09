@@ -1,0 +1,222 @@
+============================================================
+Trp-cage vectorization speed test (5 epochs, 2 CPUs)
+============================================================
+Job:        533    Seed: 0
+Output:     /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533
+Node:       hugin
+Start:      Wed May 13 04:12:43 PM CEST 2026
+Baseline:   ~15 min/epoch (trpcage_repro_v1_array, 2 CPUs, old code)
+Target:     <= 5 min/epoch (3x speedup acceptance bar)
+============================================================
+GPU placement (want GPU 1 / vLLM card):
+0, NVIDIA GeForce RTX 5090, GPU-f21f1977-19f3-8a6c-23e6-22e8a3a6e7ff, 4 MiB, 32106 MiB
+  CUDA_VISIBLE_DEVICES=0
+============================================================
+Python import resolution (must point at LOCAL repo):
+  pygv package:         /home/vi/PycharmProjects/PyGVAMP/pygv/__init__.py
+  VAMPNetDataset from:  /home/vi/PycharmProjects/PyGVAMP/pygv/dataset/vampnet_dataset.py
+  vectorized markers:  PRESENT
+============================================================
+Using model: schnet
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [20.0] (timestep=0.2 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: trpcage
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb
+Selected 20 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb
+Selected 20 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset with 11 trajectory files
+No cache file found at /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 11 trajectory files...
+Selected 20 atoms with selection: 'name CA'
+Loaded 11 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 44000]
+Total frames: 1044000, Atoms per frame: 20
+Calculating distance range from data samples...
+Distance range: 0.33 to 5.74 Å
+Created 1043900 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset created with 1043900 samples
+Dataset statistics saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247
+Topology PDB (training): /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [20.0]
+  N states: [5]
+--- Experiment 1/1 ---
+Lag time: 20.0 ns, N states: 5
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 11 trajectory files...
+Selected 20 atoms with selection: 'name CA'
+Total frames: 1044000, Atoms per frame: 20
+Calculating distance range from data samples...
+Distance range: 0.33 to 5.74 Å
+Created 1043900 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset created with 1043900 samples
+Training set: 730730 samples
+Testing set: 313170 samples
+Auto-inferred node_dim=20 from dataset (was 16)
+Weight Initialization Report (xavier_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 1,680
+----------------------------------------
+Total params: 1,680
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/56 parameters that may not be properly initialized.
+Created VAMPNet model with 7685 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([20, 20]), size=400
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([20, 1]), size=20
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 20]), size=320
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([20, 20]), size=400
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([20, 1]), size=20
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 20]), size=320
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([20, 20]), size=400
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([20, 1]), size=20
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 20]), size=320
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([20, 20]), size=400
+  ✓ encoder.interactions.3.cfconv.attention_vector: shape=torch.Size([20, 1]), size=20
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 20]), size=320
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([20, 16]), size=320
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([20]), size=20
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 20]), size=320
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([5, 16]), size=80
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([5]), size=5
+Total parameters in optimizer: 7,685 in 56 tensors
+Total model parameters: 7,685
+Training model on cuda...
+Starting training for 5 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/5, Train VAMP: 3.9193, Val VAMP: concat=4.2423, perbatch=4.2422±0.1005
+Complete model saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304/models/best_model.pt
+New best model with score: 4.2423
+Epoch 2/5, Train VAMP: 4.2887, Val VAMP: concat=4.3261, perbatch=4.3255±0.1055
+Complete model saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304/models/best_model.pt
+New best model with score: 4.3261
+Epoch 3/5, Train VAMP: 4.3888, Val VAMP: concat=4.1512, perbatch=4.1503±0.1387
+No improvement for 1 epochs. Best score: 4.3261
+Epoch 4/5, Train VAMP: 4.4603, Val VAMP: concat=4.4089, perbatch=4.4129±0.1328
+Complete model saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304/models/best_model.pt
+New best model with score: 4.4089
+Epoch 5/5, Train VAMP: 4.4841, Val VAMP: concat=4.3878, perbatch=4.3836±0.1384
+No improvement for 1 epochs. Best score: 4.4089
+Complete model saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304/models/final_model.pt
+Loaded best model with score: 4.4089
+Figure saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304/plots/vamp_scores.png
+Training completed successfully. Results saved to /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/training/lag20.0ns_5states/20260513_161304
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_vec_speedtest/20260513T161243_job533/exp_trpcage_20260513_161247/preparation/prep_20260513_161247/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Dataset created with 1043900 samples
+Training set: 835120 samples
+Testing set: 208780 samples

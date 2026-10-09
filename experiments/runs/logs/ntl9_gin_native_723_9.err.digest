@@ -1,0 +1,4 @@
+/opt/software/pygvamp/1.0.0/source/pygv/utils/nn_utils.py:244: UserWarning: std(): degrees of freedom is <= 0. Correction should be strictly less than the reduction factor (input numel divided by output numel). (Triggered internally at /pytorch/aten/src/ATen/native/ReduceOps.cpp:1858.)
+  if param.requires_grad and (param.std() < 1e-6 or param.min() == param.max()):
+/var/spool/slurm/d/job00723/slurm_script: line 111: 743911 Killed                  pygvamp --traj_dir /mnt/hdd/data/ntl9/ --top /mnt/hdd/data/ntl9/topol.pdb --file_pattern 'NTL9-*-c-alpha-*.dcd' --protein_name ntl9 --output_dir "${RUN_DIR}" --timestep 0.2 --seed "${SEED}" --model gin --selection 'name CA' --stride 1 --lag_times 200.0 --n_states 5 --no_discover_states --max_retrains 0 --no_warm_start_retrains --n_neighbors 10 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+slurmstepd-hugin: error: Detected 1 oom_kill event in StepId=723.batch. Some of the step tasks have been OOM Killed.

@@ -1,0 +1,15 @@
+torch check:
+torch 2.11.0+cu128 cuda True
+Device: cuda
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_131836/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Dataset created with 1043900 samples
+Training set: 1043900 samples
+Testing set: 0 samples

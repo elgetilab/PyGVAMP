@@ -1,0 +1,15 @@
+  its = -lag_ns / np.log(k_eigvals)
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+  its = -lag_ns / np.log(k_eigvals)
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+  its = -lag_ns / np.log(k_eigvals)
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(

@@ -1,0 +1,98 @@
+{
+  "num_samples": 20022,
+  "trajectories": [
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc",
+    "cutted_dt_1ns.xtc"
+  ],
+  "topology": {
+    "input_file": "/mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb",
+    "output_pdb": "/mnt/hdd/experiments/atr_d_std/lag20/run_03/exp_atr_d_20260629_144239/preparation/prep_20260629_144239/topology.pdb",
+    "viz_topology_pdb": "/mnt/hdd/experiments/atr_d_std/lag20/run_03/exp_atr_d_20260629_144239/preparation/prep_20260629_144239/visualization_topology.pdb",
+    "n_atoms_selected": 319,
+    "n_residues": 319
+  },
+  "parameters": {
+    "lag_time": 20.0,
+    "n_neighbors": 10,
+    "node_embedding_dim": 16,
+    "gaussian_expansion_dim": 16,
+    "selection": "chainid 0 and name CA",
+    "stride": 1,
+    "frame_dt_ps": 1000.0
+  },
+  "structure": {
+    "num_nodes": 319,
+    "num_edges": 3190,
+    "node_feature_dim": 319,
+    "edge_feature_dim": 16
+  },
+  "state_discovery": {
+    "recommended_n_states": 10,
+    "chosen_source": "umap_2",
+    "sweep_sources": [
+      "raw",
+      "umap_2",
+      "umap_3",
+      "umap_5",
+      "umap_6",
+      "umap_7",
+      "tsne_2",
+      "tsne_3"
+    ],
+    "embeddings_shape": [
+      20042,
+      512
+    ],
+    "silhouette_scores": {
+      "2": 0.452633261680603,
+      "3": 0.43829283118247986,
+      "4": 0.38857501745224,
+      "5": 0.36873745918273926,
+      "6": 0.36722123622894287,
+      "7": 0.37199321389198303,
+      "8": 0.37148672342300415,
+      "9": 0.3688689172267914,
+      "10": 0.3559120297431946
+    },
+    "best_silhouette_k": 10,
+    "elbow_k": 3
+  }
+}

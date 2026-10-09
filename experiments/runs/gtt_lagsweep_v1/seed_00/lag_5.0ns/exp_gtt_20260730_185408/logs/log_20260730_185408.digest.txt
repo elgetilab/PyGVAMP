@@ -1,0 +1,63 @@
+PyGVAMP Log - 2026-07-30 18:54:08
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/gtt/ --top /mnt/hdd/data/gtt/topol.pdb --file_pattern *.dcd --protein_name gtt --output_dir /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns --timestep 0.2 --seed 0 --model schnet --selection name CA --lag_times 5.0 --stride 5 --auto_stride --n_states 10 --max_retrains 5 --hidden_dim 16 --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --lr 5e-4 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: gtt
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/preparation/prep_20260730_185408/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/preparation/prep_20260730_185408/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/preparation/prep_20260730_185408/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/gtt/
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Creating dataset with 58 trajectory files
+No cache file found at /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 5: 1000.000 ps
+Lag time: 5.000 ns (5000.0 ps, 5 frames)
+Processing 58 trajectory files...
+Loaded 58 trajectories with frames: [20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 6518, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 10826]
+Total frames: 1137344, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.47 Å
+Created 1137339 time-lagged pairs with lag time 5.0 and 5 lag frames. 1 lag frame == 1.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260730_185408/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset created with 1137339 samples
+=== STATE DISCOVERY ===  [repeated 2 times]
+--- Training Graph2Vec ---
+Training on 1137344 graphs
+Extracting subgraphs and building vocabulary...
+  Uniform min_count=10 for all degrees
+Building vocabulary from dataset...
+Vocabulary per degree: d0: 2/2 (min_count=10), d1: 101/112 (min_count=10), d2: 188296/28243477 (min_count=10), d3: 0/39201747 (min_count=10)
+Created vocabulary with 188399 subgraphs
+Pre-extracting and caching subgraphs...
+Converting graphs to Doc2Vec documents...
+Created 1137344 documents for Doc2Vec training
+Training Doc2Vec model...
+Starting Doc2Vec training with 50 epochs...
+Vocabulary size: 188399
+Vector size: 512
+Loss computation: Enabled
+Epoch 1 started...
+Epoch 1 completed in 22.30s (Total: 34.73s, LR: 0.025000, Loss: 0.000000)
+Epoch 2 started...

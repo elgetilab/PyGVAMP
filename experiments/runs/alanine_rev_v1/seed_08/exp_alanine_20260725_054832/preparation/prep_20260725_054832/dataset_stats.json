@@ -1,0 +1,30 @@
+{
+  "num_samples": 749999,
+  "trajectories": [
+    "alanine-dipeptide-0-250ns-nowater.xtc",
+    "alanine-dipeptide-1-250ns-nowater.xtc",
+    "alanine-dipeptide-2-250ns-nowater.xtc"
+  ],
+  "topology": {
+    "input_file": "/mnt/hdd/data/alanine/alanine-dipeptide-nowater.pdb",
+    "output_pdb": "/mnt/hdd/experiments/alanine_rev_v1/seed_08/exp_alanine_20260725_054832/preparation/prep_20260725_054832/topology.pdb",
+    "viz_topology_pdb": "/mnt/hdd/experiments/alanine_rev_v1/seed_08/exp_alanine_20260725_054832/preparation/prep_20260725_054832/visualization_topology.pdb",
+    "n_atoms_selected": 10,
+    "n_residues": 3
+  },
+  "parameters": {
+    "lag_time": 0.001,
+    "n_neighbors": 5,
+    "node_embedding_dim": 16,
+    "gaussian_expansion_dim": 16,
+    "selection": "not element H",
+    "stride": 1,
+    "frame_dt_ps": 1.0
+  },
+  "structure": {
+    "num_nodes": 10,
+    "num_edges": 50,
+    "node_feature_dim": 10,
+    "edge_feature_dim": 16
+  }
+}

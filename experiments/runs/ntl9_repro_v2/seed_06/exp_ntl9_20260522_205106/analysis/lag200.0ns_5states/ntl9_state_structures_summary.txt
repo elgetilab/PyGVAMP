@@ -1,0 +1,83 @@
+State structure analysis for ntl9
+Total states: 5
+
+State 1:
+  - Frame count (max probability): 105 (0.21%)
+State 2:
+  - Frame count (max probability): 277 (0.55%)
+State 3:
+  - Frame count (max probability): 41558 (83.12%)
+State 4:
+  - Frame count (max probability): 57 (0.11%)
+State 5:
+  - Frame count (max probability): 8003 (16.01%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: ntl9_state_1_average.pdb
+  - Representative structures:
+    - ntl9_state_1_rank_1_frame_22031_rmsd_0.338_prob_0.935.pdb
+    - ntl9_state_1_rank_2_frame_22030_rmsd_0.367_prob_0.949.pdb
+    - ntl9_state_1_rank_3_frame_22023_rmsd_0.451_prob_0.951.pdb
+    - ntl9_state_1_rank_4_frame_22024_rmsd_0.456_prob_0.985.pdb
+    - ntl9_state_1_rank_5_frame_22010_rmsd_0.463_prob_0.959.pdb
+    - ntl9_state_1_rank_6_frame_22022_rmsd_0.484_prob_0.961.pdb
+    - ntl9_state_1_rank_7_frame_41663_rmsd_0.797_prob_0.937.pdb
+    - ntl9_state_1_rank_8_frame_41657_rmsd_0.842_prob_0.960.pdb
+    - ntl9_state_1_rank_9_frame_41662_rmsd_0.885_prob_0.935.pdb
+    - ntl9_state_1_rank_10_frame_41655_rmsd_0.922_prob_0.942.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ntl9_state_2_average.pdb
+  - Representative structures:
+    - ntl9_state_2_rank_1_frame_41364_rmsd_0.416_prob_0.996.pdb
+    - ntl9_state_2_rank_2_frame_41362_rmsd_0.441_prob_0.994.pdb
+    - ntl9_state_2_rank_3_frame_41390_rmsd_0.569_prob_0.995.pdb
+    - ntl9_state_2_rank_4_frame_37119_rmsd_0.598_prob_0.994.pdb
+    - ntl9_state_2_rank_5_frame_22233_rmsd_0.602_prob_0.994.pdb
+    - ntl9_state_2_rank_6_frame_37115_rmsd_0.681_prob_0.994.pdb
+    - ntl9_state_2_rank_7_frame_37112_rmsd_0.689_prob_0.994.pdb
+    - ntl9_state_2_rank_8_frame_41361_rmsd_0.689_prob_0.994.pdb
+    - ntl9_state_2_rank_9_frame_41359_rmsd_0.702_prob_0.994.pdb
+    - ntl9_state_2_rank_10_frame_41357_rmsd_0.820_prob_0.995.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ntl9_state_3_average.pdb
+  - Representative structures:
+    - ntl9_state_3_rank_1_frame_36126_rmsd_0.498_prob_0.997.pdb
+    - ntl9_state_3_rank_2_frame_20280_rmsd_0.536_prob_0.997.pdb
+    - ntl9_state_3_rank_3_frame_17576_rmsd_0.537_prob_0.997.pdb
+    - ntl9_state_3_rank_4_frame_48557_rmsd_0.603_prob_0.997.pdb
+    - ntl9_state_3_rank_5_frame_28890_rmsd_0.695_prob_0.997.pdb
+    - ntl9_state_3_rank_6_frame_612_rmsd_0.698_prob_0.997.pdb
+    - ntl9_state_3_rank_7_frame_29421_rmsd_0.767_prob_0.997.pdb
+    - ntl9_state_3_rank_8_frame_12369_rmsd_0.901_prob_0.997.pdb
+    - ntl9_state_3_rank_9_frame_7225_rmsd_0.920_prob_0.997.pdb
+    - ntl9_state_3_rank_10_frame_13260_rmsd_1.122_prob_0.997.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ntl9_state_4_average.pdb
+  - Representative structures:
+    - ntl9_state_4_rank_1_frame_39945_rmsd_0.179_prob_0.997.pdb
+    - ntl9_state_4_rank_2_frame_39941_rmsd_0.182_prob_0.998.pdb
+    - ntl9_state_4_rank_3_frame_39943_rmsd_0.185_prob_0.997.pdb
+    - ntl9_state_4_rank_4_frame_39942_rmsd_0.200_prob_0.997.pdb
+    - ntl9_state_4_rank_5_frame_39954_rmsd_0.203_prob_0.997.pdb
+    - ntl9_state_4_rank_6_frame_39952_rmsd_0.222_prob_0.998.pdb
+    - ntl9_state_4_rank_7_frame_39939_rmsd_0.228_prob_0.997.pdb
+    - ntl9_state_4_rank_8_frame_39966_rmsd_0.260_prob_0.998.pdb
+    - ntl9_state_4_rank_9_frame_39965_rmsd_0.269_prob_0.997.pdb
+    - ntl9_state_4_rank_10_frame_27279_rmsd_0.853_prob_0.997.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ntl9_state_5_average.pdb
+  - Representative structures:
+    - ntl9_state_5_rank_1_frame_32512_rmsd_0.480_prob_0.996.pdb
+    - ntl9_state_5_rank_2_frame_46278_rmsd_0.496_prob_0.996.pdb
+    - ntl9_state_5_rank_3_frame_37102_rmsd_0.560_prob_0.996.pdb
+    - ntl9_state_5_rank_4_frame_4420_rmsd_0.644_prob_0.996.pdb
+    - ntl9_state_5_rank_5_frame_4821_rmsd_0.739_prob_0.996.pdb
+    - ntl9_state_5_rank_6_frame_37260_rmsd_0.782_prob_0.996.pdb
+    - ntl9_state_5_rank_7_frame_41548_rmsd_0.791_prob_0.996.pdb
+    - ntl9_state_5_rank_8_frame_36941_rmsd_0.797_prob_0.996.pdb
+    - ntl9_state_5_rank_9_frame_27968_rmsd_0.899_prob_0.996.pdb
+    - ntl9_state_5_rank_10_frame_41824_rmsd_0.934_prob_0.996.pdb
+

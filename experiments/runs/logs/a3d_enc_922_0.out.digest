@@ -1,0 +1,1246 @@
+============================================================
+alpha3D encoder comparison — painn, seed 0
+============================================================
+Out:      /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00
+Fixed:    k=3 (from probe job 921), tau=50.0 ns, stride 10
+Capacity: 38,990 encoder params (1.000x SchNet)
+Encoder:  --model painn --painn_hidden_dim 26 --hidden_dim 16
+Code:     cdad28e
+Attempt:  0   Start: Sun Aug 23 09:03:24 PM CEST 2026   Node: hugin
+============================================================
+Using model: painn
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [50.0] (timestep=2.0 ns, stride=10)
+Experiment directory created: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: a3d
+Model: painn
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/a3d/
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset with 37 trajectory files
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endiannesSelected 73 atoms with selection: 'name CA'
+Loaded 37 trajectories with frames: [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3271, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 274]
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset created with 353520 samples
+Dataset statistics saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326
+Topology PDB (training): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [50.0]
+  N states: [3]
+--- Experiment 1/1 ---
+Lag time: 50.0 ns, N states: 3
+Auto-stride: τ=50ns, frame_dt=2000ps, stride=2
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+s
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcSelected 73 atoms with selection: 'name CA'
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Runtime subsample: stride=2, 353520 -> 176760 pairs
+Dataset created with 176760 samples
+Training set: 123732 samples
+Testing set: 53028 samples
+Auto-inferred node_dim=73 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 2
+Linear parameters: 36,826
+----------------------------------------
+Total params: 36,826
+Total tensors: 26
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([26])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([26])
+WARNING: Found 2/56 parameters that may not be properly initialized.
+Created VAMPNet model with 40273 parameters
+Parameters captured by optimizer:
+  ✓ encoder.input_proj.weight: shape=torch.Size([26, 73]), size=1898
+  ✓ encoder.input_proj.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.0.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.0.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.0.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.0.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.1.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.1.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.1.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.1.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.2.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.2.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.2.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.2.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.3.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.3.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.3.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.3.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.0.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.0.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.0.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.1.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.1.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.1.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.2.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.2.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.2.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.3.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.3.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.3.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 26]), size=416
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([26]), size=26
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 16]), size=1024
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([3, 64]), size=192
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([3]), size=3
+Total parameters in optimizer: 40,273 in 56 tensors
+Total model parameters: 40,273
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 1/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/best_model.pt
+New best model with score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 2/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 1 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 3/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 2 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 4/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 3 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 5/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 4 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 6/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 5 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 7/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 6 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 8/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 7 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 9/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 8 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 10/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 9 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_10.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 11/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 10 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 12/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 11 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 13/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 12 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 14/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 13 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 15/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 14 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 16/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 15 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 17/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 16 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 18/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 17 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 19/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 18 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 20/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 19 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_20.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 21/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 20 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 22/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 21 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 23/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 22 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 24/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 23 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 25/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 24 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 26/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 25 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 27/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 26 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 28/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 27 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 29/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 28 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 30/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 29 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_30.pt
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 31/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 30 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 32/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 31 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 33/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 32 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 34/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 33 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 35/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 34 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 36/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 35 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 37/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 36 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 38/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 37 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 39/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 38 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 40/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 39 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_40.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 41/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 40 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 42/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 41 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 43/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 42 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 44/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 43 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 45/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 44 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 46/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 45 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 47/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 46 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 48/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 47 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 49/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 48 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 50/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 49 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_50.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 51/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 50 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 52/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 51 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 53/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 52 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 54/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 53 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 55/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 54 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 56/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 55 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 57/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 56 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 58/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 57 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 59/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 58 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 60/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 59 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_60.pt
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 61/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 60 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 62/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 61 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 63/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 62 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 64/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 63 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 65/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 64 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 66/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 65 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 67/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 66 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 68/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 67 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 69/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 68 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 70/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 69 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_70.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 71/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 70 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 72/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 71 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 73/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 72 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 74/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 73 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 75/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 74 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 76/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 75 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 77/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 76 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 78/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 77 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 79/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 78 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 80/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 79 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_80.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 81/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 80 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 82/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 81 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 83/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 82 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 84/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 83 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 85/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 84 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 86/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 85 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 87/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 86 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 88/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 87 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 89/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 88 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 90/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 89 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_90.pt
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 91/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 90 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 92/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 91 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 93/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 92 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 94/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 93 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 95/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 94 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 96/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 95 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 97/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 96 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 98/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 97 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 372 times]
+Epoch 99/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 98 epochs. Best score: 1.0000
+Warning: NaN values detected in classifier output  [repeated 392 times]
+Epoch 100/100, Train VAMP: 1.0000, Val VAMP: concat=1.0000, perbatch=1.0000±0.0000
+No improvement for 99 epochs. Best score: 1.0000
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/checkpoint_epoch_100.pt
+Complete model saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/final_model.pt
+Loaded best model with score: 1.0000
+Figure saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/plots/vamp_scores.png
+Training completed successfully. Results saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401
+Training marker written: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/training_complete.json (epochs_run=100/100)
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/preparation/prep_20260823_210326/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Successfully loaded dataset from cache: 353545 frames, 73 atoms
+Runtime subsample: stride=2, 353520 -> 176760 pairs
+Dataset created with 176760 samples
+Training set: 141408 samples
+Testing set: 35352 samples
+Subsampling 353545 → 50000 frames for analysis
+Warning: NaN values detected in classifier output  [repeated 51 times]
+Analysis complete. Results saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models
+State probabilities shape: (50000, 3)
+Embeddings shape: (50000, 16)
+Number of edge attention arrays: 50000
+Number of edge index arrays: 50000
+Number of samples processed: 50000
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Trajectory timestep: 0.2 ns
+Stride: 10
+Effective timestep: 2.0 ns
+Running Chapman-Kolmogorov test with lag time 50.0 ns...
+Lag time 50.0 ns corresponds to 25 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/plots/chapman_kolmogorov/a3d_ck_test_lag50.0ns.png
+Lag time 50.0 ns: MSE = 0.0000, MAE = 0.0008
+CK test complete
+Analyzing implied timescales for a3d with lag times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200] ns
+Calculating ITS for 3 states with 200 lag times
+Trajectory timestep: 0.2 ns, Stride: 10, Effective timestep: 2.0 ns
+Lag time 1 ns corresponds to 0 frames
+Lag time 2 ns corresponds to 1 frames
+Lag time 3 ns corresponds to 2 frames
+Lag time 4 ns corresponds to 2 frames
+Lag time 5 ns corresponds to 2 frames
+Lag time 6 ns corresponds to 3 frames
+Lag time 7 ns corresponds to 4 frames
+Lag time 8 ns corresponds to 4 frames
+Lag time 9 ns corresponds to 4 frames
+Lag time 10 ns corresponds to 5 frames
+Lag time 11 ns corresponds to 6 frames
+Lag time 12 ns corresponds to 6 frames
+Lag time 13 ns corresponds to 6 frames
+Lag time 14 ns corresponds to 7 frames
+Lag time 15 ns corresponds to 8 frames
+Lag time 16 ns corresponds to 8 frames
+Lag time 17 ns corresponds to 8 frames
+Lag time 18 ns corresponds to 9 frames
+Lag time 19 ns corresponds to 10 frames
+Lag time 20 ns corresponds to 10 frames
+Lag time 21 ns corresponds to 10 frames
+Lag time 22 ns corresponds to 11 frames
+Lag time 23 ns corresponds to 12 frames
+Lag time 24 ns corresponds to 12 frames
+Lag time 25 ns corresponds to 12 frames
+Lag time 26 ns corresponds to 13 frames
+Lag time 27 ns corresponds to 14 frames
+Lag time 28 ns corresponds to 14 frames
+Lag time 29 ns corresponds to 14 frames
+Lag time 30 ns corresponds to 15 frames
+Lag time 31 ns corresponds to 16 frames
+Lag time 32 ns corresponds to 16 frames
+Lag time 33 ns corresponds to 16 frames
+Lag time 34 ns corresponds to 17 frames
+Lag time 35 ns corresponds to 18 frames
+Lag time 36 ns corresponds to 18 frames
+Lag time 37 ns corresponds to 18 frames
+Lag time 38 ns corresponds to 19 frames
+Lag time 39 ns corresponds to 20 frames
+Lag time 40 ns corresponds to 20 frames
+Lag time 41 ns corresponds to 20 frames
+Lag time 42 ns corresponds to 21 frames
+Lag time 43 ns corresponds to 22 frames
+Lag time 44 ns corresponds to 22 frames
+Lag time 45 ns corresponds to 22 frames
+Lag time 46 ns corresponds to 23 frames
+Lag time 47 ns corresponds to 24 frames
+Lag time 48 ns corresponds to 24 frames
+Lag time 49 ns corresponds to 24 frames
+Lag time 50 ns corresponds to 25 frames
+Lag time 51 ns corresponds to 26 frames
+Lag time 52 ns corresponds to 26 frames
+Lag time 53 ns corresponds to 26 frames
+Lag time 54 ns corresponds to 27 frames
+Lag time 55 ns corresponds to 28 frames
+Lag time 56 ns corresponds to 28 frames
+Lag time 57 ns corresponds to 28 frames
+Lag time 58 ns corresponds to 29 frames
+Lag time 59 ns corresponds to 30 frames
+Lag time 60 ns corresponds to 30 frames
+Lag time 61 ns corresponds to 30 frames
+Lag time 62 ns corresponds to 31 frames
+Lag time 63 ns corresponds to 32 frames
+Lag time 64 ns corresponds to 32 frames
+Lag time 65 ns corresponds to 32 frames
+Lag time 66 ns corresponds to 33 frames
+Lag time 67 ns corresponds to 34 frames
+Lag time 68 ns corresponds to 34 frames
+Lag time 69 ns corresponds to 34 frames
+Lag time 70 ns corresponds to 35 frames
+Lag time 71 ns corresponds to 36 frames
+Lag time 72 ns corresponds to 36 frames
+Lag time 73 ns corresponds to 36 frames
+Lag time 74 ns corresponds to 37 frames
+Lag time 75 ns corresponds to 38 frames
+Lag time 76 ns corresponds to 38 frames
+Lag time 77 ns corresponds to 38 frames
+Lag time 78 ns corresponds to 39 frames
+Lag time 79 ns corresponds to 40 frames
+Lag time 80 ns corresponds to 40 frames
+Lag time 81 ns corresponds to 40 frames
+Lag time 82 ns corresponds to 41 frames
+Lag time 83 ns corresponds to 42 frames
+Lag time 84 ns corresponds to 42 frames
+Lag time 85 ns corresponds to 42 frames
+Lag time 86 ns corresponds to 43 frames
+Lag time 87 ns corresponds to 44 frames
+Lag time 88 ns corresponds to 44 frames
+Lag time 89 ns corresponds to 44 frames
+Lag time 90 ns corresponds to 45 frames
+Lag time 91 ns corresponds to 46 frames
+Lag time 92 ns corresponds to 46 frames
+Lag time 93 ns corresponds to 46 frames
+Lag time 94 ns corresponds to 47 frames
+Lag time 95 ns corresponds to 48 frames
+Lag time 96 ns corresponds to 48 frames
+Lag time 97 ns corresponds to 48 frames
+Lag time 98 ns corresponds to 49 frames
+Lag time 99 ns corresponds to 50 frames
+Lag time 100 ns corresponds to 50 frames
+Lag time 101 ns corresponds to 50 frames
+Lag time 102 ns corresponds to 51 frames
+Lag time 103 ns corresponds to 52 frames
+Lag time 104 ns corresponds to 52 frames
+Lag time 105 ns corresponds to 52 frames
+Lag time 106 ns corresponds to 53 frames
+Lag time 107 ns corresponds to 54 frames
+Lag time 108 ns corresponds to 54 frames
+Lag time 109 ns corresponds to 54 frames
+Lag time 110 ns corresponds to 55 frames
+Lag time 111 ns corresponds to 56 frames
+Lag time 112 ns corresponds to 56 frames
+Lag time 113 ns corresponds to 56 frames
+Lag time 114 ns corresponds to 57 frames
+Lag time 115 ns corresponds to 58 frames
+Lag time 116 ns corresponds to 58 frames
+Lag time 117 ns corresponds to 58 frames
+Lag time 118 ns corresponds to 59 frames
+Lag time 119 ns corresponds to 60 frames
+Lag time 120 ns corresponds to 60 frames
+Lag time 121 ns corresponds to 60 frames
+Lag time 122 ns corresponds to 61 frames
+Lag time 123 ns corresponds to 62 frames
+Lag time 124 ns corresponds to 62 frames
+Lag time 125 ns corresponds to 62 frames
+Lag time 126 ns corresponds to 63 frames
+Lag time 127 ns corresponds to 64 frames
+Lag time 128 ns corresponds to 64 frames
+Lag time 129 ns corresponds to 64 frames
+Lag time 130 ns corresponds to 65 frames
+Lag time 131 ns corresponds to 66 frames
+Lag time 132 ns corresponds to 66 frames
+Lag time 133 ns corresponds to 66 frames
+Lag time 134 ns corresponds to 67 frames
+Lag time 135 ns corresponds to 68 frames
+Lag time 136 ns corresponds to 68 frames
+Lag time 137 ns corresponds to 68 frames
+Lag time 138 ns corresponds to 69 frames
+Lag time 139 ns corresponds to 70 frames
+Lag time 140 ns corresponds to 70 frames
+Lag time 141 ns corresponds to 70 frames
+Lag time 142 ns corresponds to 71 frames
+Lag time 143 ns corresponds to 72 frames
+Lag time 144 ns corresponds to 72 frames
+Lag time 145 ns corresponds to 72 frames
+Lag time 146 ns corresponds to 73 frames
+Lag time 147 ns corresponds to 74 frames
+Lag time 148 ns corresponds to 74 frames
+Lag time 149 ns corresponds to 74 frames
+Lag time 150 ns corresponds to 75 frames
+Lag time 151 ns corresponds to 76 frames
+Lag time 152 ns corresponds to 76 frames
+Lag time 153 ns corresponds to 76 frames
+Lag time 154 ns corresponds to 77 frames
+Lag time 155 ns corresponds to 78 frames
+Lag time 156 ns corresponds to 78 frames
+Lag time 157 ns corresponds to 78 frames
+Lag time 158 ns corresponds to 79 frames
+Lag time 159 ns corresponds to 80 frames
+Lag time 160 ns corresponds to 80 frames
+Lag time 161 ns corresponds to 80 frames
+Lag time 162 ns corresponds to 81 frames
+Lag time 163 ns corresponds to 82 frames
+Lag time 164 ns corresponds to 82 frames
+Lag time 165 ns corresponds to 82 frames
+Lag time 166 ns corresponds to 83 frames
+Lag time 167 ns corresponds to 84 frames
+Lag time 168 ns corresponds to 84 frames
+Lag time 169 ns corresponds to 84 frames
+Lag time 170 ns corresponds to 85 frames
+Lag time 171 ns corresponds to 86 frames
+Lag time 172 ns corresponds to 86 frames
+Lag time 173 ns corresponds to 86 frames
+Lag time 174 ns corresponds to 87 frames
+Lag time 175 ns corresponds to 88 frames
+Lag time 176 ns corresponds to 88 frames
+Lag time 177 ns corresponds to 88 frames
+Lag time 178 ns corresponds to 89 frames
+Lag time 179 ns corresponds to 90 frames
+Lag time 180 ns corresponds to 90 frames
+Lag time 181 ns corresponds to 90 frames
+Lag time 182 ns corresponds to 91 frames
+Lag time 183 ns corresponds to 92 frames
+Lag time 184 ns corresponds to 92 frames
+Lag time 185 ns corresponds to 92 frames
+Lag time 186 ns corresponds to 93 frames
+Lag time 187 ns corresponds to 94 frames
+Lag time 188 ns corresponds to 94 frames
+Lag time 189 ns corresponds to 94 frames
+Lag time 190 ns corresponds to 95 frames
+Lag time 191 ns corresponds to 96 frames
+Lag time 192 ns corresponds to 96 frames
+Lag time 193 ns corresponds to 96 frames
+Lag time 194 ns corresponds to 97 frames
+Lag time 195 ns corresponds to 98 frames
+Lag time 196 ns corresponds to 98 frames
+Lag time 197 ns corresponds to 98 frames
+Lag time 198 ns corresponds to 99 frames
+Lag time 199 ns corresponds to 100 frames
+Lag time 200 ns corresponds to 100 frames
+Saved ITS data to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/plots/implied_timescales/a3d_its_data.npz
+Saved implied timescales plot to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/plots/implied_timescales/a3d_implied_timescales.png
+Saved ITS summary to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/plots/implied_timescales/a3d_its_summary.txt
+ITS calculation complete
+Training completed: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/best_model.pt
+============================================================
+PHASE 3: ANALYSIS
+============================================================
+Analyzing: lag50.0ns_3states
+Model loaded to cuda (type: VAMPNet)
+Loaded model: VAMPNet
+Total parameters: 40273
+Model component overview:
+Embedding type: NoneType
+Encoder type: PaiNNEncoder
+Classifier type: SoftmaxMLP
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Successfully loaded dataset from cache: 353545 frames, 73 atoms
+Subsampling 353545 → 50000 frames for analysis
+Dataset created with 50000 frames for analysis
+Warning: NaN values detected in classifier output  [repeated 51 times]
+Analysis complete. Results saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states
+State probabilities shape: (50000, 3)
+Embeddings shape: (50000, 16)
+Number of edge attention arrays: 50000
+Number of edge index arrays: 50000
+Number of samples processed: 50000
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Calculating transition matrix with lag time 50.0 ns
+Effective timestep: 2.0 ns
+Lag frames: 25
+Transition counts:
+[[49975.     0.     0.]
+ [    0.     0.     0.]
+ [    0.     0.     0.]]
+Transition matrix shape: (3, 3)
+Calculating transition matrix with lag time 50.0 ns
+Effective timestep: 2.0 ns
+Lag frames: 25
+Transition counts:
+[[49975.     0.     0.]
+ [    0.     0.     0.]
+ [    0.     0.     0.]]
+Transition matrix shape: (3, 3)
+Saved all transition matrix plot to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_transition_matrix_all_lag50.0ns.png
+Saved all transition matrix to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_transition_matrix_all_lag50.0ns.csv
+Saved no_self transition matrix plot to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_transition_matrix_no_self_lag50.0ns.png
+Saved no_self transition matrix to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_transition_matrix_no_self_lag50.0ns.csv
+============================================================
+STATE QUALITY DIAGNOSTICS
+============================================================
+State Reduction Diagnostics (original: 3 states)
+============================================================
+Eigenvalue gap suggests: 2 states
+  Eigenvalues: [1., 0., 0.]
+  Gap ratios:  [1.e+12, 0.e+00]
+Underpopulated states: [1, 2]
+  Populations: [1., 0., 0.]
+  Entropy:     -0.000 (max=1.099)
+Merge groups (JSD-based): [[1, 2]]
+Effective n_states: 2
+Confidence: high
+Recommendation: retrain
+Recommendation: RETRAIN with ~2 states (reduction from 3).
+Diagnostic report saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_state_diagnostics.json
+Saved eigenvalue spectrum to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_eigenvalue_spectrum.png
+Saved JSD heatmap to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_jsd_heatmap.png
+Saved diagnostic summary to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_diagnostic_summary.png
+Diagnostic plots saved.
+No edge attention available (encoder exposes none) - skipping attention maps. State populations are still computed.
+SKIPPED: attention artifacts (maps, weights, residue directions, attention-coloured structures) — this encoder exposes no attention. ITS/CK, transition matrices, populations and state structures are unaffected.
+Generating state structures
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Found 37 trajectory files matching '*.dcd' under /mnt/hdd/data/a3d/ (recursive)
+Total trajectory files found: 37
+Applying selection 'protein': 73 atoms
+Found probabilities for 50000 frames with 3 states
+Processing trajectories with stride 10...
+Original frames: 50000, Strided frames: 5000
+Loading trajectories...
+dplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdpCombining trajectories...
+Combined trajectory has 353545 frames
+Warning: Fewer probability entries (5000) than trajectory frames (353545)
+State assignment statistics (from most probable state):
+State 1: 5000 frames (100.00%)
+State 2: 0 frames (0.00%)
+State 3: 0 frames (0.00%)
+Processing states...
+Found 5000 frames for state 1 with probability >= 0.0
+State 1: Saved average structure and 10 representative structures
+Found 5000 frames for state 2 with probability >= 0.0
+State 2: Saved average structure and 10 representative structures
+Found 5000 frames for state 3 with probability >= 0.0
+State 3: Saved average structure and 10 representative structures
+Summary saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_state_structures_summary.txt
+PyMOL failed to start, dumping diagnostics...
+pymol-3.1.7.2-py312hc70acc6_0.json
+conda build: py312hc70acc6_0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-bundle-3.1.6.1-0.json
+conda build: 0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-web-examples-2.4-1.json
+conda build: 1 https://conda.anaconda.org/schrodinger/noarch
+Operating System:
+Linux-7.0.0-28-generic-x86_64-with-glibc2.39
+#28~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jul  1 15:50:57 UTC 2
+PyQt5 5.15.11 (Qt 5.15.2)
+Python:
+3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+prefix=/opt/software/pygvamp/1.0.0/conda_env
+executable=/opt/software/pygvamp/1.0.0/conda_env/bin/python3.12
+filesystemencoding=utf-8
+Qt, Python and PyMOL Environment Variables:
+LANG=en_US.UTF-8
+PYGVAMP_ROOT=/opt/software/pygvamp/1.0.0
+PYGVAMP_VERSION=1.0.0
+PYMOL_DATA=/opt/software/pygvamp/1.0.0/conda_env/share/pymol/data
+PYMOL_PATH=/opt/software/pygvamp/1.0.0/conda_env/share/pymol
+PYTHONPATH=/opt/software/pygvamp/1.0.0/source
+QT_ACCESSIBILITY=1
+QT_API=pyqt5
+QT_IM_MODULE=ibus
+QT_XKB_CONFIG_ROOT=/opt/software/pygvamp/1.0.0/conda_env/lib
+PATH:
+/opt/software/pygvamp/1.0.0/conda_env/bin:/opt/cuda/12.8/bin:/home/vi/.nvm/ver
+sions/node/v24.15.0/bin:/opt/anaconda/2024.10-1/bin:/opt/anaconda/2024.10-
+1/condabin:/home/vi/.local/bin:/home/vi/.local/bin:/usr/local/sbin:/usr/local/
+bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/
+bin
+WARNING: Could not import PyMOL Python module.
+Will attempt to run PyMOL via command line instead.
+Using command-line approach for PyMOL visualization
+Created PyMOL script at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_pymol_script.py
+Warning: PyMOL visualization skipped: name 'pymol_executable' is not defined
+Calculating transition matrix with lag time 50.0 ns
+Effective timestep: 2.0 ns
+Lag frames: 25
+Transition counts:
+[[49975.     0.     0.]
+ [    0.     0.     0.]
+ [    0.     0.     0.]]
+Transition matrix shape: (3, 3)
+Warning: Image file not found: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/state_1/images/a3d_state_1_iso.png
+Saved state network plot to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/a3d_state_network_lag50.0.png with 1 non-empty states.
+Original states included: S1
+State network plotted
+Running implied timescales analysis...
+Analyzing implied timescales for a3d with lag times: [2.0, 29.555555555555557, 57.111111111111114, 84.66666666666667, 112.22222222222223, 139.77777777777777, 167.33333333333334, 194.8888888888889, 222.44444444444446, 250.0] ns
+Calculating ITS for 3 states with 10 lag times
+Trajectory timestep: 0.2 ns, Stride: 10, Effective timestep: 2.0 ns
+Lag time 2.0 ns corresponds to 1 frames
+Lag time 29.555555555555557 ns corresponds to 15 frames
+Lag time 57.111111111111114 ns corresponds to 29 frames
+Lag time 84.66666666666667 ns corresponds to 42 frames
+Lag time 112.22222222222223 ns corresponds to 56 frames
+Lag time 139.77777777777777 ns corresponds to 70 frames
+Lag time 167.33333333333334 ns corresponds to 84 frames
+Lag time 194.8888888888889 ns corresponds to 97 frames
+Lag time 222.44444444444446 ns corresponds to 111 frames
+Lag time 250.0 ns corresponds to 125 frames
+Saved ITS data to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/implied_timescales/a3d_its_data.npz
+Saved implied timescales plot to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/implied_timescales/a3d_implied_timescales.png
+Saved ITS summary to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/implied_timescales/a3d_its_summary.txt
+Running Chapman-Kolmogorov test...
+Trajectory timestep: 0.2 ns
+Stride: 10
+Effective timestep: 2.0 ns
+Running Chapman-Kolmogorov test with lag time 25.0 ns...
+Lag time 25.0 ns corresponds to 12 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/chapman_kolmogorov/a3d_ck_test_lag25.0ns.png
+Lag time 25.0 ns: MSE = 0.0000, MAE = 0.0003
+Running Chapman-Kolmogorov test with lag time 50.0 ns...
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/chapman_kolmogorov/a3d_ck_test_lag50.0ns.png
+Lag time 50.0 ns: MSE = 0.0000, MAE = 0.0003
+Running Chapman-Kolmogorov test with lag time 100.0 ns...
+Lag time 100.0 ns corresponds to 50 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/chapman_kolmogorov/a3d_ck_test_lag100.0ns.png
+Lag time 100.0 ns: MSE = 0.0000, MAE = 0.0003
+Saved lag time comparison plot to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states/chapman_kolmogorov/a3d_ck_test_comparison.png
+Generating merged interactive report...
+  Residue mapping: 73 training residues → resSeq values
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+  Large dataset (370000 est. frames) — loading with stride=740 (target ≤5000)
+  Loaded trajectory: 4809 frames, 73 atoms for per-frame structures.
+  Loading artifacts from lag50.0ns_3states...
+    Skipping — could not infer n_nodes.
+  No timescales could be added — skipping report generation.
+Results saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states
+Analysis completed: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/analysis/lag50.0ns_3states
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00
+Log file: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/logs/log_20260823_210326.txt
+lugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+============================================================
+Finished: Sun Aug 23 10:16:12 PM CEST 2026   Exit: 0
+⚠️  Exit 0 does NOT mean results exist — check analysis_completed in
+    /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/pipeline_summary.json
+============================================================

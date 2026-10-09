@@ -1,0 +1,345 @@
+PYTHONPATH override active: /home/vi/PycharmProjects/PyGVAMP
+============================================================
+Alanine RevGraphVAMP 3-phase (task 0, seed 0)
+Target: VAMP-2 4.41±0.01 / VAMP-E 4.38±0.01 (Huang 2024)
+Phases: chi=50(5e-4) us=50(5e-4) all=300(1e-4)
+Start:  Fri Jul 24 11:11:49 AM CEST 2026   Node: hugin
+============================================================
+Using model: schnet
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Using user-specified timestep: 0.001 ns (1 ps)
+Lag time validation passed: [0.02] (timestep=0.0 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: alanine
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/alanine/alanine-dipeptide-nowater.pdb
+Selected 10 atoms with selection: 'not element H'
+Topology saved as PDB: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/alanine/alanine-dipeptide-nowater.pdb
+Selected 22 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/alanine/
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Creating dataset with 3 trajectory files
+No cache file found at /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/cache/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Using user-specified timestep: 0.001 ns (1.000 ps)
+Trajectory timestep: 1.000 ps
+Effective timestep with stride 1: 1.000 ps
+Lag time: 0.020 ns (20.0 ps, 20 frames)
+Processing 3 trajectory files...
+Selected 10 atoms with selection: 'not element H'
+Loaded 3 trajectories with frames: [250000, 250000, 250000]
+Total frames: 750000, Atoms per frame: 10
+Calculating distance range from data samples...
+Distance range: 0.11 to 0.77 Å
+Created 749980 time-lagged pairs with lag time 0.02 and 20 lag frames. 1 lag frame == 0.001 ns
+Saving dataset to cache: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/cache/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/cache/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Dataset created with 749980 samples
+Dataset statistics saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151
+Topology PDB (training): /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [0.02]
+  N states: [6]
+--- Experiment 1/1 ---
+Lag time: 0.02 ns, N states: 6
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Using user-specified timestep: 0.001 ns (1.000 ps)
+Trajectory timestep: 1.000 ps
+Effective timestep with stride 1: 1.000 ps
+Lag time: 0.020 ns (20.0 ps, 20 frames)
+Processing 3 trajectory files...
+Selected 10 atoms with selection: 'not element H'
+Total frames: 750000, Atoms per frame: 10
+Calculating distance range from data samples...
+Distance range: 0.11 to 0.77 Å
+Created 749980 time-lagged pairs with lag time 0.02 and 20 lag frames. 1 lag frame == 0.001 ns
+Saving dataset to cache: /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/preparation/prep_20260724_111151/vampnet_data_d448648c_lag0.02_nn5_str1_cont.pkl
+Dataset created with 749980 samples
+Training set: 524986 samples
+Testing set: 224994 samples
+Auto-inferred node_dim=10 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 448
+----------------------------------------
+Total params: 448
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: rev_score.log_stationary, shape: torch.Size([6])
+WARNING: Parameter possibly uninitialized: rev_score.rate_matrix_weights, shape: torch.Size([6, 6])
+WARNING: Found 12/58 parameters that may not be properly initialized.
+Created VAMPNet model with 4160 parameters
+RevGraphVAMP 3-phase schedule: chi=50@0.0005 (VAMP-2), us=50@0.0005 (VAMP-E), all=300@0.0001 (VAMP-E); activation=exp, renorm=False
+[RevGraphVAMP phase 'chi'] 50 epochs, lr=0.0005, loss=vamp2, 56 param tensors
+  [chi] epoch 1: val VAMP-2=2.2510  VAMP-E=2.2510
+  [chi] epoch 2: val VAMP-2=2.4456  VAMP-E=2.4456
+  [chi] epoch 3: val VAMP-2=2.7427  VAMP-E=2.7415
+  [chi] epoch 4: val VAMP-2=2.7570  VAMP-E=2.7552
+  [chi] epoch 5: val VAMP-2=2.7124  VAMP-E=2.7043
+  [chi] epoch 6: val VAMP-2=2.7847  VAMP-E=2.7842
+  [chi] epoch 7: val VAMP-2=2.7986  VAMP-E=2.7963
+  [chi] epoch 8: val VAMP-2=2.7819  VAMP-E=2.7818
+  [chi] epoch 9: val VAMP-2=2.7948  VAMP-E=2.7912
+  [chi] epoch 10: val VAMP-2=2.7808  VAMP-E=2.7799
+  [chi] epoch 11: val VAMP-2=2.7699  VAMP-E=2.7686
+  [chi] epoch 12: val VAMP-2=2.8041  VAMP-E=2.8038
+  [chi] epoch 13: val VAMP-2=2.8217  VAMP-E=2.8189
+  [chi] epoch 14: val VAMP-2=2.8101  VAMP-E=2.8054
+  [chi] epoch 15: val VAMP-2=2.7760  VAMP-E=2.7748
+  [chi] epoch 16: val VAMP-2=2.7993  VAMP-E=2.7916
+  [chi] epoch 17: val VAMP-2=2.8047  VAMP-E=2.8033
+  [chi] epoch 18: val VAMP-2=2.8077  VAMP-E=2.8048
+  [chi] epoch 19: val VAMP-2=2.8210  VAMP-E=2.8178
+  [chi] epoch 20: val VAMP-2=2.8133  VAMP-E=2.8069
+  [chi] epoch 21: val VAMP-2=2.7365  VAMP-E=2.7344
+  [chi] epoch 22: val VAMP-2=2.8229  VAMP-E=2.8162
+  [chi] epoch 23: val VAMP-2=2.8100  VAMP-E=2.8077
+  [chi] epoch 24: val VAMP-2=2.7519  VAMP-E=2.7483
+  [chi] epoch 25: val VAMP-2=2.8003  VAMP-E=2.7969
+  [chi] epoch 26: val VAMP-2=2.8009  VAMP-E=2.7955
+  [chi] epoch 27: val VAMP-2=2.8040  VAMP-E=2.7943
+  [chi] epoch 28: val VAMP-2=2.8307  VAMP-E=2.8289
+  [chi] epoch 29: val VAMP-2=2.7929  VAMP-E=2.7903
+  [chi] epoch 30: val VAMP-2=2.8109  VAMP-E=2.8071
+  [chi] epoch 31: val VAMP-2=2.8109  VAMP-E=2.8007
+  [chi] epoch 32: val VAMP-2=2.8243  VAMP-E=2.8204
+  [chi] epoch 33: val VAMP-2=2.8055  VAMP-E=2.7948
+  [chi] epoch 34: val VAMP-2=2.7908  VAMP-E=2.7837
+  [chi] epoch 35: val VAMP-2=2.8041  VAMP-E=2.8013
+  [chi] epoch 36: val VAMP-2=2.8288  VAMP-E=2.8212
+  [chi] epoch 37: val VAMP-2=2.8190  VAMP-E=2.8099
+  [chi] epoch 38: val VAMP-2=2.8317  VAMP-E=2.8281
+  [chi] epoch 39: val VAMP-2=2.7961  VAMP-E=2.7922
+  [chi] epoch 40: val VAMP-2=2.8369  VAMP-E=2.8307
+  [chi] epoch 41: val VAMP-2=2.8244  VAMP-E=2.8186
+  [chi] epoch 42: val VAMP-2=2.6066  VAMP-E=2.6009
+  [chi] epoch 43: val VAMP-2=2.8122  VAMP-E=2.8019
+  [chi] epoch 44: val VAMP-2=2.8211  VAMP-E=2.8170
+  [chi] epoch 45: val VAMP-2=2.8297  VAMP-E=2.8260
+  [chi] epoch 46: val VAMP-2=2.8157  VAMP-E=2.8114
+  [chi] epoch 47: val VAMP-2=2.8320  VAMP-E=2.8260
+  [chi] epoch 48: val VAMP-2=2.8097  VAMP-E=2.7916
+  [chi] epoch 49: val VAMP-2=2.8061  VAMP-E=2.7847
+  [chi] epoch 50: val VAMP-2=2.8090  VAMP-E=2.8001
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+[RevGraphVAMP] algebraic U/S init done (Stage 2)  val VAMP-2=2.8082  VAMP-E=2.8002
+[RevGraphVAMP phase 'us'] 50 epochs, lr=0.0005, loss=vampe, 2 param tensors
+  [us] epoch 1: val VAMP-2=2.8060  VAMP-E=2.7950
+  [us] epoch 2: val VAMP-2=2.8016  VAMP-E=2.7908
+  [us] epoch 3: val VAMP-2=2.8055  VAMP-E=2.7943
+  [us] epoch 4: val VAMP-2=2.8034  VAMP-E=2.7895
+  [us] epoch 5: val VAMP-2=2.8080  VAMP-E=2.7971
+  [us] epoch 6: val VAMP-2=2.8031  VAMP-E=2.7923
+  [us] epoch 7: val VAMP-2=2.8015  VAMP-E=2.7921
+  [us] epoch 8: val VAMP-2=2.8043  VAMP-E=2.7937
+  [us] epoch 9: val VAMP-2=2.8014  VAMP-E=2.7907
+  [us] epoch 10: val VAMP-2=2.8047  VAMP-E=2.7956
+  [us] epoch 11: val VAMP-2=2.8042  VAMP-E=2.7936
+  [us] epoch 12: val VAMP-2=2.8084  VAMP-E=2.7973
+  [us] epoch 13: val VAMP-2=2.8044  VAMP-E=2.7946
+  [us] epoch 14: val VAMP-2=2.8055  VAMP-E=2.7951
+  [us] epoch 15: val VAMP-2=2.8064  VAMP-E=2.7956
+  [us] epoch 16: val VAMP-2=2.8055  VAMP-E=2.7948
+  [us] epoch 17: val VAMP-2=2.8035  VAMP-E=2.7926
+  [us] epoch 18: val VAMP-2=2.8049  VAMP-E=2.7954
+  [us] epoch 19: val VAMP-2=2.8037  VAMP-E=2.7941
+  [us] epoch 20: val VAMP-2=2.8080  VAMP-E=2.7973
+  [us] epoch 21: val VAMP-2=2.8055  VAMP-E=2.7950
+  [us] epoch 22: val VAMP-2=2.8038  VAMP-E=2.7929
+  [us] epoch 23: val VAMP-2=2.8057  VAMP-E=2.7935
+  [us] epoch 24: val VAMP-2=2.8084  VAMP-E=2.7980
+  [us] epoch 25: val VAMP-2=2.8034  VAMP-E=2.7914
+  [us] epoch 26: val VAMP-2=2.8043  VAMP-E=2.7936
+  [us] epoch 27: val VAMP-2=2.8026  VAMP-E=2.7911
+  [us] epoch 28: val VAMP-2=2.8029  VAMP-E=2.7915
+  [us] epoch 29: val VAMP-2=2.8035  VAMP-E=2.7908
+  [us] epoch 30: val VAMP-2=2.8057  VAMP-E=2.7962
+  [us] epoch 31: val VAMP-2=2.8060  VAMP-E=2.7955
+  [us] epoch 32: val VAMP-2=2.8045  VAMP-E=2.7937
+  [us] epoch 33: val VAMP-2=2.8016  VAMP-E=2.7919
+  [us] epoch 34: val VAMP-2=2.8027  VAMP-E=2.7917
+  [us] epoch 35: val VAMP-2=2.7961  VAMP-E=2.7879
+  [us] epoch 36: val VAMP-2=2.8067  VAMP-E=2.7964
+  [us] epoch 37: val VAMP-2=2.8038  VAMP-E=2.7935
+  [us] epoch 38: val VAMP-2=2.8035  VAMP-E=2.7943
+  [us] epoch 39: val VAMP-2=2.8019  VAMP-E=2.7916
+  [us] epoch 40: val VAMP-2=2.8075  VAMP-E=2.7967
+  [us] epoch 41: val VAMP-2=2.8027  VAMP-E=2.7915
+  [us] epoch 42: val VAMP-2=2.8014  VAMP-E=2.7902
+  [us] epoch 43: val VAMP-2=2.8041  VAMP-E=2.7932
+  [us] epoch 44: val VAMP-2=2.8054  VAMP-E=2.7955
+  [us] epoch 45: val VAMP-2=2.8024  VAMP-E=2.7933
+  [us] epoch 46: val VAMP-2=2.8072  VAMP-E=2.7964
+  [us] epoch 47: val VAMP-2=2.8090  VAMP-E=2.7987
+  [us] epoch 48: val VAMP-2=2.8030  VAMP-E=2.7937
+  [us] epoch 49: val VAMP-2=2.8024  VAMP-E=2.7920
+  [us] epoch 50: val VAMP-2=2.8030  VAMP-E=2.7917
+[RevGraphVAMP phase 'all'] 300 epochs, lr=0.0001, loss=vampe, 58 param tensors
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 1: val VAMP-2=2.8366  VAMP-E=2.8220  (best VAMP-2=2.8366)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 2: val VAMP-2=2.8369  VAMP-E=2.8191  (best VAMP-2=2.8369)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 3: val VAMP-2=2.8451  VAMP-E=2.8321  (best VAMP-2=2.8451)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 4: val VAMP-2=2.8561  VAMP-E=2.8373  (best VAMP-2=2.8561)
+  [all] epoch 5: val VAMP-2=2.8531  VAMP-E=2.8264  (best VAMP-2=2.8561)
+  [all] epoch 6: val VAMP-2=2.8549  VAMP-E=2.8312  (best VAMP-2=2.8561)
+  [all] epoch 7: val VAMP-2=2.8482  VAMP-E=2.8239  (best VAMP-2=2.8561)
+  [all] epoch 8: val VAMP-2=2.8552  VAMP-E=2.8278  (best VAMP-2=2.8561)
+  [all] epoch 9: val VAMP-2=2.8527  VAMP-E=2.8293  (best VAMP-2=2.8561)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 10: val VAMP-2=2.8562  VAMP-E=2.8319  (best VAMP-2=2.8562)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 11: val VAMP-2=2.8589  VAMP-E=2.8363  (best VAMP-2=2.8589)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 12: val VAMP-2=2.8615  VAMP-E=2.8356  (best VAMP-2=2.8615)
+  [all] epoch 13: val VAMP-2=2.8587  VAMP-E=2.8363  (best VAMP-2=2.8615)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 14: val VAMP-2=2.8619  VAMP-E=2.8368  (best VAMP-2=2.8619)
+  [all] epoch 15: val VAMP-2=2.8553  VAMP-E=2.8316  (best VAMP-2=2.8619)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 16: val VAMP-2=2.8642  VAMP-E=2.8406  (best VAMP-2=2.8642)
+  [all] epoch 17: val VAMP-2=2.8585  VAMP-E=2.8359  (best VAMP-2=2.8642)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 18: val VAMP-2=2.8696  VAMP-E=2.8465  (best VAMP-2=2.8696)
+  [all] epoch 19: val VAMP-2=2.8650  VAMP-E=2.8449  (best VAMP-2=2.8696)
+  [all] epoch 20: val VAMP-2=2.8560  VAMP-E=2.8382  (best VAMP-2=2.8696)
+  [all] epoch 21: val VAMP-2=2.8641  VAMP-E=2.8427  (best VAMP-2=2.8696)
+  [all] epoch 22: val VAMP-2=2.8526  VAMP-E=2.8324  (best VAMP-2=2.8696)
+  [all] epoch 23: val VAMP-2=2.8575  VAMP-E=2.8370  (best VAMP-2=2.8696)
+  [all] epoch 24: val VAMP-2=2.8638  VAMP-E=2.8453  (best VAMP-2=2.8696)
+  [all] epoch 25: val VAMP-2=2.8646  VAMP-E=2.8461  (best VAMP-2=2.8696)
+  [all] epoch 26: val VAMP-2=2.8628  VAMP-E=2.8420  (best VAMP-2=2.8696)
+  [all] epoch 27: val VAMP-2=2.8640  VAMP-E=2.8473  (best VAMP-2=2.8696)
+  [all] epoch 28: val VAMP-2=2.8615  VAMP-E=2.8455  (best VAMP-2=2.8696)
+  [all] epoch 29: val VAMP-2=2.8622  VAMP-E=2.8410  (best VAMP-2=2.8696)
+  [all] epoch 30: val VAMP-2=2.8602  VAMP-E=2.8408  (best VAMP-2=2.8696)
+  [all] epoch 31: val VAMP-2=2.8683  VAMP-E=2.8466  (best VAMP-2=2.8696)
+  [all] epoch 32: val VAMP-2=2.8643  VAMP-E=2.8439  (best VAMP-2=2.8696)
+  [all] epoch 33: val VAMP-2=2.8587  VAMP-E=2.8362  (best VAMP-2=2.8696)
+  [all] epoch 34: val VAMP-2=2.8526  VAMP-E=2.8302  (best VAMP-2=2.8696)
+  [all] epoch 35: val VAMP-2=2.8534  VAMP-E=2.8263  (best VAMP-2=2.8696)
+  [all] epoch 36: val VAMP-2=2.8640  VAMP-E=2.8390  (best VAMP-2=2.8696)
+  [all] epoch 37: val VAMP-2=2.8678  VAMP-E=2.8443  (best VAMP-2=2.8696)
+  [all] epoch 38: val VAMP-2=2.8605  VAMP-E=2.8375  (best VAMP-2=2.8696)
+  [all] epoch 39: val VAMP-2=2.8656  VAMP-E=2.8451  (best VAMP-2=2.8696)
+  [all] epoch 40: val VAMP-2=2.8657  VAMP-E=2.8418  (best VAMP-2=2.8696)
+  [all] epoch 41: val VAMP-2=2.8656  VAMP-E=2.8432  (best VAMP-2=2.8696)
+  [all] epoch 42: val VAMP-2=2.8682  VAMP-E=2.8473  (best VAMP-2=2.8696)
+  [all] epoch 43: val VAMP-2=2.8629  VAMP-E=2.8438  (best VAMP-2=2.8696)
+  [all] epoch 44: val VAMP-2=2.8565  VAMP-E=2.8336  (best VAMP-2=2.8696)
+  [all] epoch 45: val VAMP-2=2.8565  VAMP-E=2.8354  (best VAMP-2=2.8696)
+  [all] epoch 46: val VAMP-2=2.8491  VAMP-E=2.8291  (best VAMP-2=2.8696)
+  [all] epoch 47: val VAMP-2=2.8654  VAMP-E=2.8489  (best VAMP-2=2.8696)
+  [all] epoch 48: val VAMP-2=2.8625  VAMP-E=2.8460  (best VAMP-2=2.8696)
+  [all] epoch 49: val VAMP-2=2.8605  VAMP-E=2.8400  (best VAMP-2=2.8696)
+  [all] epoch 50: val VAMP-2=2.8546  VAMP-E=2.8339  (best VAMP-2=2.8696)
+  [all] epoch 51: val VAMP-2=2.8502  VAMP-E=2.8282  (best VAMP-2=2.8696)
+  [all] epoch 52: val VAMP-2=2.8537  VAMP-E=2.8295  (best VAMP-2=2.8696)
+  [all] epoch 53: val VAMP-2=2.8621  VAMP-E=2.8432  (best VAMP-2=2.8696)
+  [all] epoch 54: val VAMP-2=2.8552  VAMP-E=2.8339  (best VAMP-2=2.8696)
+  [all] epoch 55: val VAMP-2=2.8557  VAMP-E=2.8386  (best VAMP-2=2.8696)
+  [all] epoch 56: val VAMP-2=2.8543  VAMP-E=2.8336  (best VAMP-2=2.8696)
+  [all] epoch 57: val VAMP-2=2.8469  VAMP-E=2.8263  (best VAMP-2=2.8696)
+  [all] epoch 58: val VAMP-2=2.8565  VAMP-E=2.8360  (best VAMP-2=2.8696)
+  [all] epoch 59: val VAMP-2=2.8609  VAMP-E=2.8452  (best VAMP-2=2.8696)
+  [all] epoch 60: val VAMP-2=2.8528  VAMP-E=2.8309  (best VAMP-2=2.8696)
+  [all] epoch 61: val VAMP-2=2.8585  VAMP-E=2.8413  (best VAMP-2=2.8696)
+  [all] epoch 62: val VAMP-2=2.8691  VAMP-E=2.8529  (best VAMP-2=2.8696)
+  [all] epoch 63: val VAMP-2=2.8636  VAMP-E=2.8444  (best VAMP-2=2.8696)
+  [all] epoch 64: val VAMP-2=2.8598  VAMP-E=2.8438  (best VAMP-2=2.8696)
+  [all] epoch 65: val VAMP-2=2.8596  VAMP-E=2.8394  (best VAMP-2=2.8696)
+  [all] epoch 66: val VAMP-2=2.8637  VAMP-E=2.8453  (best VAMP-2=2.8696)
+  [all] epoch 67: val VAMP-2=2.8618  VAMP-E=2.8459  (best VAMP-2=2.8696)
+  [all] epoch 68: val VAMP-2=2.8613  VAMP-E=2.8386  (best VAMP-2=2.8696)
+  [all] epoch 69: val VAMP-2=2.8602  VAMP-E=2.8424  (best VAMP-2=2.8696)
+  [all] epoch 70: val VAMP-2=2.8640  VAMP-E=2.8475  (best VAMP-2=2.8696)
+  [all] epoch 71: val VAMP-2=2.8615  VAMP-E=2.8417  (best VAMP-2=2.8696)
+Complete model saved to /mnt/hdd/experiments/alanine_faithful/seed_00/exp_alanine_20260724_111151/training/lag0.02ns_6states/20260724_111158/models/best_model.pt
+  [all] epoch 72: val VAMP-2=2.8727  VAMP-E=2.8537  (best VAMP-2=2.8727)
+  [all] epoch 73: val VAMP-2=2.8600  VAMP-E=2.8429  (best VAMP-2=2.8727)
+  [all] epoch 74: val VAMP-2=2.8631  VAMP-E=2.8441  (best VAMP-2=2.8727)
+  [all] epoch 75: val VAMP-2=2.8580  VAMP-E=2.8460  (best VAMP-2=2.8727)
+  [all] epoch 76: val VAMP-2=2.8616  VAMP-E=2.8524  (best VAMP-2=2.8727)
+  [all] epoch 77: val VAMP-2=2.8678  VAMP-E=2.8545  (best VAMP-2=2.8727)
+  [all] epoch 78: val VAMP-2=2.8610  VAMP-E=2.8458  (best VAMP-2=2.8727)
+  [all] epoch 79: val VAMP-2=2.8559  VAMP-E=2.8421  (best VAMP-2=2.8727)
+  [all] epoch 80: val VAMP-2=2.8581  VAMP-E=2.8424  (best VAMP-2=2.8727)
+  [all] epoch 81: val VAMP-2=2.8625  VAMP-E=2.8396  (best VAMP-2=2.8727)
+  [all] epoch 82: val VAMP-2=2.8643  VAMP-E=2.8477  (best VAMP-2=2.8727)
+  [all] epoch 83: val VAMP-2=2.8560  VAMP-E=2.8405  (best VAMP-2=2.8727)
+  [all] epoch 84: val VAMP-2=2.8685  VAMP-E=2.8552  (best VAMP-2=2.8727)
+  [all] epoch 85: val VAMP-2=2.8603  VAMP-E=2.8487  (best VAMP-2=2.8727)
+  [all] epoch 86: val VAMP-2=2.8343  VAMP-E=2.8290  (best VAMP-2=2.8727)
+  [all] epoch 87: val VAMP-2=2.8653  VAMP-E=2.8555  (best VAMP-2=2.8727)
+  [all] epoch 88: val VAMP-2=2.8605  VAMP-E=2.8415  (best VAMP-2=2.8727)
+  [all] epoch 89: val VAMP-2=2.8584  VAMP-E=2.8458  (best VAMP-2=2.8727)
+  [all] epoch 90: val VAMP-2=2.8590  VAMP-E=2.8441  (best VAMP-2=2.8727)
+  [all] epoch 91: val VAMP-2=2.8637  VAMP-E=2.8470  (best VAMP-2=2.8727)
+  [all] epoch 92: val VAMP-2=2.8658  VAMP-E=2.8481  (best VAMP-2=2.8727)
+  [all] epoch 93: val VAMP-2=2.8563  VAMP-E=2.8377  (best VAMP-2=2.8727)
+  [all] epoch 94: val VAMP-2=2.8431  VAMP-E=2.8305  (best VAMP-2=2.8727)
+  [all] epoch 95: val VAMP-2=2.8574  VAMP-E=2.8444  (best VAMP-2=2.8727)
+  [all] epoch 96: val VAMP-2=2.8593  VAMP-E=2.8443  (best VAMP-2=2.8727)
+  [all] epoch 97: val VAMP-2=2.8584  VAMP-E=2.8510  (best VAMP-2=2.8727)
+  [all] epoch 98: val VAMP-2=2.8462  VAMP-E=2.8359  (best VAMP-2=2.8727)
+  [all] epoch 99: val VAMP-2=2.8408  VAMP-E=2.8280  (best VAMP-2=2.8727)
+  [all] epoch 100: val VAMP-2=2.8593  VAMP-E=2.8477  (best VAMP-2=2.8727)
+  [all] epoch 101: val VAMP-2=2.8426  VAMP-E=2.8317  (best VAMP-2=2.8727)
+  [all] epoch 102: val VAMP-2=2.8561  VAMP-E=2.8448  (best VAMP-2=2.8727)
+  [all] epoch 103: val VAMP-2=2.8565  VAMP-E=2.8463  (best VAMP-2=2.8727)
+  [all] epoch 104: val VAMP-2=2.8446  VAMP-E=2.8403  (best VAMP-2=2.8727)
+  [all] epoch 105: val VAMP-2=2.8484  VAMP-E=2.8424  (best VAMP-2=2.8727)
+  [all] epoch 106: val VAMP-2=2.8563  VAMP-E=2.8349  (best VAMP-2=2.8727)
+  [all] epoch 107: val VAMP-2=2.8549  VAMP-E=2.8454  (best VAMP-2=2.8727)
+  [all] epoch 108: val VAMP-2=2.8629  VAMP-E=2.8506  (best VAMP-2=2.8727)
+  [all] epoch 109: val VAMP-2=2.8599  VAMP-E=2.8467  (best VAMP-2=2.8727)
+  [all] epoch 110: val VAMP-2=2.8431  VAMP-E=2.8282  (best VAMP-2=2.8727)
+  [all] epoch 111: val VAMP-2=2.8526  VAMP-E=2.8417  (best VAMP-2=2.8727)

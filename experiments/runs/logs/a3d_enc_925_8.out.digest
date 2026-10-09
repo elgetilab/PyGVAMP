@@ -1,0 +1,339 @@
+============================================================
+alpha3D encoder comparison — painn, seed 8
+============================================================
+Out:      /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08
+Fixed:    k=3 (from probe job 921), tau=50.0 ns, stride 10
+Capacity: 38,990 encoder params (1.000x SchNet)
+Encoder:  --model painn --painn_hidden_dim 26 --hidden_dim 16
+Code:     09ca509
+Attempt:  0   Start: Mon Aug 24 02:22:57 PM CEST 2026   Node: hugin
+============================================================
+Using model: painn
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [50.0] (timestep=2.0 ns, stride=10)
+Experiment directory created: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: a3d
+Model: painn
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/a3d/
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset with 37 trajectory files
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endiannesSelected 73 atoms with selection: 'name CA'
+Loaded 37 trajectories with frames: [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3271, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 274]
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset created with 353520 samples
+Dataset statistics saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259
+Topology PDB (training): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [50.0]
+  N states: [3]
+--- Experiment 1/1 ---
+Lag time: 50.0 ns, N states: 3
+Auto-stride: τ=50ns, frame_dt=2000ps, stride=2
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+s
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcSelected 73 atoms with selection: 'name CA'
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/preparation/prep_20260824_142259/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Runtime subsample: stride=2, 353520 -> 176760 pairs
+Dataset created with 176760 samples
+Training set: 123732 samples
+Testing set: 53028 samples
+Auto-inferred node_dim=73 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 2
+Linear parameters: 36,826
+----------------------------------------
+Total params: 36,826
+Total tensors: 26
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([26])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([26])
+WARNING: Found 2/56 parameters that may not be properly initialized.
+init: preserved self-initialised encoder PaiNNEncoder (skipped kaiming_normal)
+Created VAMPNet model with 40273 parameters
+Parameters captured by optimizer:
+  ✓ encoder.input_proj.weight: shape=torch.Size([26, 73]), size=1898
+  ✓ encoder.input_proj.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.0.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.0.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.0.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.0.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.1.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.1.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.1.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.1.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.2.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.2.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.2.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.2.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.3.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.3.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.3.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.3.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.0.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.0.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.0.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.1.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.1.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.1.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.2.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.2.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.2.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.3.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.3.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.3.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 26]), size=416
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([26]), size=26
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 16]), size=1024
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([3, 64]), size=192
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([3]), size=3
+Total parameters in optimizer: 40,273 in 56 tensors
+Total model parameters: 40,273
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Training failed: CUDA out of memory in encoder. Try reducing batch size.
+No trained models found. Run training first.
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08
+Log file: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/logs/log_20260824_142259.txt
+dplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+============================================================
+Finished: Mon Aug 24 02:24:42 PM CEST 2026   Exit: 0
+⚠️  Exit 0 does NOT mean results exist — check analysis_completed in
+    /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s08/pipeline_summary.json
+============================================================

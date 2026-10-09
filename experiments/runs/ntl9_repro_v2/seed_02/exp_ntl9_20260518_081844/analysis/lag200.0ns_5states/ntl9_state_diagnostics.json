@@ -1,0 +1,45 @@
+{
+  "diagnostics": {
+    "original_n_states": 5,
+    "effective_n_states": 3,
+    "eigenvalue_gap_suggestion": 4,
+    "eigenvalues": [
+      0.9999999999999997,
+      0.017120725759961472,
+      0.017120725759961472,
+      0.016741060985470242,
+      4.1046051327463295e-18
+    ],
+    "gap_ratios": [
+      58.408738859575664,
+      1.0,
+      1.0226786566765838,
+      16741060985.470243
+    ],
+    "populations": [
+      0.16112,
+      0.00154,
+      0.0014,
+      0.83052,
+      0.00542
+    ],
+    "underpopulated_states": [
+      1,
+      2,
+      4
+    ],
+    "population_entropy": 0.4958244017359328,
+    "merge_groups": [
+      [
+        0,
+        3
+      ],
+      [
+        2,
+        4
+      ]
+    ],
+    "confidence": "medium",
+    "recommendation": "retrain"
+  }
+}

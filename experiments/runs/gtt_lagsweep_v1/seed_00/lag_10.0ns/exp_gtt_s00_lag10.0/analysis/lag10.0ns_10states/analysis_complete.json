@@ -1,0 +1,10 @@
+{
+  "exp_name": "lag10.0ns_10states",
+  "model_path": "/mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_10.0ns/exp_gtt_s00_lag10.0/training/lag10.0ns_10states/20260803_150848/models/best_model.pt",
+  "completed_at": "2026-08-03T17:32:08.131724",
+  "diagnostic": {
+    "recommendation": "retrain",
+    "effective_n_states": 3,
+    "original_n_states": 10
+  }
+}

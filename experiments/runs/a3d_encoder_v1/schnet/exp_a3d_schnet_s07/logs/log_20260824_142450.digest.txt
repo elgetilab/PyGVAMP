@@ -1,0 +1,115 @@
+PyGVAMP Log - 2026-08-24 14:24:50
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/a3d/ --top /mnt/hdd/data/a3d/topol.pdb --file_pattern *.dcd --protein_name a3d --output_dir /mnt/hdd/experiments/a3d_encoder_v1/schnet --exp_name exp_a3d_schnet_s07 --timestep 0.2 --seed 7 --model schnet --hidden_dim 16 --selection name CA --lag_times 50.0 --stride 10 --auto_stride --n_states 3 --no_discover_states --max_retrains 0 --no_warm_start_retrains --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --use_attention --no_use_embedding --lr 5e-4 --epochs 100 --batch_size 1000 --val_split 0.3 --resume_training --save_every 10 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: a3d
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/a3d/
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset with 37 trajectory files
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+Loaded 37 trajectories with frames: [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3271, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 274]
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset created with 353520 samples
+Dataset statistics saved to /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450
+Topology PDB (training): /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [50.0]
+  N states: [3]
+--- Experiment 1/1 ---
+Lag time: 50.0 ns, N states: 3
+Auto-stride: τ=50ns, frame_dt=2000ps, stride=2
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/preparation/prep_20260824_142450/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Runtime subsample: stride=2, 353520 -> 176760 pairs
+Dataset created with 176760 samples
+Training set: 123732 samples
+Testing set: 53028 samples
+Auto-inferred node_dim=73 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 21,508
+----------------------------------------
+Total params: 21,508
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/58 parameters that may not be properly initialized.
+Training failed: CUDA error: out of memory
+Search for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+No trained models found. Run training first.
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07
+Log file: /mnt/hdd/experiments/a3d_encoder_v1/schnet/exp_a3d_schnet_s07/logs/log_20260824_142450.txt
+============================================================
+Log ended: 2026-08-24 14:26:10

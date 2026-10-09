@@ -1,0 +1,25 @@
+torch check:
+torch 2.11.0+cu128 cuda True
+Device: cuda
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_131836/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Dataset created with 1043900 samples
+Training set: 730730 samples
+Testing set: 313170 samples
+Full pair dataset: 1043900 pairs, n_frames=1044000, lag_frames=100
+Complete model loaded from /mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_233355/training/lag20.0ns_5states/20260512_233412/models/best_model.pt
+random val: 313170 pairs | blocked val: 313000 pairs (300 dropped at seams)
+=== Full-validation VAMP-2 (frozen model, varying eval partition) ===
+  (ceiling = n_states; concat is the honest estimator, perbatch is paper-comparable)
+  random  : concat=4.6697  perbatch=1.2577±0.3687  (n_pairs=313170)
+  blocked : concat=4.7564  perbatch=1.0895±0.2058  (n_pairs=313000)
+  whole   : concat=4.6685  perbatch=1.0757±0.1851  (n_pairs=1043900)
+Read: random >> blocked  -> eval-partition leakage is real (blocked is honest).
+      random ~= blocked    -> our eval split is NOT leaking; look elsewhere for the 0.14.

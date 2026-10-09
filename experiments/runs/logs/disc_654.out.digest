@@ -1,0 +1,19 @@
+============================================================
+PyGVAMP — AT1R (d125d) State Discovery
+============================================================
+Trajectories: /mnt/hdd/data/julia_ATR  (pattern: d125d/cutted_dt_1ns.xtc, recursive)
+Topology:     /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selection:    chainid 0 and name CA
+Preset:       large_schnet
+Output:       /mnt/hdd/experiments/atr_d/discovery
+GPU:          NVIDIA GeForce RTX 5090
+Node:         hugin
+Start:        Tue Jun 16 01:16:21 PM CEST 2026
+============================================================  [repeated 2 times]
+Finished:     Tue Jun 16 01:16:25 PM CEST 2026
+Exit code:    2
+Next steps:
+  grep 'Recommended n_states' /mnt/hdd/experiments/logs/disc_654.out
+  grep 'Selected'             /mnt/hdd/experiments/logs/disc_654.out
+  sbatch cluster_scripts/atr_d_experiment.sh --n_states <N>
+============================================================

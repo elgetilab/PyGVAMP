@@ -1,0 +1,5 @@
+Number of frames: 22748
+Number of states: 25
+Embedding dimension: 16
+Number of attention arrays: 22748
+Number of edge index arrays: 22748

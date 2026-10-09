@@ -1,0 +1,67 @@
+State structure analysis for atr_d
+Total states: 4
+
+State 1:
+  - Frame count (max probability): 156 (19.31%)
+State 2:
+  - Frame count (max probability): 247 (30.57%)
+State 3:
+  - Frame count (max probability): 100 (12.38%)
+State 4:
+  - Frame count (max probability): 305 (37.75%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: atr_d_state_1_average.pdb
+  - Representative structures:
+    - atr_d_state_1_rank_1_frame_2675_rmsd_0.378_prob_0.951.pdb
+    - atr_d_state_1_rank_2_frame_2670_rmsd_0.379_prob_0.929.pdb
+    - atr_d_state_1_rank_3_frame_2120_rmsd_0.384_prob_0.956.pdb
+    - atr_d_state_1_rank_4_frame_2685_rmsd_0.396_prob_0.933.pdb
+    - atr_d_state_1_rank_5_frame_2070_rmsd_0.397_prob_0.944.pdb
+    - atr_d_state_1_rank_6_frame_2690_rmsd_0.402_prob_0.949.pdb
+    - atr_d_state_1_rank_7_frame_2785_rmsd_0.412_prob_0.969.pdb
+    - atr_d_state_1_rank_8_frame_2055_rmsd_0.428_prob_0.954.pdb
+    - atr_d_state_1_rank_9_frame_2280_rmsd_0.432_prob_0.963.pdb
+    - atr_d_state_1_rank_10_frame_2265_rmsd_0.436_prob_0.951.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: atr_d_state_2_average.pdb
+  - Representative structures:
+    - atr_d_state_2_rank_1_frame_375_rmsd_0.197_prob_0.996.pdb
+    - atr_d_state_2_rank_2_frame_1785_rmsd_0.212_prob_0.996.pdb
+    - atr_d_state_2_rank_3_frame_380_rmsd_0.215_prob_0.996.pdb
+    - atr_d_state_2_rank_4_frame_470_rmsd_0.216_prob_0.997.pdb
+    - atr_d_state_2_rank_5_frame_1790_rmsd_0.224_prob_0.996.pdb
+    - atr_d_state_2_rank_6_frame_1765_rmsd_0.225_prob_0.996.pdb
+    - atr_d_state_2_rank_7_frame_1750_rmsd_0.239_prob_0.996.pdb
+    - atr_d_state_2_rank_8_frame_1815_rmsd_0.255_prob_0.996.pdb
+    - atr_d_state_2_rank_9_frame_340_rmsd_0.282_prob_0.996.pdb
+    - atr_d_state_2_rank_10_frame_305_rmsd_0.336_prob_0.996.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: atr_d_state_3_average.pdb
+  - Representative structures:
+    - atr_d_state_3_rank_1_frame_555_rmsd_0.167_prob_0.990.pdb
+    - atr_d_state_3_rank_2_frame_540_rmsd_0.175_prob_0.985.pdb
+    - atr_d_state_3_rank_3_frame_530_rmsd_0.175_prob_0.983.pdb
+    - atr_d_state_3_rank_4_frame_550_rmsd_0.177_prob_0.988.pdb
+    - atr_d_state_3_rank_5_frame_535_rmsd_0.178_prob_0.983.pdb
+    - atr_d_state_3_rank_6_frame_650_rmsd_0.196_prob_0.987.pdb
+    - atr_d_state_3_rank_7_frame_685_rmsd_0.197_prob_0.984.pdb
+    - atr_d_state_3_rank_8_frame_520_rmsd_0.200_prob_0.985.pdb
+    - atr_d_state_3_rank_9_frame_640_rmsd_0.243_prob_0.984.pdb
+    - atr_d_state_3_rank_10_frame_925_rmsd_0.243_prob_0.985.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: atr_d_state_4_average.pdb
+  - Representative structures:
+    - atr_d_state_4_rank_1_frame_3270_rmsd_0.304_prob_0.999.pdb
+    - atr_d_state_4_rank_2_frame_3330_rmsd_0.310_prob_0.999.pdb
+    - atr_d_state_4_rank_3_frame_3285_rmsd_0.312_prob_1.000.pdb
+    - atr_d_state_4_rank_4_frame_3760_rmsd_0.379_prob_0.999.pdb
+    - atr_d_state_4_rank_5_frame_3315_rmsd_0.380_prob_0.999.pdb
+    - atr_d_state_4_rank_6_frame_3310_rmsd_0.382_prob_0.999.pdb
+    - atr_d_state_4_rank_7_frame_3855_rmsd_0.391_prob_0.999.pdb
+    - atr_d_state_4_rank_8_frame_3290_rmsd_0.398_prob_0.999.pdb
+    - atr_d_state_4_rank_9_frame_1470_rmsd_0.754_prob_0.999.pdb
+    - atr_d_state_4_rank_10_frame_1455_rmsd_0.841_prob_0.999.pdb
+

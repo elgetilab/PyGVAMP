@@ -1,0 +1,67 @@
+State structure analysis for villin
+Total states: 4
+
+State 1:
+  - Frame count (max probability): 57 (0.11%)
+State 2:
+  - Frame count (max probability): 35739 (71.48%)
+State 3:
+  - Frame count (max probability): 11693 (23.39%)
+State 4:
+  - Frame count (max probability): 2511 (5.02%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: villin_state_1_average.pdb
+  - Representative structures:
+    - villin_state_1_rank_1_frame_45409_rmsd_0.213_prob_0.998.pdb
+    - villin_state_1_rank_2_frame_45401_rmsd_0.228_prob_0.997.pdb
+    - villin_state_1_rank_3_frame_45410_rmsd_0.239_prob_0.999.pdb
+    - villin_state_1_rank_4_frame_45400_rmsd_0.261_prob_0.999.pdb
+    - villin_state_1_rank_5_frame_45404_rmsd_0.293_prob_0.999.pdb
+    - villin_state_1_rank_6_frame_45395_rmsd_0.349_prob_0.998.pdb
+    - villin_state_1_rank_7_frame_45385_rmsd_0.364_prob_0.999.pdb
+    - villin_state_1_rank_8_frame_45406_rmsd_0.380_prob_0.997.pdb
+    - villin_state_1_rank_9_frame_45379_rmsd_0.388_prob_0.999.pdb
+    - villin_state_1_rank_10_frame_45384_rmsd_0.419_prob_0.998.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: villin_state_2_average.pdb
+  - Representative structures:
+    - villin_state_2_rank_1_frame_8341_rmsd_0.256_prob_0.999.pdb
+    - villin_state_2_rank_2_frame_48384_rmsd_0.258_prob_0.998.pdb
+    - villin_state_2_rank_3_frame_48381_rmsd_0.279_prob_0.998.pdb
+    - villin_state_2_rank_4_frame_8340_rmsd_0.297_prob_0.998.pdb
+    - villin_state_2_rank_5_frame_20225_rmsd_0.321_prob_0.998.pdb
+    - villin_state_2_rank_6_frame_14324_rmsd_0.481_prob_0.998.pdb
+    - villin_state_2_rank_7_frame_14325_rmsd_0.541_prob_0.998.pdb
+    - villin_state_2_rank_8_frame_41970_rmsd_0.597_prob_0.998.pdb
+    - villin_state_2_rank_9_frame_7672_rmsd_0.646_prob_0.999.pdb
+    - villin_state_2_rank_10_frame_26698_rmsd_0.658_prob_0.998.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: villin_state_3_average.pdb
+  - Representative structures:
+    - villin_state_3_rank_1_frame_12849_rmsd_0.329_prob_0.972.pdb
+    - villin_state_3_rank_2_frame_19494_rmsd_0.449_prob_0.973.pdb
+    - villin_state_3_rank_3_frame_7079_rmsd_0.552_prob_0.972.pdb
+    - villin_state_3_rank_4_frame_17347_rmsd_0.623_prob_0.972.pdb
+    - villin_state_3_rank_5_frame_41050_rmsd_0.636_prob_0.972.pdb
+    - villin_state_3_rank_6_frame_6987_rmsd_0.651_prob_0.971.pdb
+    - villin_state_3_rank_7_frame_45940_rmsd_0.660_prob_0.971.pdb
+    - villin_state_3_rank_8_frame_14999_rmsd_0.679_prob_0.971.pdb
+    - villin_state_3_rank_9_frame_43814_rmsd_0.707_prob_0.971.pdb
+    - villin_state_3_rank_10_frame_22171_rmsd_0.836_prob_0.971.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: villin_state_4_average.pdb
+  - Representative structures:
+    - villin_state_4_rank_1_frame_24171_rmsd_0.422_prob_1.000.pdb
+    - villin_state_4_rank_2_frame_24173_rmsd_0.469_prob_1.000.pdb
+    - villin_state_4_rank_3_frame_24148_rmsd_0.520_prob_1.000.pdb
+    - villin_state_4_rank_4_frame_24157_rmsd_0.540_prob_1.000.pdb
+    - villin_state_4_rank_5_frame_24186_rmsd_0.547_prob_1.000.pdb
+    - villin_state_4_rank_6_frame_24175_rmsd_0.556_prob_1.000.pdb
+    - villin_state_4_rank_7_frame_24178_rmsd_0.570_prob_1.000.pdb
+    - villin_state_4_rank_8_frame_24149_rmsd_0.591_prob_1.000.pdb
+    - villin_state_4_rank_9_frame_24208_rmsd_0.602_prob_1.000.pdb
+    - villin_state_4_rank_10_frame_24192_rmsd_0.700_prob_1.000.pdb
+

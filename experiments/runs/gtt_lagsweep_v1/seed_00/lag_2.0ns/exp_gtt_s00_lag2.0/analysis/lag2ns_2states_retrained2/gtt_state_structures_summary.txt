@@ -1,0 +1,35 @@
+State structure analysis for gtt
+Total states: 2
+
+State 1:
+  - Frame count (max probability): 1143 (22.86%)
+State 2:
+  - Frame count (max probability): 3857 (77.14%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: gtt_state_1_average.pdb
+  - Representative structures:
+    - gtt_state_1_rank_1_frame_48820_rmsd_0.405_prob_0.999.pdb
+    - gtt_state_1_rank_2_frame_25820_rmsd_0.625_prob_0.999.pdb
+    - gtt_state_1_rank_3_frame_1140_rmsd_0.687_prob_0.999.pdb
+    - gtt_state_1_rank_4_frame_25190_rmsd_0.694_prob_0.999.pdb
+    - gtt_state_1_rank_5_frame_2630_rmsd_0.697_prob_0.999.pdb
+    - gtt_state_1_rank_6_frame_5100_rmsd_0.725_prob_0.999.pdb
+    - gtt_state_1_rank_7_frame_2220_rmsd_0.769_prob_0.999.pdb
+    - gtt_state_1_rank_8_frame_36000_rmsd_0.772_prob_0.999.pdb
+    - gtt_state_1_rank_9_frame_2360_rmsd_0.812_prob_0.999.pdb
+    - gtt_state_1_rank_10_frame_25990_rmsd_1.028_prob_0.999.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: gtt_state_2_average.pdb
+  - Representative structures:
+    - gtt_state_2_rank_1_frame_36080_rmsd_0.552_prob_1.000.pdb
+    - gtt_state_2_rank_2_frame_41260_rmsd_0.562_prob_1.000.pdb
+    - gtt_state_2_rank_3_frame_26250_rmsd_0.594_prob_1.000.pdb
+    - gtt_state_2_rank_4_frame_12100_rmsd_0.636_prob_1.000.pdb
+    - gtt_state_2_rank_5_frame_36650_rmsd_0.707_prob_1.000.pdb
+    - gtt_state_2_rank_6_frame_39280_rmsd_0.722_prob_1.000.pdb
+    - gtt_state_2_rank_7_frame_35060_rmsd_0.723_prob_1.000.pdb
+    - gtt_state_2_rank_8_frame_26680_rmsd_0.726_prob_1.000.pdb
+    - gtt_state_2_rank_9_frame_8930_rmsd_0.854_prob_1.000.pdb
+    - gtt_state_2_rank_10_frame_29740_rmsd_0.920_prob_1.000.pdb
+

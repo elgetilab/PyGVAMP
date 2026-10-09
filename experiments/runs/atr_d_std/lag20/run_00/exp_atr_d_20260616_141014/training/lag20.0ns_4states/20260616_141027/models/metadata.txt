@@ -1,0 +1,5 @@
+Number of frames: 4040
+Number of states: 4
+Embedding dimension: 64
+Number of attention arrays: 4040
+Number of edge index arrays: 4040

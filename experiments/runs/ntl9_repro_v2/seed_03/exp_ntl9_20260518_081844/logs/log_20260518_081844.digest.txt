@@ -1,0 +1,419 @@
+PyGVAMP Log - 2026-05-18 08:18:44
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/ntl9/ --top /mnt/hdd/data/ntl9/topol.pdb --file_pattern NTL9-*-c-alpha-*.dcd --protein_name ntl9 --output_dir /mnt/hdd/experiments/ntl9_repro_v2/seed_03 --timestep 0.2 --seed 3 --model schnet --selection name CA --stride 1 --lag_times 200.0 --n_states 5 --no_discover_states --max_retrains 0 --no_warm_start_retrains --hidden_dim 16 --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --use_attention --no_use_embedding --clf_num_layers 1 --clf_dropout 0 --clf_norm none --init_method xavier_normal --lr 5e-4 --weight_decay 1e-5 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: ntl9
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/ntl9/
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset with 149 trajectory files
+No cache file found at /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Processing 149 trajectory files...
+Loaded 149 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 60828, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 65777, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 45226, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 83599]
+Total frames: 14755430, Atoms per frame: 39
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.71 Å
+Created 14754430 time-lagged pairs with lag time 200.0 and 1000 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset created with 14754430 samples
+Dataset statistics saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844
+Topology PDB (training): /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [200.0]
+  N states: [5]
+--- Experiment 1/1 ---
+Lag time: 200.0 ns, N states: 5
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Processing 149 trajectory files...
+Total frames: 14755430, Atoms per frame: 39
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.71 Å
+Created 14754430 time-lagged pairs with lag time 200.0 and 1000 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset created with 14754430 samples
+Training set: 10328101 samples
+Testing set: 4426329 samples
+Auto-inferred node_dim=39 from dataset (was 16)
+Weight Initialization Report (xavier_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 6,164
+----------------------------------------
+Total params: 6,164
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/56 parameters that may not be properly initialized.
+Created VAMPNet model with 16349 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.3.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([5, 16]), size=80
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([5]), size=5
+Total parameters in optimizer: 16,349 in 56 tensors
+Total model parameters: 16,349
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 4.0024, Val VAMP: concat=4.2760, perbatch=4.1593±0.4557
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.2760
+Epoch 2/100, Train VAMP: 4.1970, Val VAMP: concat=4.3465, perbatch=4.2284±0.4491
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.3465
+Epoch 3/100, Train VAMP: 4.2305, Val VAMP: concat=4.3777, perbatch=4.2429±0.4610
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.3777
+Epoch 4/100, Train VAMP: 4.2495, Val VAMP: concat=4.3884, perbatch=4.2524±0.4524
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.3884
+Epoch 5/100, Train VAMP: 4.2593, Val VAMP: concat=4.3797, perbatch=4.2505±0.4491
+No improvement for 1 epochs. Best score: 4.3884
+Epoch 6/100, Train VAMP: 4.2709, Val VAMP: concat=4.4008, perbatch=4.2814±0.4390
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4008
+Epoch 7/100, Train VAMP: 4.2811, Val VAMP: concat=4.4080, perbatch=4.2797±0.4337
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4080
+Epoch 8/100, Train VAMP: 4.2912, Val VAMP: concat=4.4142, perbatch=4.2958±0.4257
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4142
+Epoch 9/100, Train VAMP: 4.2999, Val VAMP: concat=4.4302, perbatch=4.3138±0.4209
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4302
+Epoch 10/100, Train VAMP: 4.3018, Val VAMP: concat=4.4118, perbatch=4.3026±0.4228
+No improvement for 1 epochs. Best score: 4.4302
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_10.pt
+Epoch 11/100, Train VAMP: 4.3010, Val VAMP: concat=4.4435, perbatch=4.2983±0.4390
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4435
+Epoch 12/100, Train VAMP: 4.3080, Val VAMP: concat=4.4477, perbatch=4.3094±0.4273
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4477
+Epoch 13/100, Train VAMP: 4.3136, Val VAMP: concat=4.4431, perbatch=4.3034±0.4285
+No improvement for 1 epochs. Best score: 4.4477
+Epoch 14/100, Train VAMP: 4.3210, Val VAMP: concat=4.4541, perbatch=4.3202±0.4396
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4541
+Epoch 15/100, Train VAMP: 4.3176, Val VAMP: concat=4.4578, perbatch=4.3237±0.4276
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4578
+Epoch 16/100, Train VAMP: 4.3232, Val VAMP: concat=4.4574, perbatch=4.3232±0.4341
+No improvement for 1 epochs. Best score: 4.4578
+Epoch 17/100, Train VAMP: 4.3307, Val VAMP: concat=4.4434, perbatch=4.3232±0.4252
+No improvement for 2 epochs. Best score: 4.4578
+Epoch 18/100, Train VAMP: 4.3277, Val VAMP: concat=4.4629, perbatch=4.3085±0.4462
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4629
+Epoch 19/100, Train VAMP: 4.3373, Val VAMP: concat=4.4637, perbatch=4.3267±0.4348
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4637
+Epoch 20/100, Train VAMP: 4.3342, Val VAMP: concat=4.4634, perbatch=4.3290±0.4372
+No improvement for 1 epochs. Best score: 4.4637
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_20.pt
+Epoch 21/100, Train VAMP: 4.3349, Val VAMP: concat=4.4508, perbatch=4.3267±0.4280
+No improvement for 2 epochs. Best score: 4.4637
+Epoch 22/100, Train VAMP: 4.3351, Val VAMP: concat=4.4773, perbatch=4.3303±0.4410
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4773
+Epoch 23/100, Train VAMP: 4.3443, Val VAMP: concat=4.4825, perbatch=4.3457±0.4170
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4825
+Epoch 24/100, Train VAMP: 4.3423, Val VAMP: concat=4.4751, perbatch=4.3346±0.4423
+No improvement for 1 epochs. Best score: 4.4825
+Epoch 25/100, Train VAMP: 4.3450, Val VAMP: concat=4.4709, perbatch=4.3515±0.4269
+No improvement for 2 epochs. Best score: 4.4825
+Epoch 26/100, Train VAMP: 4.3504, Val VAMP: concat=4.4876, perbatch=4.3484±0.4263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4876
+Epoch 27/100, Train VAMP: 4.3454, Val VAMP: concat=4.4787, perbatch=4.3411±0.4368
+No improvement for 1 epochs. Best score: 4.4876
+Epoch 28/100, Train VAMP: 4.3518, Val VAMP: concat=4.4763, perbatch=4.3399±0.4254
+No improvement for 2 epochs. Best score: 4.4876
+Epoch 29/100, Train VAMP: 4.3500, Val VAMP: concat=4.4876, perbatch=4.3497±0.4226
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4876
+Epoch 30/100, Train VAMP: 4.3501, Val VAMP: concat=4.4722, perbatch=4.3474±0.4206
+No improvement for 1 epochs. Best score: 4.4876
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_30.pt
+Epoch 31/100, Train VAMP: 4.3610, Val VAMP: concat=4.4889, perbatch=4.3482±0.4320
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4889
+Epoch 32/100, Train VAMP: 4.3552, Val VAMP: concat=4.4794, perbatch=4.3456±0.4203
+No improvement for 1 epochs. Best score: 4.4889
+Epoch 33/100, Train VAMP: 4.3535, Val VAMP: concat=4.4737, perbatch=4.3564±0.4153
+No improvement for 2 epochs. Best score: 4.4889
+Epoch 34/100, Train VAMP: 4.3639, Val VAMP: concat=4.4755, perbatch=4.3348±0.4167
+No improvement for 3 epochs. Best score: 4.4889
+Epoch 35/100, Train VAMP: 4.3611, Val VAMP: concat=4.4855, perbatch=4.3488±0.4247
+No improvement for 4 epochs. Best score: 4.4889
+Epoch 36/100, Train VAMP: 4.3613, Val VAMP: concat=4.4840, perbatch=4.3445±0.4353
+No improvement for 5 epochs. Best score: 4.4889
+Epoch 37/100, Train VAMP: 4.3620, Val VAMP: concat=4.4814, perbatch=4.3478±0.4164
+No improvement for 6 epochs. Best score: 4.4889
+Epoch 38/100, Train VAMP: 4.3596, Val VAMP: concat=4.4757, perbatch=4.3438±0.4185
+No improvement for 7 epochs. Best score: 4.4889
+Epoch 39/100, Train VAMP: 4.3675, Val VAMP: concat=4.4833, perbatch=4.3456±0.4216
+No improvement for 8 epochs. Best score: 4.4889
+Epoch 40/100, Train VAMP: 4.3604, Val VAMP: concat=4.4806, perbatch=4.3419±0.4298
+No improvement for 9 epochs. Best score: 4.4889
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_40.pt
+Epoch 41/100, Train VAMP: 4.3609, Val VAMP: concat=4.4890, perbatch=4.3517±0.4250
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4890
+Epoch 42/100, Train VAMP: 4.3642, Val VAMP: concat=4.4763, perbatch=4.3546±0.4213
+No improvement for 1 epochs. Best score: 4.4890
+Epoch 43/100, Train VAMP: 4.3639, Val VAMP: concat=4.4753, perbatch=4.3428±0.4243
+No improvement for 2 epochs. Best score: 4.4890
+Epoch 44/100, Train VAMP: 4.3691, Val VAMP: concat=4.4864, perbatch=4.3524±0.4246
+No improvement for 3 epochs. Best score: 4.4890
+Epoch 45/100, Train VAMP: 4.3644, Val VAMP: concat=4.4749, perbatch=4.3498±0.4149
+No improvement for 4 epochs. Best score: 4.4890
+Epoch 46/100, Train VAMP: 4.3649, Val VAMP: concat=4.4855, perbatch=4.3598±0.4101
+No improvement for 5 epochs. Best score: 4.4890
+Epoch 47/100, Train VAMP: 4.3722, Val VAMP: concat=4.4929, perbatch=4.3548±0.4199
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4929
+Epoch 48/100, Train VAMP: 4.3755, Val VAMP: concat=4.4839, perbatch=4.3517±0.4153
+No improvement for 1 epochs. Best score: 4.4929
+Epoch 49/100, Train VAMP: 4.3715, Val VAMP: concat=4.4925, perbatch=4.3572±0.4174
+No improvement for 2 epochs. Best score: 4.4929
+Epoch 50/100, Train VAMP: 4.3712, Val VAMP: concat=4.4931, perbatch=4.3558±0.4133
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4931
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_50.pt
+Epoch 51/100, Train VAMP: 4.3677, Val VAMP: concat=4.4872, perbatch=4.3607±0.4221
+No improvement for 1 epochs. Best score: 4.4931
+Epoch 52/100, Train VAMP: 4.3809, Val VAMP: concat=4.4934, perbatch=4.3655±0.4056
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.4934
+Epoch 53/100, Train VAMP: 4.3730, Val VAMP: concat=4.4924, perbatch=4.3547±0.4161
+No improvement for 1 epochs. Best score: 4.4934
+Epoch 54/100, Train VAMP: 4.3726, Val VAMP: concat=4.4880, perbatch=4.3606±0.4243
+No improvement for 2 epochs. Best score: 4.4934
+Epoch 55/100, Train VAMP: 4.3761, Val VAMP: concat=4.5023, perbatch=4.3534±0.4286
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5023
+Epoch 56/100, Train VAMP: 4.3762, Val VAMP: concat=4.4844, perbatch=4.3564±0.4119
+No improvement for 1 epochs. Best score: 4.5023
+Epoch 57/100, Train VAMP: 4.3772, Val VAMP: concat=4.5009, perbatch=4.3736±0.4137
+No improvement for 2 epochs. Best score: 4.5023
+Epoch 58/100, Train VAMP: 4.3766, Val VAMP: concat=4.4867, perbatch=4.3561±0.4207
+No improvement for 3 epochs. Best score: 4.5023
+Epoch 59/100, Train VAMP: 4.3805, Val VAMP: concat=4.4858, perbatch=4.3605±0.4115
+No improvement for 4 epochs. Best score: 4.5023
+Epoch 60/100, Train VAMP: 4.3751, Val VAMP: concat=4.4885, perbatch=4.3660±0.4113
+No improvement for 5 epochs. Best score: 4.5023
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_60.pt
+Epoch 61/100, Train VAMP: 4.3787, Val VAMP: concat=4.4946, perbatch=4.3582±0.4223
+No improvement for 6 epochs. Best score: 4.5023
+Epoch 62/100, Train VAMP: 4.3748, Val VAMP: concat=4.4886, perbatch=4.3681±0.4108
+No improvement for 7 epochs. Best score: 4.5023
+Epoch 63/100, Train VAMP: 4.3831, Val VAMP: concat=4.4901, perbatch=4.3552±0.4249
+No improvement for 8 epochs. Best score: 4.5023
+Epoch 64/100, Train VAMP: 4.3810, Val VAMP: concat=4.4996, perbatch=4.3538±0.4213
+No improvement for 9 epochs. Best score: 4.5023
+Epoch 65/100, Train VAMP: 4.3798, Val VAMP: concat=4.4886, perbatch=4.3686±0.4142
+No improvement for 10 epochs. Best score: 4.5023
+Epoch 66/100, Train VAMP: 4.3799, Val VAMP: concat=4.5028, perbatch=4.3647±0.4054
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5028
+Epoch 67/100, Train VAMP: 4.3819, Val VAMP: concat=4.4988, perbatch=4.3693±0.4014
+No improvement for 1 epochs. Best score: 4.5028
+Epoch 68/100, Train VAMP: 4.3891, Val VAMP: concat=4.4938, perbatch=4.3592±0.4156
+No improvement for 2 epochs. Best score: 4.5028
+Epoch 69/100, Train VAMP: 4.3835, Val VAMP: concat=4.4906, perbatch=4.3717±0.4111
+No improvement for 3 epochs. Best score: 4.5028
+Epoch 70/100, Train VAMP: 4.3893, Val VAMP: concat=4.5002, perbatch=4.3606±0.4218
+No improvement for 4 epochs. Best score: 4.5028
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_70.pt
+Epoch 71/100, Train VAMP: 4.3889, Val VAMP: concat=4.5008, perbatch=4.3602±0.4205
+No improvement for 5 epochs. Best score: 4.5028
+Epoch 72/100, Train VAMP: 4.3891, Val VAMP: concat=4.4938, perbatch=4.3558±0.4101
+No improvement for 6 epochs. Best score: 4.5028
+Epoch 73/100, Train VAMP: 4.3883, Val VAMP: concat=4.4905, perbatch=4.3648±0.4096
+No improvement for 7 epochs. Best score: 4.5028
+Epoch 74/100, Train VAMP: 4.3916, Val VAMP: concat=4.4831, perbatch=4.3543±0.4251
+No improvement for 8 epochs. Best score: 4.5028
+Epoch 75/100, Train VAMP: 4.3858, Val VAMP: concat=4.4949, perbatch=4.3557±0.4204
+No improvement for 9 epochs. Best score: 4.5028
+Epoch 76/100, Train VAMP: 4.3867, Val VAMP: concat=4.5003, perbatch=4.3693±0.4129
+No improvement for 10 epochs. Best score: 4.5028
+Epoch 77/100, Train VAMP: 4.3917, Val VAMP: concat=4.5044, perbatch=4.3671±0.4127
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5044
+Epoch 78/100, Train VAMP: 4.3855, Val VAMP: concat=4.4951, perbatch=4.3699±0.4127
+No improvement for 1 epochs. Best score: 4.5044
+Epoch 79/100, Train VAMP: 4.3926, Val VAMP: concat=4.5078, perbatch=4.3738±0.4095
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5078
+Epoch 80/100, Train VAMP: 4.3855, Val VAMP: concat=4.5098, perbatch=4.3685±0.4266
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5098
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_80.pt
+Epoch 81/100, Train VAMP: 4.3910, Val VAMP: concat=4.5006, perbatch=4.3707±0.4111
+No improvement for 1 epochs. Best score: 4.5098
+Epoch 82/100, Train VAMP: 4.3893, Val VAMP: concat=4.4945, perbatch=4.3659±0.4081
+No improvement for 2 epochs. Best score: 4.5098
+Epoch 83/100, Train VAMP: 4.3917, Val VAMP: concat=4.5010, perbatch=4.3802±0.4047
+No improvement for 3 epochs. Best score: 4.5098
+Epoch 84/100, Train VAMP: 4.3876, Val VAMP: concat=4.5056, perbatch=4.3751±0.4085
+No improvement for 4 epochs. Best score: 4.5098
+Epoch 85/100, Train VAMP: 4.3949, Val VAMP: concat=4.4953, perbatch=4.3679±0.4177
+No improvement for 5 epochs. Best score: 4.5098
+Epoch 86/100, Train VAMP: 4.3948, Val VAMP: concat=4.5065, perbatch=4.3715±0.4171
+No improvement for 6 epochs. Best score: 4.5098
+Epoch 87/100, Train VAMP: 4.3920, Val VAMP: concat=4.4926, perbatch=4.3698±0.4057
+No improvement for 7 epochs. Best score: 4.5098
+Epoch 88/100, Train VAMP: 4.3959, Val VAMP: concat=4.5025, perbatch=4.3762±0.4114
+No improvement for 8 epochs. Best score: 4.5098
+Epoch 89/100, Train VAMP: 4.3950, Val VAMP: concat=4.4907, perbatch=4.3618±0.4044
+No improvement for 9 epochs. Best score: 4.5098
+Epoch 90/100, Train VAMP: 4.3901, Val VAMP: concat=4.4986, perbatch=4.3664±0.4187
+No improvement for 10 epochs. Best score: 4.5098
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_90.pt
+Epoch 91/100, Train VAMP: 4.3946, Val VAMP: concat=4.5007, perbatch=4.3671±0.4150
+No improvement for 11 epochs. Best score: 4.5098
+Epoch 92/100, Train VAMP: 4.3924, Val VAMP: concat=4.5084, perbatch=4.3698±0.4142
+No improvement for 12 epochs. Best score: 4.5098
+Epoch 93/100, Train VAMP: 4.3897, Val VAMP: concat=4.4987, perbatch=4.3732±0.4131
+No improvement for 13 epochs. Best score: 4.5098
+Epoch 94/100, Train VAMP: 4.3890, Val VAMP: concat=4.5147, perbatch=4.3810±0.4116
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/best_model.pt
+New best model with score: 4.5147
+Epoch 95/100, Train VAMP: 4.3955, Val VAMP: concat=4.4985, perbatch=4.3633±0.4225
+No improvement for 1 epochs. Best score: 4.5147
+Epoch 96/100, Train VAMP: 4.4023, Val VAMP: concat=4.4997, perbatch=4.3806±0.4133
+No improvement for 2 epochs. Best score: 4.5147
+Epoch 97/100, Train VAMP: 4.3997, Val VAMP: concat=4.5104, perbatch=4.3724±0.4163
+No improvement for 3 epochs. Best score: 4.5147
+Epoch 98/100, Train VAMP: 4.3964, Val VAMP: concat=4.5005, perbatch=4.3715±0.4119
+No improvement for 4 epochs. Best score: 4.5147
+Epoch 99/100, Train VAMP: 4.3941, Val VAMP: concat=4.5041, perbatch=4.3795±0.4097
+No improvement for 5 epochs. Best score: 4.5147
+Epoch 100/100, Train VAMP: 4.3973, Val VAMP: concat=4.4952, perbatch=4.3670±0.4069
+No improvement for 6 epochs. Best score: 4.5147
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/checkpoint_epoch_100.pt
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/models/final_model.pt
+Loaded best model with score: 4.5147
+Figure saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716/plots/vamp_scores.png
+Training completed successfully. Results saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/training/lag200.0ns_5states/20260518_082716
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_03/exp_ntl9_20260518_081844/preparation/prep_20260518_081844/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Successfully loaded dataset from cache: 14755430 frames, 39 atoms
+Dataset created with 14754430 samples
+Training set: 11803544 samples
+Testing set: 2950886 samples

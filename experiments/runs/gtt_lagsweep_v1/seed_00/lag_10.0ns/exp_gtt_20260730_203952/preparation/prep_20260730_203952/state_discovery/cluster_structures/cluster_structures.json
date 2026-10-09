@@ -1,0 +1,14 @@
+{
+  "selection": "protein",
+  "structures": {
+    "0": "cluster_0.pdb",
+    "1": "cluster_1.pdb",
+    "2": "cluster_2.pdb",
+    "3": "cluster_3.pdb",
+    "4": "cluster_4.pdb",
+    "5": "cluster_5.pdb",
+    "6": "cluster_6.pdb",
+    "7": "cluster_7.pdb",
+    "8": "cluster_8.pdb"
+  }
+}

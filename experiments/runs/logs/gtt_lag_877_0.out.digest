@@ -1,0 +1,674 @@
+PYTHONPATH override active: /home/vi/PycharmProjects/PyGVAMP
+============================================================
+GTT (WW domain FiP35) lag sweep — task 0
+Seed: 0   Lag: 5.0 ns   Stride: 5   (ladder: 5.0 10.0 20.0 50.0)
+Out:  /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns
+Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames
+k: discovery ON, start 10 -> JSD retrain loop reduces it (max 5 rounds, warm-started)
+Code: 314330e
+Start: Mon Aug  3 08:26:18 AM CEST 2026   Node: hugin
+============================================================
+Using model: schnet
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [5.0] (timestep=1.0 ns, stride=5)
+Experiment directory created: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: gtt
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/gtt/
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Creating dataset with 58 trajectory files
+No cache file found at /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 5: 1000.000 ps
+Lag time: 5.000 ns (5000.0 ps, 5 frames)
+Processing 58 trajectory files...
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endiannesSelected 35 atoms with selection: 'name CA'
+Loaded 58 trajectories with frames: [20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 6518, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 20000, 10826]
+Total frames: 1137344, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.47 Å
+Created 1137339 time-lagged pairs with lag time 5.0 and 5 lag frames. 1 lag frame == 1.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/cache/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset created with 1137339 samples
+=== STATE DISCOVERY ===  [repeated 2 times]
+--- Training Graph2Vec ---
+Training on 1137344 graphs
+Extracting subgraphs and building vocabulary...
+  Uniform min_count=10 for all degrees
+Building vocabulary from dataset...
+Vocabulary per degree: d0: 2/2 (min_count=10), d1: 101/112 (min_count=10), d2: 188296/28243477 (min_count=10), d3: 0/39201747 (min_count=10)
+Created vocabulary with 188399 subgraphs
+Pre-extracting and caching subgraphs...
+Converting graphs to Doc2Vec documents...
+Created 1137344 documents for Doc2Vec training
+Training Doc2Vec model...
+Starting Doc2Vec training with 50 epochs...
+Vocabulary size: 188399
+Vector size: 512
+Loss computation: Enabled
+Epoch 1 started...
+Epoch 1 completed in 19.78s (Total: 32.48s, LR: 0.025000, Loss: 0.000000)
+Epoch 2 started...
+Epoch 2 completed in 19.31s (Total: 51.78s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 3 started...
+Epoch 3 completed in 19.81s (Total: 71.59s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 4 started...
+Epoch 4 completed in 19.10s (Total: 90.69s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 5 started...
+Epoch 5 completed in 19.11s (Total: 109.80s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 6 started...
+Epoch 6 completed in 19.10s (Total: 128.89s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 7 started...
+Epoch 7 completed in 19.20s (Total: 148.09s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 8 started...
+Epoch 8 completed in 19.09s (Total: 167.18s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 9 started...
+Epoch 9 completed in 18.32s (Total: 185.50s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 10 started...
+Epoch 10 completed in 19.08s (Total: 204.58s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 11 started...
+Epoch 11 completed in 18.67s (Total: 223.25s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 12 started...
+Epoch 12 completed in 18.72s (Total: 241.97s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 13 started...
+Epoch 13 completed in 18.98s (Total: 260.95s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 14 started...
+Epoch 14 completed in 22.09s (Total: 283.04s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 15 started...
+Epoch 15 completed in 22.31s (Total: 305.35s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 16 started...
+Epoch 16 completed in 23.19s (Total: 328.54s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 17 started...
+Epoch 17 completed in 22.63s (Total: 351.17s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 18 started...
+Epoch 18 completed in 22.69s (Total: 373.87s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 19 started...
+Epoch 19 completed in 21.94s (Total: 395.80s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 20 started...
+Epoch 20 completed in 20.70s (Total: 416.50s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 21 started...
+Epoch 21 completed in 18.41s (Total: 434.91s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 22 started...
+Epoch 22 completed in 18.60s (Total: 453.51s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 23 started...
+Epoch 23 completed in 18.03s (Total: 471.54s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 24 started...
+Epoch 24 completed in 18.45s (Total: 489.98s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 25 started...
+Epoch 25 completed in 17.90s (Total: 507.88s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 26 started...
+Epoch 26 completed in 17.90s (Total: 525.79s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 27 started...
+Epoch 27 completed in 17.91s (Total: 543.70s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 28 started...
+Epoch 28 completed in 17.86s (Total: 561.56s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 29 started...
+Epoch 29 completed in 18.60s (Total: 580.16s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 30 started...
+Epoch 30 completed in 17.44s (Total: 597.60s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 31 started...
+Epoch 31 completed in 17.55s (Total: 615.15s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 32 started...
+Epoch 32 completed in 17.91s (Total: 633.06s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 33 started...
+Epoch 33 completed in 18.09s (Total: 651.15s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 34 started...
+Epoch 34 completed in 17.80s (Total: 668.96s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 35 started...
+Epoch 35 completed in 17.68s (Total: 686.63s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 36 started...
+Epoch 36 completed in 18.14s (Total: 704.78s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 37 started...
+Epoch 37 completed in 17.58s (Total: 722.36s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 38 started...
+Epoch 38 completed in 17.68s (Total: 740.04s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 39 started...
+Epoch 39 completed in 18.08s (Total: 758.12s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 40 started...
+Epoch 40 completed in 17.93s (Total: 776.05s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 41 started...
+Epoch 41 completed in 18.05s (Total: 794.10s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 42 started...
+Epoch 42 completed in 17.77s (Total: 811.87s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 43 started...
+Epoch 43 completed in 18.01s (Total: 829.88s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 44 started...
+Epoch 44 completed in 17.77s (Total: 847.65s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 45 started...
+Epoch 45 completed in 17.43s (Total: 865.08s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 46 started...
+Epoch 46 completed in 17.64s (Total: 882.72s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 47 started...
+Epoch 47 completed in 17.80s (Total: 900.52s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 48 started...
+Epoch 48 completed in 17.60s (Total: 918.12s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 49 started...
+Epoch 49 completed in 17.24s (Total: 935.36s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 50 started...
+Epoch 50 completed in 17.34s (Total: 952.70s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Doc2Vec training completed in 952.70s
+Loss progression: 0.000000 → 0.000000
+Total loss reduction: 0.000000
+============================================================
+GRAPH2VEC MODEL QUALITY ASSESSMENT
+============================================================
+1. VOCABULARY QUALITY:
+------------------------------
+Subgraph vocabulary size: 188399
+Doc2Vec vocabulary size: 188399
+Vocabulary utilization: 100.0%
+Most frequent subgraph appears 38669696 times
+Least frequent subgraph appears 10 times
+Average subgraph frequency: 463.07
+Subgraph frequency std: 91192.06
+2. EMBEDDING QUALITY:
+------------------------------
+Embedding dimension: 512
+Number of graph embeddings: 1137344
+Embedding mean: -0.001569
+Embedding std: 0.124563
+Embedding range: [-0.743945, 0.780401]
+Average pairwise cosine similarity: 0.308943
+Similarity std: 0.122273
+3. SIMILARITY PATTERNS:
+------------------------------
+Graph 369235 most similar to: [('graph_337527', 0.8874192833900452), ('graph_373990', 0.874833345413208), ('graph_529306', 0.8438495397567749)]
+Graph 274108 most similar to: [('graph_1086215', 0.8292524814605713), ('graph_231868', 0.8137014508247375), ('graph_150135', 0.8115125894546509)]
+Graph 1101195 most similar to: [('graph_171533', 0.766232967376709), ('graph_459642', 0.7602241635322571), ('graph_978790', 0.7528107166290283)]
+Graph 784108 most similar to: [('graph_880946', 0.9312779307365417), ('graph_1077269', 0.8625428676605225), ('graph_846189', 0.8558586835861206)]
+Graph 683069 most similar to: [('graph_507517', 0.802794873714447), ('graph_796576', 0.7964949607849121), ('graph_676395', 0.7939848899841309)]
+Training completed. Vocabulary size: 188399
+--- Extracting embeddings ---
+Embeddings shape: (1137344, 512)
+Subsampled 1137344 → 100000 embeddings for clustering sweep
+--- Clustering sweep ---
+    raw: silhouette_k=2 (score=0.048), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=2)...
+    umap_2: silhouette_k=8 (score=0.417), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=3)...
+    umap_3: silhouette_k=9 (score=0.393), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=5)...
+    umap_5: silhouette_k=10 (score=0.386), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=6)...
+    umap_6: silhouette_k=9 (score=0.381), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=7)...
+    umap_7: silhouette_k=10 (score=0.381), elbow_k=3, bic_k=10, aic_k=10
+  t-SNE reduction (dim=2)...
+    tsne_2: silhouette_k=2 (score=0.383), elbow_k=3, bic_k=10, aic_k=10
+  t-SNE reduction (dim=3)...
+s
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dc    tsne_3: silhouette_k=6 (score=0.273), elbow_k=4, bic_k=10, aic_k=10
+--- Sweep Summary ---
+  raw: silhouette_k=2 (0.048), elbow=3, bic=10, aic=10
+  umap_2: silhouette_k=8 (0.417), elbow=3, bic=10, aic=10  << BEST SOURCE
+  umap_3: silhouette_k=9 (0.393), elbow=3, bic=10, aic=10
+  umap_5: silhouette_k=10 (0.386), elbow=3, bic=10, aic=10
+  umap_6: silhouette_k=9 (0.381), elbow=3, bic=10, aic=10
+  umap_7: silhouette_k=10 (0.381), elbow=3, bic=10, aic=10
+  tsne_2: silhouette_k=2 (0.383), elbow=3, bic=10, aic=10
+  tsne_3: silhouette_k=6 (0.273), elbow=4, bic=10, aic=10
+--- Metric Recommendations (source=umap_2) ---
+  silhouette: k=8
+  elbow: k=3
+  bic: k=10
+  aic: k=10
+  >> Recommended n_states: 10 (max across metrics)
+--- Generating Plots ---
+Saving to: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/state_discovery
+  - elbow_plot.png
+  - silhouette_plot.png
+  - bic_aic_plot.png
+  - metric_recommendations.png
+  - cluster_sizes.png
+  - sweep_comparison.png
+  Computing t-SNE 2D projection...
+  - tsne_embeddings.png
+  Computing UMAP 2D projection...
+  - umap_embeddings.png
+  Computing t-SNE 2D for temporal visualization...
+  - tsne_temporal.png
+  - tsne_temporal_3d.png
+  - state_timeline.png
+  Computing UMAP 2D for temporal visualization...
+  - umap_temporal_3d.png
+  - discovery_summary.json
+All plots generated successfully
+  Saved 10 full-atom cluster structures (selection='protein', 35 atoms) to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/state_discovery/cluster_structures
+Recommended n_states: 10
+Dataset statistics saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619
+Topology PDB (training): /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/cache
+State discovery recommended n_states = 10
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [5.0]
+  N states: [10]
+--- Experiment 1/1 ---
+Lag time: 5.0 ns, N states: 10
+Auto-stride: τ=5ns, frame_dt=1000ps, stride=1
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 5: 1000.000 ps
+Lag time: 5.000 ns (5000.0 ps, 5 frames)
+Processing 58 trajectory files...
+dplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+Selected 35 atoms with selection: 'name CA'
+Total frames: 1137344, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.47 Å
+Created 1137339 time-lagged pairs with lag time 5.0 and 5 lag frames. 1 lag frame == 1.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/preparation/prep_20260803_082619/vampnet_data_2ee04f62_lag5.0_nn10_str5_cont.pkl
+Dataset created with 1137339 samples
+Training set: 796138 samples
+Testing set: 341201 samples
+Auto-inferred node_dim=35 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 4,736
+----------------------------------------
+Total params: 4,736
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/62 parameters that may not be properly initialized.
+Created VAMPNet model with 18858 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.3.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ embedding_module.lins.0.weight: shape=torch.Size([64, 35]), size=2240
+  ✓ embedding_module.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ embedding_module.lins.1.weight: shape=torch.Size([32, 64]), size=2048
+  ✓ embedding_module.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 16]), size=1024
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([10, 64]), size=640
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([10]), size=10
+Total parameters in optimizer: 18,858 in 62 tensors
+Total model parameters: 18,858
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 6.9734, Val VAMP: concat=6.0140, perbatch=5.9152±0.4527
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 6.0140
+Epoch 2/100, Train VAMP: 8.3324, Val VAMP: concat=6.3225, perbatch=6.2799±0.4176
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 6.3225
+Epoch 3/100, Train VAMP: 8.4978, Val VAMP: concat=6.9566, perbatch=6.9554±0.5136
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 6.9566
+Epoch 4/100, Train VAMP: 8.5633, Val VAMP: concat=8.1529, perbatch=8.1660±0.4610
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.1529
+Epoch 5/100, Train VAMP: 8.6496, Val VAMP: concat=7.9363, perbatch=8.0581±0.4996
+No improvement for 1 epochs. Best score: 8.1529
+Epoch 6/100, Train VAMP: 8.7194, Val VAMP: concat=8.6841, perbatch=8.6290±0.4431
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.6841
+Epoch 7/100, Train VAMP: 8.7496, Val VAMP: concat=8.7975, perbatch=8.7191±0.4539
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.7975
+Epoch 8/100, Train VAMP: 8.7587, Val VAMP: concat=8.7453, perbatch=8.6447±0.4309
+No improvement for 1 epochs. Best score: 8.7975
+Epoch 9/100, Train VAMP: 8.7858, Val VAMP: concat=8.7160, perbatch=8.6249±0.4148
+No improvement for 2 epochs. Best score: 8.7975
+Epoch 10/100, Train VAMP: 8.8237, Val VAMP: concat=8.6487, perbatch=8.5417±0.4347
+No improvement for 3 epochs. Best score: 8.7975
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/checkpoint_epoch_10.pt
+Epoch 11/100, Train VAMP: 8.8354, Val VAMP: concat=8.5395, perbatch=8.5191±0.4651
+No improvement for 4 epochs. Best score: 8.7975
+Epoch 12/100, Train VAMP: 8.8434, Val VAMP: concat=8.6863, perbatch=8.6179±0.4516
+No improvement for 5 epochs. Best score: 8.7975
+Epoch 13/100, Train VAMP: 8.8703, Val VAMP: concat=8.8779, perbatch=8.7933±0.4333
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.8779
+Epoch 14/100, Train VAMP: 8.8842, Val VAMP: concat=8.9260, perbatch=8.8387±0.4171
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.9260
+Epoch 15/100, Train VAMP: 8.8693, Val VAMP: concat=8.9467, perbatch=8.8902±0.3953
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.9467
+Epoch 16/100, Train VAMP: 8.8946, Val VAMP: concat=8.9942, perbatch=8.9244±0.3903
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.9942
+Epoch 17/100, Train VAMP: 8.9166, Val VAMP: concat=8.9240, perbatch=8.8212±0.4310
+No improvement for 1 epochs. Best score: 8.9942
+Epoch 18/100, Train VAMP: 8.9092, Val VAMP: concat=8.9965, perbatch=8.9104±0.4045
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 8.9965
+Epoch 19/100, Train VAMP: 8.9362, Val VAMP: concat=8.9720, perbatch=8.8918±0.3993
+No improvement for 1 epochs. Best score: 8.9965
+Epoch 20/100, Train VAMP: 8.9371, Val VAMP: concat=9.0041, perbatch=8.9111±0.4175
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 9.0041
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/checkpoint_epoch_20.pt
+Epoch 21/100, Train VAMP: 8.9286, Val VAMP: concat=9.0272, perbatch=8.9589±0.3763
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 9.0272
+Epoch 22/100, Train VAMP: 8.9540, Val VAMP: concat=8.9777, perbatch=8.8825±0.3900
+No improvement for 1 epochs. Best score: 9.0272
+Epoch 23/100, Train VAMP: 8.9664, Val VAMP: concat=9.0194, perbatch=8.9224±0.3964
+No improvement for 2 epochs. Best score: 9.0272
+Epoch 24/100, Train VAMP: 8.9784, Val VAMP: concat=8.9625, perbatch=8.8582±0.4446
+No improvement for 3 epochs. Best score: 9.0272
+Epoch 25/100, Train VAMP: 8.9819, Val VAMP: concat=9.0499, perbatch=8.9552±0.4597
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 9.0499
+Epoch 26/100, Train VAMP: 8.9922, Val VAMP: concat=9.0133, perbatch=8.9249±0.4284
+No improvement for 1 epochs. Best score: 9.0499
+Epoch 27/100, Train VAMP: 9.0207, Val VAMP: concat=8.9946, perbatch=8.9261±0.3779
+No improvement for 2 epochs. Best score: 9.0499
+Epoch 28/100, Train VAMP: 8.9904, Val VAMP: concat=9.0124, perbatch=8.9104±0.4317
+No improvement for 3 epochs. Best score: 9.0499
+Epoch 29/100, Train VAMP: 9.0205, Val VAMP: concat=9.0009, perbatch=8.9339±0.3597
+No improvement for 4 epochs. Best score: 9.0499
+Epoch 30/100, Train VAMP: 9.0290, Val VAMP: concat=9.0656, perbatch=8.9717±0.3895
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 9.0656
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/checkpoint_epoch_30.pt
+Epoch 31/100, Train VAMP: 9.0199, Val VAMP: concat=9.0808, perbatch=9.0011±0.4040
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_00/lag_5.0ns/exp_gtt_20260803_082619/training/lag5.0ns_10states/20260803_104500/models/best_model.pt
+New best model with score: 9.0808
+Epoch 32/100, Train VAMP: 9.0216, Val VAMP: concat=9.0403, perbatch=8.9514±0.4024
+No improvement for 1 epochs. Best score: 9.0808

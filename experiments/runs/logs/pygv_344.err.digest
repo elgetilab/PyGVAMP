@@ -1,0 +1,1 @@
+slurmstepd-hugin: error: Detected 2 oom_kill events in StepId=344.batch. Some of the step tasks have been OOM Killed.

@@ -1,0 +1,31 @@
+Implied Timescales Analysis for ab42_red
+==================================================
+
+Number of processes analyzed: 9
+Lag times analyzed: [0.25, 0.7777777910232544, 1.3055555820465088, 1.8333333730697632, 2.3611111640930176, 2.8888888359069824, 3.4166667461395264, 3.9444446563720703, 4.472222328186035, 5.0] ns
+
+Process Summary:
+Process 2: Mean ITS = 6.37 ns, Max ITS = 7.67 ns
+Process 3: Mean ITS = 5.14 ns, Max ITS = 6.79 ns
+Process 4: Mean ITS = 4.30 ns, Max ITS = 5.50 ns
+Process 5: Mean ITS = 4.10 ns, Max ITS = 5.50 ns
+Process 6: Mean ITS = 3.69 ns, Max ITS = 5.03 ns
+Process 7: Mean ITS = 2.87 ns, Max ITS = 3.92 ns
+Process 8: Mean ITS = 2.69 ns, Max ITS = 3.85 ns
+Process 9: Mean ITS = 2.33 ns, Max ITS = 3.25 ns
+Process 10: Mean ITS = 1.72 ns, Max ITS = 2.25 ns
+
+Detailed ITS for each lag time:
+
+Lag Time (ns) | Process 2 | Process 3 | Process 4 | Process 5 | Process 6
+------------------------------------------------------------------------
+       0.25 |      6.15 |      3.79 |      3.49 |      3.05 |      2.30
+       0.78 |      6.28 |      4.38 |      3.78 |      3.56 |      2.94
+       1.31 |      6.11 |      4.52 |      3.73 |      3.71 |      3.21
+       1.83 |      6.01 |      4.62 |      3.75 |      3.75 |      3.26
+       2.36 |      5.92 |      4.82 |      3.84 |      3.84 |      3.40
+       2.89 |      5.60 |      4.93 |      3.93 |      3.81 |      3.66
+       3.42 |      6.13 |      5.41 |      4.52 |      4.13 |      4.02
+       3.94 |      6.63 |      5.84 |      5.14 |      4.58 |      4.36
+       4.47 |      7.16 |      6.30 |      5.30 |      5.04 |      4.71
+       5.00 |      7.67 |      6.79 |      5.50 |      5.50 |      5.03

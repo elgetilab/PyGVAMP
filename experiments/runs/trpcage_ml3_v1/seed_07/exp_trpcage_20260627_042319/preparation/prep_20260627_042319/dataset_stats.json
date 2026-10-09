@@ -1,0 +1,38 @@
+{
+  "num_samples": 1043900,
+  "trajectories": [
+    "2JOF-0-c-alpha-000.dcd",
+    "2JOF-0-c-alpha-001.dcd",
+    "2JOF-0-c-alpha-002.dcd",
+    "2JOF-0-c-alpha-003.dcd",
+    "2JOF-0-c-alpha-004.dcd",
+    "2JOF-0-c-alpha-005.dcd",
+    "2JOF-0-c-alpha-006.dcd",
+    "2JOF-0-c-alpha-007.dcd",
+    "2JOF-0-c-alpha-008.dcd",
+    "2JOF-0-c-alpha-009.dcd",
+    "2JOF-0-c-alpha-010.dcd"
+  ],
+  "topology": {
+    "input_file": "/mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb",
+    "output_pdb": "/mnt/hdd/experiments/trpcage_ml3_v1/seed_07/exp_trpcage_20260627_042319/preparation/prep_20260627_042319/topology.pdb",
+    "viz_topology_pdb": "/mnt/hdd/experiments/trpcage_ml3_v1/seed_07/exp_trpcage_20260627_042319/preparation/prep_20260627_042319/visualization_topology.pdb",
+    "n_atoms_selected": 20,
+    "n_residues": 20
+  },
+  "parameters": {
+    "lag_time": 20.0,
+    "n_neighbors": 7,
+    "node_embedding_dim": 16,
+    "gaussian_expansion_dim": 16,
+    "selection": "name CA",
+    "stride": 1,
+    "frame_dt_ps": 200.0
+  },
+  "structure": {
+    "num_nodes": 20,
+    "num_edges": 140,
+    "node_feature_dim": 20,
+    "edge_feature_dim": 16
+  }
+}

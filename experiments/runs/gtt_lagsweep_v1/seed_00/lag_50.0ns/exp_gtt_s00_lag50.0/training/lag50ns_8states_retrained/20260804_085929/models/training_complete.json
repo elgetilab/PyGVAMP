@@ -1,0 +1,10 @@
+{
+  "epochs_run": 100,
+  "epochs_requested": 100,
+  "early_stopped": false,
+  "best_score": 5.940149784088135,
+  "best_epoch": 26,
+  "lag_time": 50.0,
+  "n_states": 8,
+  "completed_at": "2026-08-04T09:59:23.137797"
+}

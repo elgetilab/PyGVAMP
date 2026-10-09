@@ -1,0 +1,2 @@
+  warnings.warn(  [repeated 5 times]
+slurmstepd-hugin: error: *** JOB 811 ON hugin CANCELLED AT 2026-07-24T14:57:32 ***

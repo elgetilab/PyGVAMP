@@ -1,0 +1,8 @@
+Error: Some lag times are not compatible with the trajectory.
+  Trajectory timestep: 200 ps (2.0 ns)
+  Stride: 10
+  Effective timestep: 2000 ps (2.0 ns)
+  Invalid lag times:
+    1.0 ns  ->  closest valid: 0.0 ns
+  Valid lag times must be multiples of 2 ns.
+  Example valid values: 2, 4, 6, 8, 10, ...

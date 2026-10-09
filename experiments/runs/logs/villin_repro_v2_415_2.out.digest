@@ -1,0 +1,12 @@
+============================================================
+Villin reproduction v2 (array task 2)
+============================================================
+Job:        418    Seed: 2    Output: /mnt/hdd/experiments/villin_repro_v2/seed_02
+GPU:        NVIDIA GeForce RTX 5090
+Node:       hugin
+Start:      Mon Apr 27 12:19:16 PM CEST 2026
+Target:     VAMP-2 = 3.78 ± 0.02 (Ghorbani 2022, Table S1)
+Diffs vs v1: no pre-encoder MLP, linear softmax head, no early stopping
+============================================================  [repeated 2 times]
+Finished:   Mon Apr 27 12:19:19 PM CEST 2026    Exit: 2
+============================================================

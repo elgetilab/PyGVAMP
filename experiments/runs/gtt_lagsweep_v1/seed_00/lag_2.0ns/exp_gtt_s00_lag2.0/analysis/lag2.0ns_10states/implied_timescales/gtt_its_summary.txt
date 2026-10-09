@@ -1,0 +1,31 @@
+Implied Timescales Analysis for gtt
+==================================================
+
+Number of processes analyzed: 9
+Lag times analyzed: [2.0, 2.888888888888889, 3.7777777777777777, 4.666666666666666, 5.555555555555555, 6.444444444444445, 7.333333333333333, 8.222222222222221, 9.11111111111111, 10.0] ns
+
+Process Summary:
+Process 2: Mean ITS = 1233.61 ns, Max ITS = 1554.54 ns
+Process 3: Mean ITS = 128.72 ns, Max ITS = 164.27 ns
+Process 4: Mean ITS = 26.43 ns, Max ITS = 33.71 ns
+Process 5: Mean ITS = 24.95 ns, Max ITS = 31.68 ns
+Process 6: Mean ITS = 18.98 ns, Max ITS = 22.17 ns
+Process 7: Mean ITS = 16.61 ns, Max ITS = 22.00 ns
+Process 8: Mean ITS = 12.87 ns, Max ITS = 15.86 ns
+Process 9: Mean ITS = 11.95 ns, Max ITS = 14.99 ns
+Process 10: Mean ITS = 5.90 ns, Max ITS = 8.32 ns
+
+Detailed ITS for each lag time:
+
+Lag Time (ns) | Process 2 | Process 3 | Process 4 | Process 5 | Process 6
+------------------------------------------------------------------------
+       2.00 |   1076.22 |    113.72 |     23.34 |     21.93 |     15.35
+       2.89 |   1554.54 |    164.27 |     33.71 |     31.68 |     22.17
+       3.78 |   1078.79 |    105.93 |     24.45 |     22.34 |     16.73
+       4.67 |   1332.62 |    130.86 |     30.20 |     27.60 |     20.67
+       5.56 |   1119.29 |    115.17 |     24.28 |     22.67 |     17.51
+       6.44 |   1298.37 |    133.60 |     28.16 |     26.30 |     20.32
+       7.33 |   1146.71 |    121.32 |     23.61 |     22.74 |     17.65
+       8.22 |   1285.70 |    136.02 |     26.47 |     25.50 |     19.79
+       9.11 |   1165.08 |    126.96 |     23.89 |     23.22 |     18.88
+      10.00 |   1278.74 |    139.35 |     26.22 |     25.48 |     20.73

@@ -1,0 +1,168 @@
+PyGVAMP Log - 2026-08-24 14:19:43
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/a3d/ --top /mnt/hdd/data/a3d/topol.pdb --file_pattern *.dcd --protein_name a3d --output_dir /mnt/hdd/experiments/a3d_encoder_v1/painn --exp_name exp_a3d_painn_s06 --timestep 0.2 --seed 6 --model painn --painn_hidden_dim 26 --hidden_dim 16 --selection name CA --lag_times 50.0 --stride 10 --auto_stride --n_states 3 --no_discover_states --max_retrains 0 --no_warm_start_retrains --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --use_attention --no_use_embedding --lr 5e-4 --epochs 100 --batch_size 1000 --val_split 0.3 --resume_training --save_every 10 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: a3d
+Model: painn
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/a3d/topol.pdb
+Selected 73 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/a3d/
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset with 37 trajectory files
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+Loaded 37 trajectories with frames: [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3271, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 274]
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/cache/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset created with 353520 samples
+Dataset statistics saved to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943
+Topology PDB (training): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [50.0]
+  N states: [3]
+--- Experiment 1/1 ---
+Lag time: 50.0 ns, N states: 3
+Auto-stride: τ=50ns, frame_dt=2000ps, stride=2
+Found 37 trajectory files
+Examples:
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-012.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-018.dcd
+  - /mnt/hdd/data/a3d/A3D-1/A3D-1-c-alpha-004.dcd
+  ... and 34 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 50.000 ns (50000.0 ps, 25 frames)
+Processing 37 trajectory files...
+Total frames: 353545, Atoms per frame: 73
+Calculating distance range from data samples...
+Distance range: 0.28 to 10.34 Å
+Created 353520 time-lagged pairs with lag time 50.0 and 25 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/preparation/prep_20260824_141943/vampnet_data_54be1a21_lag50.0_nn10_str10_cont.pkl
+Runtime subsample: stride=2, 353520 -> 176760 pairs
+Dataset created with 176760 samples
+Training set: 123732 samples
+Testing set: 53028 samples
+Auto-inferred node_dim=73 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 2
+Linear parameters: 36,826
+----------------------------------------
+Total params: 36,826
+Total tensors: 26
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([26])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([26])
+WARNING: Found 2/56 parameters that may not be properly initialized.
+init: preserved self-initialised encoder PaiNNEncoder (skipped kaiming_normal)
+Created VAMPNet model with 40273 parameters
+Parameters captured by optimizer:
+  ✓ encoder.input_proj.weight: shape=torch.Size([26, 73]), size=1898
+  ✓ encoder.input_proj.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.0.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.0.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.0.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.0.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.0.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.1.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.1.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.1.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.1.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.1.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.2.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.2.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.2.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.2.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.2.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.context_net.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.interactions.3.context_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.interactions.3.context_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.interactions.3.context_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.interactions.3.filter_net.weight: shape=torch.Size([78, 16]), size=1248
+  ✓ encoder.interactions.3.filter_net.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.0.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.0.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.0.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.0.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.1.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.1.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.1.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.1.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.2.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.2.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.2.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.2.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.mixings.3.channel_mix.weight: shape=torch.Size([52, 26]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.weight: shape=torch.Size([26, 52]), size=1352
+  ✓ encoder.mixings.3.gate_net.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.mixings.3.gate_net.2.weight: shape=torch.Size([78, 26]), size=2028
+  ✓ encoder.mixings.3.gate_net.2.bias: shape=torch.Size([78]), size=78
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([26, 26]), size=676
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 26]), size=416
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([26]), size=26
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([26]), size=26
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 16]), size=1024
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([3, 64]), size=192
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([3]), size=3
+Total parameters in optimizer: 40,273 in 56 tensors
+Total model parameters: 40,273
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Training failed: CUDA out of memory in encoder. Try reducing batch size.
+No trained models found. Run training first.
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06
+Log file: /mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s06/logs/log_20260824_141943.txt
+============================================================
+Log ended: 2026-08-24 14:21:01

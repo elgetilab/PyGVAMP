@@ -1,0 +1,83 @@
+State structure analysis for trpcage
+Total states: 5
+
+State 1:
+  - Frame count (max probability): 35905 (71.81%)
+State 2:
+  - Frame count (max probability): 8667 (17.33%)
+State 3:
+  - Frame count (max probability): 4068 (8.14%)
+State 4:
+  - Frame count (max probability): 803 (1.61%)
+State 5:
+  - Frame count (max probability): 557 (1.11%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: trpcage_state_1_average.pdb
+  - Representative structures:
+    - trpcage_state_1_rank_1_frame_41698_rmsd_0.348_prob_0.998.pdb
+    - trpcage_state_1_rank_2_frame_20474_rmsd_0.390_prob_0.998.pdb
+    - trpcage_state_1_rank_3_frame_42371_rmsd_0.391_prob_0.998.pdb
+    - trpcage_state_1_rank_4_frame_47809_rmsd_0.400_prob_0.998.pdb
+    - trpcage_state_1_rank_5_frame_9580_rmsd_0.411_prob_0.998.pdb
+    - trpcage_state_1_rank_6_frame_8490_rmsd_0.417_prob_0.998.pdb
+    - trpcage_state_1_rank_7_frame_7634_rmsd_0.425_prob_0.998.pdb
+    - trpcage_state_1_rank_8_frame_31813_rmsd_0.459_prob_0.998.pdb
+    - trpcage_state_1_rank_9_frame_31812_rmsd_0.467_prob_0.998.pdb
+    - trpcage_state_1_rank_10_frame_21481_rmsd_0.641_prob_0.998.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: trpcage_state_2_average.pdb
+  - Representative structures:
+    - trpcage_state_2_rank_1_frame_5430_rmsd_0.371_prob_0.986.pdb
+    - trpcage_state_2_rank_2_frame_5973_rmsd_0.388_prob_0.985.pdb
+    - trpcage_state_2_rank_3_frame_35744_rmsd_0.421_prob_0.986.pdb
+    - trpcage_state_2_rank_4_frame_20050_rmsd_0.442_prob_0.986.pdb
+    - trpcage_state_2_rank_5_frame_33529_rmsd_0.600_prob_0.985.pdb
+    - trpcage_state_2_rank_6_frame_19043_rmsd_0.609_prob_0.986.pdb
+    - trpcage_state_2_rank_7_frame_39249_rmsd_0.615_prob_0.986.pdb
+    - trpcage_state_2_rank_8_frame_39120_rmsd_0.681_prob_0.986.pdb
+    - trpcage_state_2_rank_9_frame_39740_rmsd_0.686_prob_0.987.pdb
+    - trpcage_state_2_rank_10_frame_25452_rmsd_0.822_prob_0.986.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: trpcage_state_3_average.pdb
+  - Representative structures:
+    - trpcage_state_3_rank_1_frame_12517_rmsd_0.181_prob_0.852.pdb
+    - trpcage_state_3_rank_2_frame_12514_rmsd_0.196_prob_0.852.pdb
+    - trpcage_state_3_rank_3_frame_12506_rmsd_0.210_prob_0.854.pdb
+    - trpcage_state_3_rank_4_frame_12516_rmsd_0.211_prob_0.851.pdb
+    - trpcage_state_3_rank_5_frame_12522_rmsd_0.220_prob_0.851.pdb
+    - trpcage_state_3_rank_6_frame_12420_rmsd_0.229_prob_0.853.pdb
+    - trpcage_state_3_rank_7_frame_12430_rmsd_0.251_prob_0.852.pdb
+    - trpcage_state_3_rank_8_frame_40611_rmsd_0.399_prob_0.852.pdb
+    - trpcage_state_3_rank_9_frame_48530_rmsd_0.664_prob_0.853.pdb
+    - trpcage_state_3_rank_10_frame_40624_rmsd_0.743_prob_0.852.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: trpcage_state_4_average.pdb
+  - Representative structures:
+    - trpcage_state_4_rank_1_frame_8937_rmsd_0.204_prob_0.991.pdb
+    - trpcage_state_4_rank_2_frame_10509_rmsd_0.220_prob_0.991.pdb
+    - trpcage_state_4_rank_3_frame_10415_rmsd_0.224_prob_0.991.pdb
+    - trpcage_state_4_rank_4_frame_10508_rmsd_0.225_prob_0.991.pdb
+    - trpcage_state_4_rank_5_frame_10648_rmsd_0.241_prob_0.993.pdb
+    - trpcage_state_4_rank_6_frame_10604_rmsd_0.246_prob_0.991.pdb
+    - trpcage_state_4_rank_7_frame_27170_rmsd_0.390_prob_0.991.pdb
+    - trpcage_state_4_rank_8_frame_27127_rmsd_0.431_prob_0.992.pdb
+    - trpcage_state_4_rank_9_frame_27187_rmsd_0.573_prob_0.991.pdb
+    - trpcage_state_4_rank_10_frame_27198_rmsd_0.608_prob_0.991.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: trpcage_state_5_average.pdb
+  - Representative structures:
+    - trpcage_state_5_rank_1_frame_21605_rmsd_0.320_prob_0.912.pdb
+    - trpcage_state_5_rank_2_frame_27430_rmsd_0.362_prob_0.913.pdb
+    - trpcage_state_5_rank_3_frame_27427_rmsd_0.373_prob_0.913.pdb
+    - trpcage_state_5_rank_4_frame_46008_rmsd_0.374_prob_0.912.pdb
+    - trpcage_state_5_rank_5_frame_21559_rmsd_0.408_prob_0.910.pdb
+    - trpcage_state_5_rank_6_frame_21537_rmsd_0.451_prob_0.908.pdb
+    - trpcage_state_5_rank_7_frame_21929_rmsd_0.572_prob_0.909.pdb
+    - trpcage_state_5_rank_8_frame_21546_rmsd_0.594_prob_0.911.pdb
+    - trpcage_state_5_rank_9_frame_22805_rmsd_0.648_prob_0.911.pdb
+    - trpcage_state_5_rank_10_frame_21971_rmsd_0.733_prob_0.911.pdb
+

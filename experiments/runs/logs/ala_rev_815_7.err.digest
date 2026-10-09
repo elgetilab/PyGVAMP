@@ -1,0 +1,1 @@
+  its = -lag_ns / np.log(k_eigvals)

@@ -1,0 +1,25 @@
+Device: cuda
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_131836/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Dataset created with 1043900 samples
+Training set: 730730 samples
+Testing set: 313170 samples
+Evaluating on 200000 pairs (of 1043900); concat should be ~flat, perbatch should rise as batch shrinks.
+Complete model loaded from /mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_233355/training/lag20.0ns_5states/20260512_233412/models/best_model.pt
+ batch    concat  perbatch_mean  perbatch_std  n_batches
+----------------------------------------------------------
+    64    4.6712         3.9464        0.6735       3125
+   128    4.6697         4.3626        0.5426       1562
+   256    4.6708         4.5959        0.3452        781
+   512    4.6715         4.6555        0.2421        390
+  1024    4.6699         4.6763        0.1366        195
+  2048    4.6705         4.6697        0.0974         97
+Read: if perbatch_mean climbs toward ~4.79 at small batch while concat stays ~4.67,
+      the gap to the reference is the (biased) per-batch estimator, not the model.

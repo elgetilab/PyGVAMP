@@ -1,0 +1,11 @@
+seed,best_epoch,best_concat,perbatch_mean,perbatch_std,final_epoch,completed,log_path
+0,86,4.644600,4.639300,0.143100,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_00/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+1,95,4.650100,4.645000,0.130300,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_01/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+2,96,4.663800,4.654500,0.188600,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_02/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+3,75,4.636600,4.631700,0.132600,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_03/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+4,83,4.652000,4.650900,0.124700,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_04/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+5,91,4.636600,4.639900,0.123900,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_05/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+6,98,4.646700,4.648100,0.131600,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_06/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+7,87,4.717500,4.692000,0.192100,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_07/exp_trpcage_20260512_233355/logs/log_20260512_233355.txt
+8,91,4.646600,4.644400,0.129100,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_08/exp_trpcage_20260514_005450/logs/log_20260514_005450.txt
+9,95,4.669200,4.669900,0.162600,100,1,/mnt/hdd/experiments/trpcage_repro_v1/seed_09/exp_trpcage_20260514_010625/logs/log_20260514_010625.txt

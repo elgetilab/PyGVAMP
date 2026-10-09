@@ -1,0 +1,9 @@
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 12, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+/opt/software/pygvamp/1.0.0/source/pygv/utils/nn_utils.py:244: UserWarning: std(): degrees of freedom is <= 0. Correction should be strictly less than the reduction factor (input numel divided by output numel). (Triggered internally at /pytorch/aten/src/ATen/native/ReduceOps.cpp:1858.)
+  if param.requires_grad and (param.std() < 1e-6 or param.min() == param.max()):
+  self.check_worker_number_rationality()
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(

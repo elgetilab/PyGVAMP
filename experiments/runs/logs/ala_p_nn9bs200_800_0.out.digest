@@ -1,0 +1,156 @@
+PYTHONPATH override active: /home/vi/PycharmProjects/PyGVAMP
+============================================================
+Alanine RevGraphVAMP 3-phase (task 0, seed 0)
+Target: VAMP-2 4.41±0.01 / VAMP-E 4.38±0.01 (Huang 2024)
+Phases: chi=40(5e-4) us=0(5e-4) all=2(1e-4)
+Start:  Thu Jul 23 02:33:36 PM CEST 2026   Node: hugin
+============================================================
+Using model: schnet
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Using user-specified timestep: 0.001 ns (1 ps)
+Lag time validation passed: [0.02] (timestep=0.0 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: alanine
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/alanine/alanine-dipeptide-nowater.pdb
+Selected 10 atoms with selection: 'not element H'
+Topology saved as PDB: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/alanine/alanine-dipeptide-nowater.pdb
+Selected 22 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/alanine/
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Creating dataset with 3 trajectory files
+No cache file found at /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/cache/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Using user-specified timestep: 0.001 ns (1.000 ps)
+Trajectory timestep: 1.000 ps
+Effective timestep with stride 1: 1.000 ps
+Lag time: 0.020 ns (20.0 ps, 20 frames)
+Processing 3 trajectory files...
+Selected 10 atoms with selection: 'not element H'
+Loaded 3 trajectories with frames: [250000, 250000, 250000]
+Total frames: 750000, Atoms per frame: 10
+Calculating distance range from data samples...
+Distance range: 0.11 to 0.77 Å
+Created 749980 time-lagged pairs with lag time 0.02 and 20 lag frames. 1 lag frame == 0.001 ns
+Saving dataset to cache: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/cache/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/cache/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Dataset created with 749980 samples
+Dataset statistics saved to /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337
+Topology PDB (training): /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [0.02]
+  N states: [6]
+--- Experiment 1/1 ---
+Lag time: 0.02 ns, N states: 6
+Found 3 trajectory files
+Examples:
+  - /mnt/hdd/data/alanine/alanine-dipeptide-2-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-1-250ns-nowater.xtc
+  - /mnt/hdd/data/alanine/alanine-dipeptide-0-250ns-nowater.xtc
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Using user-specified timestep: 0.001 ns (1.000 ps)
+Trajectory timestep: 1.000 ps
+Effective timestep with stride 1: 1.000 ps
+Lag time: 0.020 ns (20.0 ps, 20 frames)
+Processing 3 trajectory files...
+Selected 10 atoms with selection: 'not element H'
+Total frames: 750000, Atoms per frame: 10
+Calculating distance range from data samples...
+Distance range: 0.11 to 0.77 Å
+Created 749980 time-lagged pairs with lag time 0.02 and 20 lag frames. 1 lag frame == 0.001 ns
+Saving dataset to cache: /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/alanine_probe_nn9bs200/seed_00/exp_alanine_20260723_143337/preparation/prep_20260723_143337/vampnet_data_d448648c_lag0.02_nn9_str1_cont.pkl
+Dataset created with 749980 samples
+Training set: 524986 samples
+Testing set: 224994 samples
+Auto-inferred node_dim=10 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 496
+----------------------------------------
+Total params: 496
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: rev_score.log_stationary, shape: torch.Size([6])
+WARNING: Parameter possibly uninitialized: rev_score.rate_matrix_weights, shape: torch.Size([6, 6])
+WARNING: Found 12/58 parameters that may not be properly initialized.
+Created VAMPNet model with 4344 parameters
+RevGraphVAMP 3-phase schedule: chi=40@0.0005 (VAMP-2), us=0@0.0005 (VAMP-E), all=2@0.0001 (VAMP-E); activation=exp, renorm=False
+[RevGraphVAMP phase 'chi'] 40 epochs, lr=0.0005, loss=vamp2, 56 param tensors
+  [chi] epoch 1: val VAMP-2=2.5270  VAMP-E=2.5237
+  [chi] epoch 2: val VAMP-2=2.6019  VAMP-E=2.6016
+  [chi] epoch 3: val VAMP-2=2.5253  VAMP-E=2.5247
+  [chi] epoch 4: val VAMP-2=2.5877  VAMP-E=2.5855
+  [chi] epoch 5: val VAMP-2=2.6133  VAMP-E=2.6128
+  [chi] epoch 6: val VAMP-2=2.5577  VAMP-E=2.5566
+  [chi] epoch 7: val VAMP-2=2.6116  VAMP-E=2.6101
+  [chi] epoch 8: val VAMP-2=2.5502  VAMP-E=2.5492
+  [chi] epoch 9: val VAMP-2=2.6155  VAMP-E=2.6147
+  [chi] epoch 10: val VAMP-2=2.5668  VAMP-E=2.5657
+  [chi] epoch 11: val VAMP-2=2.5554  VAMP-E=2.5514
+  [chi] epoch 12: val VAMP-2=2.6576  VAMP-E=2.6547
+  [chi] epoch 13: val VAMP-2=2.6230  VAMP-E=2.6225
+  [chi] epoch 14: val VAMP-2=2.5859  VAMP-E=2.5855
+  [chi] epoch 15: val VAMP-2=2.6238  VAMP-E=2.6234
+  [chi] epoch 16: val VAMP-2=2.6323  VAMP-E=2.6307
+  [chi] epoch 17: val VAMP-2=2.7259  VAMP-E=2.7245
+  [chi] epoch 18: val VAMP-2=2.5620  VAMP-E=2.5607
+  [chi] epoch 19: val VAMP-2=2.6047  VAMP-E=2.6016
+  [chi] epoch 20: val VAMP-2=2.5940  VAMP-E=2.5895
+  [chi] epoch 21: val VAMP-2=2.5987  VAMP-E=2.5980
+  [chi] epoch 22: val VAMP-2=2.6632  VAMP-E=2.6629
+  [chi] epoch 23: val VAMP-2=2.6189  VAMP-E=2.6169
+  [chi] epoch 24: val VAMP-2=2.5914  VAMP-E=2.5849
+  [chi] epoch 25: val VAMP-2=2.5775  VAMP-E=2.5736
+  [chi] epoch 26: val VAMP-2=2.5920  VAMP-E=2.5879
+  [chi] epoch 27: val VAMP-2=2.6850  VAMP-E=2.6837
+  [chi] epoch 28: val VAMP-2=2.5736  VAMP-E=2.5722
+  [chi] epoch 29: val VAMP-2=2.5774  VAMP-E=2.5768
+  [chi] epoch 30: val VAMP-2=2.5550  VAMP-E=2.5519
+  [chi] epoch 31: val VAMP-2=2.5997  VAMP-E=2.5989
+  [chi] epoch 32: val VAMP-2=2.5881  VAMP-E=2.5869
+  [chi] epoch 33: val VAMP-2=2.6216  VAMP-E=2.6215
+  [chi] epoch 34: val VAMP-2=2.6600  VAMP-E=2.6597
+  [chi] epoch 35: val VAMP-2=2.6473  VAMP-E=2.6462
+  [chi] epoch 36: val VAMP-2=2.6177  VAMP-E=2.6168
+  [chi] epoch 37: val VAMP-2=2.6621  VAMP-E=2.6614

@@ -1,0 +1,166 @@
+PyGVAMP Log - 2026-06-16 14:06:07
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/julia_ATR --top /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb --file_pattern d125d/cutted_dt_1ns.xtc --selection chainid 0 and name CA --lag_times 20 --n_states 4 --no_discover_states --protein_name atr_d --output_dir /mnt/hdd/experiments/atr_d_std/lag20/run_00 --preset large_schnet --n_neighbors 20 --epochs 50 --batch_size 2048 --stride 5 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: atr_d
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selected 319 atoms with selection: 'chainid 0 and name CA'
+Topology saved as PDB: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selected 5434 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/julia_ATR
+Found 40 trajectory files
+Examples:
+  - /mnt/hdd/data/julia_ATR/gmm5/r3/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r1/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r2/d125d/cutted_dt_1ns.xtc
+  ... and 37 more
+Creating dataset with 40 trajectory files
+No cache file found at /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/cache/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Trajectory timestep: 1000.000 ps
+Effective timestep with stride 5: 5000.000 ps
+Lag time: 20.000 ns (20000.0 ps, 4 frames)
+Processing 40 trajectory files...
+Loaded 40 trajectories with frames: [101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101, 101]
+Total frames: 4040, Atoms per frame: 319
+Calculating distance range from data samples...
+Distance range: 0.34 to 10.54 Å
+Created 4036 time-lagged pairs with lag time 20.0 and 4 lag frames. 1 lag frame == 5.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/cache/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/cache/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Dataset created with 4036 samples
+Dataset statistics saved to /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607
+Topology PDB (training): /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [20.0]
+  N states: [4]
+--- Experiment 1/1 ---
+Lag time: 20.0 ns, N states: 4
+Found 40 trajectory files
+Examples:
+  - /mnt/hdd/data/julia_ATR/gmm5/r3/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r1/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r2/d125d/cutted_dt_1ns.xtc
+  ... and 37 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Trajectory timestep: 1000.000 ps
+Effective timestep with stride 5: 5000.000 ps
+Lag time: 20.000 ns (20000.0 ps, 4 frames)
+Processing 40 trajectory files...
+Total frames: 4040, Atoms per frame: 319
+Calculating distance range from data samples...
+Distance range: 0.34 to 10.54 Å
+Created 4036 time-lagged pairs with lag time 20.0 and 4 lag frames. 1 lag frame == 5.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/preparation/prep_20260616_140607/vampnet_data_0dd19796_lag20.0_nn20_str5_cont.pkl
+Dataset created with 4036 samples
+Training set: 3229 samples
+Testing set: 807 samples
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 12, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Auto-inferred node_dim=319 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 8
+Linear parameters: 3,328
+----------------------------------------
+Total params: 3,328
+Total tensors: 4
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Found 8/50 parameters that may not be properly initialized.
+Created VAMPNet model with 87620 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([128, 16]), size=2048
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([128, 16]), size=2048
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([128, 16]), size=2048
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([64, 128]), size=8192
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([64]), size=64
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ embedding_module.lins.0.weight: shape=torch.Size([64, 319]), size=20416
+  ✓ embedding_module.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ embedding_module.lins.1.weight: shape=torch.Size([32, 64]), size=2048
+  ✓ embedding_module.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 64]), size=4096
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([4, 64]), size=256
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([4]), size=4
+Total parameters in optimizer: 87,620 in 50 tensors
+Total model parameters: 87,620
+Training model on cuda...
+Starting training for 50 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+  self.check_worker_number_rationality()
+Training failed: CUDA out of memory in encoder. Try reducing batch size.
+No trained models found. Run training first.
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607
+Log file: /mnt/hdd/experiments/atr_d_std/lag20/run_00/exp_atr_d_20260616_140607/logs/log_20260616_140607.txt
+============================================================
+Log ended: 2026-06-16 14:06:39

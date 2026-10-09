@@ -1,0 +1,537 @@
+PyGVAMP Log - 2026-07-30 04:57:53
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/gtt/ --top /mnt/hdd/data/gtt/topol.pdb --file_pattern *.dcd --protein_name gtt --output_dir /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns --timestep 0.2 --seed 1 --model schnet --selection name CA --lag_times 2.0 --auto_stride --min_states 2 --max_states 25 --max_retrains 0 --no_warm_start_retrains --hidden_dim 16 --output_dim 16 --n_interactions 4 --n_neighbors 10 --gaussian_expansion_dim 16 --lr 5e-4 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: gtt
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/gtt/topol.pdb
+Selected 35 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/gtt/
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Creating dataset with 58 trajectory files
+No cache file found at /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/cache/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 2.000 ns (2000.0 ps, 1 frames)
+Processing 58 trajectory files...
+Loaded 58 trajectories with frames: [10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3259, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 5413]
+Total frames: 568672, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.33 to 8.18 Å
+Created 568671 time-lagged pairs with lag time 2.0 and 1 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/cache/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/cache/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Dataset created with 568671 samples
+=== STATE DISCOVERY ===  [repeated 2 times]
+--- Training Graph2Vec ---
+Training on 568672 graphs
+Extracting subgraphs and building vocabulary...
+  Uniform min_count=10 for all degrees
+Building vocabulary from dataset...
+Vocabulary per degree: d0: 2/2 (min_count=10), d1: 100/107 (min_count=10), d2: 85322/14828820 (min_count=10), d3: 0/19602131 (min_count=10)
+Created vocabulary with 85424 subgraphs
+Pre-extracting and caching subgraphs...
+Converting graphs to Doc2Vec documents...
+Created 568672 documents for Doc2Vec training
+Training Doc2Vec model...
+Starting Doc2Vec training with 50 epochs...
+Vocabulary size: 85424
+Vector size: 512
+Loss computation: Enabled
+Epoch 1 started...
+Epoch 1 completed in 9.14s (Total: 14.34s, LR: 0.025000, Loss: 0.000000)
+Epoch 2 started...
+Epoch 2 completed in 9.83s (Total: 24.17s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 3 started...
+Epoch 3 completed in 8.33s (Total: 32.51s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 4 started...
+Epoch 4 completed in 8.36s (Total: 40.87s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 5 started...
+Epoch 5 completed in 9.93s (Total: 50.80s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 6 started...
+Epoch 6 completed in 9.12s (Total: 59.91s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 7 started...
+Epoch 7 completed in 9.01s (Total: 68.92s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 8 started...
+Epoch 8 completed in 9.53s (Total: 78.45s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 9 started...
+Epoch 9 completed in 8.30s (Total: 86.75s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 10 started...
+Epoch 10 completed in 8.32s (Total: 95.07s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 11 started...
+Epoch 11 completed in 7.75s (Total: 102.83s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 12 started...
+Epoch 12 completed in 8.33s (Total: 111.15s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 13 started...
+Epoch 13 completed in 7.75s (Total: 118.90s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 14 started...
+Epoch 14 completed in 7.82s (Total: 126.72s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 15 started...
+Epoch 15 completed in 7.87s (Total: 134.59s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 16 started...
+Epoch 16 completed in 7.80s (Total: 142.39s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 17 started...
+Epoch 17 completed in 7.69s (Total: 150.08s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 18 started...
+Epoch 18 completed in 7.65s (Total: 157.73s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 19 started...
+Epoch 19 completed in 7.70s (Total: 165.43s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 20 started...
+Epoch 20 completed in 7.76s (Total: 173.19s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 21 started...
+Epoch 21 completed in 7.52s (Total: 180.70s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 22 started...
+Epoch 22 completed in 7.53s (Total: 188.24s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 23 started...
+Epoch 23 completed in 7.46s (Total: 195.70s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 24 started...
+Epoch 24 completed in 7.51s (Total: 203.21s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 25 started...
+Epoch 25 completed in 7.55s (Total: 210.76s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 26 started...
+Epoch 26 completed in 7.60s (Total: 218.36s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 27 started...
+Epoch 27 completed in 7.70s (Total: 226.06s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 28 started...
+Epoch 28 completed in 7.65s (Total: 233.71s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 29 started...
+Epoch 29 completed in 7.86s (Total: 241.56s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 30 started...
+Epoch 30 completed in 7.70s (Total: 249.26s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 31 started...
+Epoch 31 completed in 7.69s (Total: 256.95s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 32 started...
+Epoch 32 completed in 7.64s (Total: 264.59s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 33 started...
+Epoch 33 completed in 7.58s (Total: 272.17s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 34 started...
+Epoch 34 completed in 7.59s (Total: 279.76s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 35 started...
+Epoch 35 completed in 8.46s (Total: 288.22s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 36 started...
+Epoch 36 completed in 9.04s (Total: 297.26s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 37 started...
+Epoch 37 completed in 8.72s (Total: 305.98s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 38 started...
+Epoch 38 completed in 8.79s (Total: 314.77s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 39 started...
+Epoch 39 completed in 9.03s (Total: 323.80s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 40 started...
+Epoch 40 completed in 8.84s (Total: 332.64s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 41 started...
+Epoch 41 completed in 9.30s (Total: 341.94s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 42 started...
+Epoch 42 completed in 8.70s (Total: 350.64s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 43 started...
+Epoch 43 completed in 8.70s (Total: 359.34s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 44 started...
+Epoch 44 completed in 9.53s (Total: 368.86s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 45 started...
+Epoch 45 completed in 8.69s (Total: 377.55s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 46 started...
+Epoch 46 completed in 9.00s (Total: 386.55s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 47 started...
+Epoch 47 completed in 9.09s (Total: 395.64s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 48 started...
+Epoch 48 completed in 8.55s (Total: 404.19s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 49 started...
+Epoch 49 completed in 9.28s (Total: 413.47s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 50 started...
+Epoch 50 completed in 8.74s (Total: 422.21s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Doc2Vec training completed in 422.21s
+Loss progression: 0.000000 → 0.000000
+Total loss reduction: 0.000000
+============================================================
+GRAPH2VEC MODEL QUALITY ASSESSMENT
+============================================================
+1. VOCABULARY QUALITY:
+------------------------------
+Subgraph vocabulary size: 85424
+Doc2Vec vocabulary size: 85424
+Vocabulary utilization: 100.0%
+Most frequent subgraph appears 19334848 times
+Least frequent subgraph appears 10 times
+Average subgraph frequency: 503.17
+Subgraph frequency std: 67712.44
+2. EMBEDDING QUALITY:
+------------------------------
+Embedding dimension: 512
+Number of graph embeddings: 568672
+Embedding mean: 0.001726
+Embedding std: 0.119017
+Embedding range: [-0.685725, 0.781363]
+Average pairwise cosine similarity: 0.310863
+Similarity std: 0.125890
+3. SIMILARITY PATTERNS:
+------------------------------
+Graph 211412 most similar to: [('graph_157769', 0.8895593881607056), ('graph_424600', 0.8743729591369629), ('graph_528719', 0.8522345423698425)]
+Graph 381120 most similar to: [('graph_184309', 0.840875506401062), ('graph_461546', 0.8223161697387695), ('graph_456964', 0.8169902563095093)]
+Graph 356334 most similar to: [('graph_330609', 0.8411151170730591), ('graph_492761', 0.8077058792114258), ('graph_84730', 0.8002287149429321)]
+Graph 31789 most similar to: [('graph_39836', 0.8405169248580933), ('graph_55622', 0.8041442632675171), ('graph_49706', 0.8038285374641418)]
+Graph 515257 most similar to: [('graph_399223', 0.8584023118019104), ('graph_443209', 0.8181997537612915), ('graph_435128', 0.8114423155784607)]
+Training completed. Vocabulary size: 85424
+--- Extracting embeddings ---
+Embeddings shape: (568672, 512)
+Subsampled 568672 → 100000 embeddings for clustering sweep
+--- Clustering sweep ---
+    raw: silhouette_k=2 (score=0.047), elbow_k=3, bic_k=25, aic_k=25
+  UMAP reduction (dim=2)...
+    umap_2: silhouette_k=17 (score=0.439), elbow_k=3, bic_k=25, aic_k=25
+  UMAP reduction (dim=3)...
+    umap_3: silhouette_k=18 (score=0.411), elbow_k=3, bic_k=25, aic_k=25
+  UMAP reduction (dim=5)...
+    umap_5: silhouette_k=5 (score=0.408), elbow_k=3, bic_k=25, aic_k=25
+  UMAP reduction (dim=6)...
+    umap_6: silhouette_k=6 (score=0.410), elbow_k=3, bic_k=25, aic_k=25
+  UMAP reduction (dim=7)...
+    umap_7: silhouette_k=6 (score=0.410), elbow_k=3, bic_k=25, aic_k=25
+  t-SNE reduction (dim=2)...
+    tsne_2: silhouette_k=3 (score=0.391), elbow_k=3, bic_k=25, aic_k=25
+  t-SNE reduction (dim=3)...
+    tsne_3: silhouette_k=3 (score=0.265), elbow_k=3, bic_k=25, aic_k=25
+--- Sweep Summary ---
+  raw: silhouette_k=2 (0.047), elbow=3, bic=25, aic=25
+  umap_2: silhouette_k=17 (0.439), elbow=3, bic=25, aic=25  << BEST SOURCE
+  umap_3: silhouette_k=18 (0.411), elbow=3, bic=25, aic=25
+  umap_5: silhouette_k=5 (0.408), elbow=3, bic=25, aic=25
+  umap_6: silhouette_k=6 (0.410), elbow=3, bic=25, aic=25
+  umap_7: silhouette_k=6 (0.410), elbow=3, bic=25, aic=25
+  tsne_2: silhouette_k=3 (0.391), elbow=3, bic=25, aic=25
+  tsne_3: silhouette_k=3 (0.265), elbow=3, bic=25, aic=25
+--- Metric Recommendations (source=umap_2) ---
+  silhouette: k=17
+  elbow: k=3
+  bic: k=25
+  aic: k=25
+  >> Recommended n_states: 25 (max across metrics)
+--- Generating Plots ---
+Saving to: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/state_discovery
+  - elbow_plot.png
+  - silhouette_plot.png
+  - bic_aic_plot.png
+  - metric_recommendations.png
+  - cluster_sizes.png
+  - sweep_comparison.png
+  Computing t-SNE 2D projection...
+  - tsne_embeddings.png
+  Computing UMAP 2D projection...
+  - umap_embeddings.png
+  Computing t-SNE 2D for temporal visualization...
+  - tsne_temporal.png
+  - tsne_temporal_3d.png
+  - state_timeline.png
+  Computing UMAP 2D for temporal visualization...
+  - umap_temporal_3d.png
+  - discovery_summary.json
+All plots generated successfully
+  Saved 25 full-atom cluster structures (selection='protein', 35 atoms) to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/state_discovery/cluster_structures
+Recommended n_states: 25
+Dataset statistics saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753
+Topology PDB (training): /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/cache
+State discovery recommended n_states = 25
+Using discovered n_states = 25
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [2.0]
+  N states: [25]
+--- Experiment 1/1 ---
+Lag time: 2.0 ns, N states: 25
+Auto-stride: τ=2ns, frame_dt=2000ps, stride=1
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 10: 2000.000 ps
+Lag time: 2.000 ns (2000.0 ps, 1 frames)
+Processing 58 trajectory files...
+Total frames: 568672, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.33 to 8.18 Å
+Created 568671 time-lagged pairs with lag time 2.0 and 1 lag frames. 1 lag frame == 2.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/preparation/prep_20260730_045753/vampnet_data_2ee04f62_lag2.0_nn10_str10_cont.pkl
+Dataset created with 568671 samples
+Training set: 398070 samples
+Testing set: 170601 samples
+Auto-inferred node_dim=35 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 5,696
+----------------------------------------
+Total params: 5,696
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/62 parameters that may not be properly initialized.
+Created VAMPNet model with 19833 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.3.cfconv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 32]), size=512
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ embedding_module.lins.0.weight: shape=torch.Size([64, 35]), size=2240
+  ✓ embedding_module.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ embedding_module.lins.1.weight: shape=torch.Size([32, 64]), size=2048
+  ✓ embedding_module.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 16]), size=1024
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([25, 64]), size=1600
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([25]), size=25
+Total parameters in optimizer: 19,833 in 62 tensors
+Total model parameters: 19,833
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 11.1500, Val VAMP: concat=12.1873, perbatch=13.3528±0.9532
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 12.1873
+Epoch 2/100, Train VAMP: 16.1453, Val VAMP: concat=13.7628, perbatch=14.6307±1.0258
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 13.7628
+Epoch 3/100, Train VAMP: 17.0055, Val VAMP: concat=11.5931, perbatch=13.0919±1.0073
+No improvement for 1 epochs. Best score: 13.7628
+Epoch 4/100, Train VAMP: 17.5254, Val VAMP: concat=14.5787, perbatch=16.1247±0.8357
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 14.5787
+Epoch 5/100, Train VAMP: 17.7801, Val VAMP: concat=13.9567, perbatch=14.8935±1.1508
+No improvement for 1 epochs. Best score: 14.5787
+Epoch 6/100, Train VAMP: 18.0537, Val VAMP: concat=16.7924, perbatch=16.9131±1.0093
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 16.7924
+Epoch 7/100, Train VAMP: 18.2675, Val VAMP: concat=16.0021, perbatch=16.9285±0.9768
+No improvement for 1 epochs. Best score: 16.7924
+Epoch 8/100, Train VAMP: 18.5464, Val VAMP: concat=18.4480, perbatch=18.6966±1.1074
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 18.4480
+Epoch 9/100, Train VAMP: 18.6531, Val VAMP: concat=18.2130, perbatch=18.3223±0.9114
+No improvement for 1 epochs. Best score: 18.4480
+Epoch 10/100, Train VAMP: 18.8384, Val VAMP: concat=18.1072, perbatch=18.3885±1.0125
+No improvement for 2 epochs. Best score: 18.4480
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_10.pt
+Epoch 11/100, Train VAMP: 18.9048, Val VAMP: concat=16.5609, perbatch=17.0728±1.0630
+No improvement for 3 epochs. Best score: 18.4480
+Epoch 12/100, Train VAMP: 19.0248, Val VAMP: concat=19.2752, perbatch=19.1346±0.9014
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 19.2752
+Epoch 13/100, Train VAMP: 19.0549, Val VAMP: concat=19.2145, perbatch=18.9496±1.0107
+No improvement for 1 epochs. Best score: 19.2752
+Epoch 14/100, Train VAMP: 19.1747, Val VAMP: concat=19.2618, perbatch=18.9740±0.9763
+No improvement for 2 epochs. Best score: 19.2752
+Epoch 15/100, Train VAMP: 19.2677, Val VAMP: concat=19.2100, perbatch=19.0204±1.0497
+No improvement for 3 epochs. Best score: 19.2752
+Epoch 16/100, Train VAMP: 19.2907, Val VAMP: concat=19.1233, perbatch=19.0214±0.9847
+No improvement for 4 epochs. Best score: 19.2752
+Epoch 17/100, Train VAMP: 19.3169, Val VAMP: concat=19.2048, perbatch=19.0192±1.1617
+No improvement for 5 epochs. Best score: 19.2752
+Epoch 18/100, Train VAMP: 19.3551, Val VAMP: concat=19.5439, perbatch=19.3501±0.9343
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 19.5439
+Epoch 19/100, Train VAMP: 19.4129, Val VAMP: concat=17.4390, perbatch=17.3304±0.9650
+No improvement for 1 epochs. Best score: 19.5439
+Epoch 20/100, Train VAMP: 19.4630, Val VAMP: concat=19.5553, perbatch=19.2458±1.0918
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 19.5553
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_20.pt
+Epoch 21/100, Train VAMP: 19.5123, Val VAMP: concat=20.1204, perbatch=19.5628±1.0521
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.1204
+Epoch 22/100, Train VAMP: 19.5708, Val VAMP: concat=18.9876, perbatch=18.9114±1.0057
+No improvement for 1 epochs. Best score: 20.1204
+Epoch 23/100, Train VAMP: 19.5720, Val VAMP: concat=19.5510, perbatch=19.2704±1.0238
+No improvement for 2 epochs. Best score: 20.1204
+Epoch 24/100, Train VAMP: 19.6157, Val VAMP: concat=19.1682, perbatch=18.9176±1.0603
+No improvement for 3 epochs. Best score: 20.1204
+Epoch 25/100, Train VAMP: 19.6165, Val VAMP: concat=19.9763, perbatch=19.4789±1.0483
+No improvement for 4 epochs. Best score: 20.1204
+Epoch 26/100, Train VAMP: 19.8301, Val VAMP: concat=20.2531, perbatch=19.5783±1.0533
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.2531
+Epoch 27/100, Train VAMP: 19.7717, Val VAMP: concat=20.0281, perbatch=19.6247±1.0424
+No improvement for 1 epochs. Best score: 20.2531
+Epoch 28/100, Train VAMP: 19.8033, Val VAMP: concat=20.3094, perbatch=19.7515±1.0666
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.3094
+Epoch 29/100, Train VAMP: 19.8725, Val VAMP: concat=19.8221, perbatch=19.3987±1.1000
+No improvement for 1 epochs. Best score: 20.3094
+Epoch 30/100, Train VAMP: 19.8964, Val VAMP: concat=20.3608, perbatch=19.8166±1.0095
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.3608
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_30.pt
+Epoch 31/100, Train VAMP: 19.7994, Val VAMP: concat=20.2389, perbatch=19.6709±0.9885
+No improvement for 1 epochs. Best score: 20.3608
+Epoch 32/100, Train VAMP: 19.8969, Val VAMP: concat=20.3803, perbatch=19.8501±1.0221
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.3803
+Epoch 33/100, Train VAMP: 19.9514, Val VAMP: concat=20.2291, perbatch=19.7493±0.9929
+No improvement for 1 epochs. Best score: 20.3803
+Epoch 34/100, Train VAMP: 19.9791, Val VAMP: concat=20.3298, perbatch=19.6731±0.9975
+No improvement for 2 epochs. Best score: 20.3803
+Epoch 35/100, Train VAMP: 19.9614, Val VAMP: concat=20.1719, perbatch=19.5498±1.1051
+No improvement for 3 epochs. Best score: 20.3803
+Epoch 36/100, Train VAMP: 19.9949, Val VAMP: concat=20.1237, perbatch=19.6418±0.9197
+No improvement for 4 epochs. Best score: 20.3803
+Epoch 37/100, Train VAMP: 20.0606, Val VAMP: concat=20.0609, perbatch=19.6797±0.9032
+No improvement for 5 epochs. Best score: 20.3803
+Epoch 38/100, Train VAMP: 20.1081, Val VAMP: concat=20.5548, perbatch=19.9757±1.0494
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.5548
+Epoch 39/100, Train VAMP: 20.1208, Val VAMP: concat=20.7377, perbatch=19.9644±0.9884
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.7377
+Epoch 40/100, Train VAMP: 20.1400, Val VAMP: concat=20.6413, perbatch=19.9701±1.0410
+No improvement for 1 epochs. Best score: 20.7377
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_40.pt
+Epoch 41/100, Train VAMP: 20.1151, Val VAMP: concat=20.5402, perbatch=19.9402±0.9873
+No improvement for 2 epochs. Best score: 20.7377
+Epoch 42/100, Train VAMP: 20.1240, Val VAMP: concat=20.6531, perbatch=19.9818±0.9801
+No improvement for 3 epochs. Best score: 20.7377
+Epoch 43/100, Train VAMP: 20.1746, Val VAMP: concat=20.7985, perbatch=19.9908±1.1330
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.7985
+Epoch 44/100, Train VAMP: 20.1803, Val VAMP: concat=20.5697, perbatch=20.0266±1.0556
+No improvement for 1 epochs. Best score: 20.7985
+Epoch 45/100, Train VAMP: 20.2951, Val VAMP: concat=20.7537, perbatch=20.1885±0.9916
+No improvement for 2 epochs. Best score: 20.7985
+Epoch 46/100, Train VAMP: 20.2691, Val VAMP: concat=20.6589, perbatch=20.0214±0.9806
+No improvement for 3 epochs. Best score: 20.7985
+Epoch 47/100, Train VAMP: 20.2307, Val VAMP: concat=20.6393, perbatch=20.0919±1.0308
+No improvement for 4 epochs. Best score: 20.7985
+Epoch 48/100, Train VAMP: 20.2871, Val VAMP: concat=20.3965, perbatch=19.6897±1.1313
+No improvement for 5 epochs. Best score: 20.7985
+Epoch 49/100, Train VAMP: 20.3263, Val VAMP: concat=20.8616, perbatch=20.2274±1.0722
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.8616
+Epoch 50/100, Train VAMP: 20.2580, Val VAMP: concat=20.9519, perbatch=20.1455±0.9856
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.9519
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_50.pt
+Epoch 51/100, Train VAMP: 20.4048, Val VAMP: concat=20.8230, perbatch=20.0310±1.0296
+No improvement for 1 epochs. Best score: 20.9519
+Epoch 52/100, Train VAMP: 20.4538, Val VAMP: concat=20.4060, perbatch=19.8163±1.0519
+No improvement for 2 epochs. Best score: 20.9519
+Epoch 53/100, Train VAMP: 20.3912, Val VAMP: concat=20.8501, perbatch=20.0671±1.0770
+No improvement for 3 epochs. Best score: 20.9519
+Epoch 54/100, Train VAMP: 20.5053, Val VAMP: concat=20.9578, perbatch=20.1789±1.0389
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 20.9578
+Epoch 55/100, Train VAMP: 20.3997, Val VAMP: concat=20.8725, perbatch=20.2320±1.0154
+No improvement for 1 epochs. Best score: 20.9578
+Epoch 56/100, Train VAMP: 20.4490, Val VAMP: concat=20.9377, perbatch=20.2094±1.0840
+No improvement for 2 epochs. Best score: 20.9578
+Epoch 57/100, Train VAMP: 20.5138, Val VAMP: concat=21.0056, perbatch=20.2904±0.9877
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 21.0056
+Epoch 58/100, Train VAMP: 20.4087, Val VAMP: concat=21.0599, perbatch=20.3156±1.0254
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 21.0599
+Epoch 59/100, Train VAMP: 20.5352, Val VAMP: concat=20.9007, perbatch=20.2943±1.0171
+No improvement for 1 epochs. Best score: 21.0599
+Epoch 60/100, Train VAMP: 20.5661, Val VAMP: concat=20.9868, perbatch=20.1473±1.1310
+No improvement for 2 epochs. Best score: 21.0599
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/checkpoint_epoch_60.pt
+Epoch 61/100, Train VAMP: 20.5914, Val VAMP: concat=21.1850, perbatch=20.3887±0.9586
+Complete model saved to /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_2.0ns/exp_gtt_20260730_045753/training/lag2.0ns_25states/20260730_072547/models/best_model.pt
+New best model with score: 21.1850
+Epoch 62/100, Train VAMP: 20.5832, Val VAMP: concat=21.0769, perbatch=20.3854±0.9561
+No improvement for 1 epochs. Best score: 21.1850
+Epoch 63/100, Train VAMP: 20.5835, Val VAMP: concat=21.0665, perbatch=20.2761±1.0336
+No improvement for 2 epochs. Best score: 21.1850
+Epoch 64/100, Train VAMP: 20.5861, Val VAMP: concat=20.9928, perbatch=20.3837±1.0178
+No improvement for 3 epochs. Best score: 21.1850
+Epoch 65/100, Train VAMP: 20.6289, Val VAMP: concat=20.9687, perbatch=20.3061±1.0241
+No improvement for 4 epochs. Best score: 21.1850
+Epoch 66/100, Train VAMP: 20.6288, Val VAMP: concat=20.9771, perbatch=20.3499±0.9672
+No improvement for 5 epochs. Best score: 21.1850

@@ -1,0 +1,216 @@
+============================================================
+Villin GIN-encoder run v1 array (task 0)
+============================================================
+Job:        726    Seed: 0    Output: /mnt/hdd/experiments/villin_gin_v1/seed_00
+GPU:        NVIDIA GeForce RTX 5090
+Node:       hugin
+Start:      Wed Jul  1 09:50:38 AM CEST 2026
+Target:     VAMP-2 = 3.78 ± 0.02 (Ghorbani 2022) | SchNet baseline 3.6923
+Encoder:    GIN de-tuned (sum + attention), repro-matched hyperparams
+============================================================
+Using model: gin
+Found 7 trajectory files
+Examples:
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-003.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-004.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-001.dcd
+  ... and 4 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [20.0] (timestep=0.2 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: villin
+Model: gin
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/topol.pdb
+Selected 35 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/topol.pdb
+Selected 35 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/
+Found 7 trajectory files
+Examples:
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-003.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-004.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-001.dcd
+  ... and 4 more
+Creating dataset with 7 trajectory files
+No cache file found at /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/cache/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 7 trajectory files...
+Selected 35 atoms with selection: 'name CA'
+Loaded 7 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 27907]
+Total frames: 627907, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.33 to 8.21 Å
+Created 627807 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/cache/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/cache/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Dataset created with 627807 samples
+Dataset statistics saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039
+Topology PDB (training): /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [20.0]
+  N states: [4]
+--- Experiment 1/1 ---
+Lag time: 20.0 ns, N states: 4
+Found 7 trajectory files
+Examples:
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-003.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-004.dcd
+  - /mnt/hdd/data/villin/DESRES-Trajectory_2F4K-0-c-alpha/2F4K-0-c-alpha/2F4K-0-c-alpha-001.dcd
+  ... and 4 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 7 trajectory files...
+Selected 35 atoms with selection: 'name CA'
+Total frames: 627907, Atoms per frame: 35
+Calculating distance range from data samples...
+Distance range: 0.33 to 8.21 Å
+Created 627807 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/preparation/prep_20260701_095039/vampnet_data_cc3017ab_lag20.0_nn10_str1_cont.pkl
+Dataset created with 627807 samples
+Training set: 439465 samples
+Testing set: 188342 samples
+Auto-inferred node_dim=35 from dataset (was 16)
+Weight Initialization Report (xavier_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 7,204
+----------------------------------------
+Total params: 7,204
+Total tensors: 9
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 14/68 parameters that may not be properly initialized.
+Created VAMPNet model with 17868 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([35, 35]), size=1225
+  ✓ encoder.interactions.0.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.0.gin_conv.attention_vector: shape=torch.Size([35, 1]), size=35
+  ✓ encoder.interactions.0.gin_conv.edge_projection.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.0.gin_conv.edge_projection.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([35, 35]), size=1225
+  ✓ encoder.interactions.1.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.1.gin_conv.attention_vector: shape=torch.Size([35, 1]), size=35
+  ✓ encoder.interactions.1.gin_conv.edge_projection.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.1.gin_conv.edge_projection.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([35, 35]), size=1225
+  ✓ encoder.interactions.2.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.2.gin_conv.attention_vector: shape=torch.Size([35, 1]), size=35
+  ✓ encoder.interactions.2.gin_conv.edge_projection.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.2.gin_conv.edge_projection.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([35, 35]), size=1225
+  ✓ encoder.interactions.3.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.3.gin_conv.attention_vector: shape=torch.Size([35, 1]), size=35
+  ✓ encoder.interactions.3.gin_conv.edge_projection.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.3.gin_conv.edge_projection.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.3.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.3.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.3.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([35, 16]), size=560
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([35]), size=35
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 35]), size=560
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([4, 16]), size=64
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([4]), size=4
+Total parameters in optimizer: 17,868 in 68 tensors
+Total model parameters: 17,868
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 2.7348, Val VAMP: concat=2.9894, perbatch=2.9890±0.0851
+Complete model saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/training/lag20.0ns_4states/20260701_095057/models/best_model.pt
+New best model with score: 2.9894
+Epoch 2/100, Train VAMP: 3.1856, Val VAMP: concat=3.2129, perbatch=3.2154±0.0759
+Complete model saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/training/lag20.0ns_4states/20260701_095057/models/best_model.pt
+New best model with score: 3.2129
+Epoch 3/100, Train VAMP: 3.2794, Val VAMP: concat=3.2821, perbatch=3.2832±0.0666
+Complete model saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/training/lag20.0ns_4states/20260701_095057/models/best_model.pt
+New best model with score: 3.2821
+Epoch 4/100, Train VAMP: 3.3151, Val VAMP: concat=3.1871, perbatch=3.1873±0.1246
+No improvement for 1 epochs. Best score: 3.2821
+Epoch 5/100, Train VAMP: 3.2900, Val VAMP: concat=3.0604, perbatch=3.0236±0.2717
+No improvement for 2 epochs. Best score: 3.2821
+Epoch 6/100, Train VAMP: 3.3530, Val VAMP: concat=3.3823, perbatch=3.3734±0.2594
+Complete model saved to /mnt/hdd/experiments/villin_gin_v1/seed_00/exp_villin_20260701_095039/training/lag20.0ns_4states/20260701_095057/models/best_model.pt
+New best model with score: 3.3823

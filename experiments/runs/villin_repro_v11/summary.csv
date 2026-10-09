@@ -1,0 +1,11 @@
+seed,best_epoch,best_concat,perbatch_mean,perbatch_std,final_epoch,completed,log_path
+0,68,3.729300,3.671000,0.215100,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_00/exp_villin_20260507_112909/logs/log_20260507_112909.txt
+1,55,3.757500,3.744100,0.170900,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_01/exp_villin_20260508_114241/logs/log_20260508_114241.txt
+2,100,3.695800,3.657400,0.247500,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_02/exp_villin_20260508_153548/logs/log_20260508_153548.txt
+3,72,3.683700,3.651200,0.241900,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_03/exp_villin_20260508_192926/logs/log_20260508_192926.txt
+4,100,3.667500,3.627700,0.245200,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_04/exp_villin_20260508_232448/logs/log_20260508_232448.txt
+5,38,3.757700,3.748200,0.151300,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_05/exp_villin_20260509_031908/logs/log_20260509_031908.txt
+6,86,3.688700,3.654700,0.236300,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_06/exp_villin_20260509_071418/logs/log_20260509_071418.txt
+7,49,3.770200,3.746600,0.183200,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_07/exp_villin_20260509_110931/logs/log_20260509_110931.txt
+8,87,3.722100,3.695200,0.201600,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_08/exp_villin_20260509_150459/logs/log_20260509_150459.txt
+9,46,3.740300,3.726900,0.179100,100,1,/mnt/hdd/experiments/villin_repro_v11/seed_09/exp_villin_20260509_190058/logs/log_20260509_190058.txt

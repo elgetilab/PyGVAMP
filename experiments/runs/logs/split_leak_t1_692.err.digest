@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/vi/PycharmProjects/PyGVAMP/cluster_scripts/split_leak_test1_eval.py", line 118, in <module>
+    main()
+  File "/home/vi/PycharmProjects/PyGVAMP/cluster_scripts/split_leak_test1_eval.py", line 93, in main
+    f"n_frames={dataset.n_frames}, lag_frames={dataset.lag_frames}")
+                                               ^^^^^^^^^^^^^^^^^^
+AttributeError: 'VAMPNetDataset' object has no attribute 'lag_frames'. Did you mean: 'n_frames'?

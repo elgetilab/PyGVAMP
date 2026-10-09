@@ -1,0 +1,1024 @@
+============================================================
+NTL9 reproduction v2 array (task 5)
+============================================================
+Job:        566    Seed: 5    Output: /mnt/hdd/experiments/ntl9_repro_v2/seed_05
+GPU:        NVIDIA GeForce RTX 5090
+Node:       hugin
+Start:      Thu May 21 06:38:07 PM CEST 2026
+Target:     VAMP-2 = 4.59 ± 0.09 (Ghorbani 2022, Table S1)
+Arch:       v11 (corrected attention + dual-scoring eval, vectorized)
+Data:       NTL9-{0,1,2,3} combined (1.11 ms, 149 DCDs, 39 Cα atoms)
+Resources:  shard:2 (~8 GB VRAM), cpus=4, mem=32G  (v1 OOM fix)
+============================================================
+Using model: schnet
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Using user-specified timestep: 0.2 ns (200 ps)
+Lag time validation passed: [200.0] (timestep=0.2 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: ntl9
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/ntl9/topol.pdb
+Selected 39 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/ntl9/
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset with 149 trajectory files
+No cache file found at /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Processing 149 trajectory files...
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdpSelected 39 atoms with selection: 'name CA'
+Loaded 149 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 60828, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 65777, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 45226, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 83599]
+Total frames: 14755430, Atoms per frame: 39
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.71 Å
+Created 14754430 time-lagged pairs with lag time 200.0 and 1000 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/cache/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset created with 14754430 samples
+Dataset statistics saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810
+Topology PDB (training): /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [200.0]
+  N states: [5]
+--- Experiment 1/1 ---
+Lag time: 200.0 ns, N states: 5
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 200.000 ns (200000.0 ps, 1000 frames)
+Processing 149 trajectory files...
+lugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdplugin) CHARMM format DCD file (also NAMD 2.1 and later)
+dcdplugin) detected standard 32-bit DCD file of native endianness
+dcdpluSelected 39 atoms with selection: 'name CA'
+Total frames: 14755430, Atoms per frame: 39
+Calculating distance range from data samples...
+Distance range: 0.32 to 8.71 Å
+Created 14754430 time-lagged pairs with lag time 200.0 and 1000 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Dataset created with 14754430 samples
+Training set: 10328101 samples
+Testing set: 4426329 samples
+Auto-inferred node_dim=39 from dataset (was 16)
+Weight Initialization Report (xavier_normal):
+----------------------------------------
+BatchNorm parameters: 10
+Linear parameters: 6,164
+----------------------------------------
+Total params: 6,164
+Total tensors: 5
+----------------------------------------
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.interactions.3.output_layer.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([16])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([16])
+WARNING: Found 10/56 parameters that may not be properly initialized.
+Created VAMPNet model with 16349 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.0.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.0.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.1.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.1.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.2.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.2.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.initial_dense.weight: shape=torch.Size([39, 39]), size=1521
+  ✓ encoder.interactions.3.cfconv.attention_vector: shape=torch.Size([39, 1]), size=39
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.3.cfconv.filter_network.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.3.output_layer.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.interactions.3.output_layer.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.lins.1.weight: shape=torch.Size([39, 16]), size=624
+  ✓ encoder.interactions.3.output_layer.lins.1.bias: shape=torch.Size([39]), size=39
+  ✓ encoder.interactions.3.output_layer.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.interactions.3.output_layer.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([16, 39]), size=624
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([16, 16]), size=256
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([16]), size=16
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([16]), size=16
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([5, 16]), size=80
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([5]), size=5
+Total parameters in optimizer: 16,349 in 56 tensors
+Total model parameters: 16,349
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 3.9702, Val VAMP: concat=4.0923, perbatch=4.0525±0.3551
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.0923
+Epoch 2/100, Train VAMP: 4.0916, Val VAMP: concat=4.1612, perbatch=4.1191±0.3626
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.1612
+Epoch 3/100, Train VAMP: 4.1223, Val VAMP: concat=4.1909, perbatch=4.1481±0.3562
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.1909
+Epoch 4/100, Train VAMP: 4.1387, Val VAMP: concat=4.1976, perbatch=4.1595±0.3480
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.1976
+Epoch 5/100, Train VAMP: 4.1563, Val VAMP: concat=4.2144, perbatch=4.1610±0.3617
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2144
+Epoch 6/100, Train VAMP: 4.1685, Val VAMP: concat=4.2291, perbatch=4.1761±0.3446
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2291
+Epoch 7/100, Train VAMP: 4.1748, Val VAMP: concat=4.2164, perbatch=4.1762±0.3465
+No improvement for 1 epochs. Best score: 4.2291
+Epoch 8/100, Train VAMP: 4.1836, Val VAMP: concat=4.2444, perbatch=4.1875±0.3434
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2444
+Epoch 9/100, Train VAMP: 4.1921, Val VAMP: concat=4.2453, perbatch=4.1917±0.3382
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2453
+Epoch 10/100, Train VAMP: 4.1938, Val VAMP: concat=4.2400, perbatch=4.1981±0.3240
+No improvement for 1 epochs. Best score: 4.2453
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_10.pt
+Epoch 11/100, Train VAMP: 4.2043, Val VAMP: concat=4.2245, perbatch=4.1817±0.3453
+No improvement for 2 epochs. Best score: 4.2453
+Epoch 12/100, Train VAMP: 4.2113, Val VAMP: concat=4.2454, perbatch=4.1917±0.3342
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2454
+Epoch 13/100, Train VAMP: 4.2128, Val VAMP: concat=4.2584, perbatch=4.2041±0.3175
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2584
+Epoch 14/100, Train VAMP: 4.2200, Val VAMP: concat=4.2495, perbatch=4.2054±0.3257
+No improvement for 1 epochs. Best score: 4.2584
+Epoch 15/100, Train VAMP: 4.2205, Val VAMP: concat=4.2768, perbatch=4.2286±0.3152
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2768
+Epoch 16/100, Train VAMP: 4.2236, Val VAMP: concat=4.2544, perbatch=4.2088±0.3296
+No improvement for 1 epochs. Best score: 4.2768
+Epoch 17/100, Train VAMP: 4.2259, Val VAMP: concat=4.2820, perbatch=4.2206±0.3305
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2820
+Epoch 18/100, Train VAMP: 4.2328, Val VAMP: concat=4.2884, perbatch=4.2325±0.3290
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2884
+Epoch 19/100, Train VAMP: 4.2353, Val VAMP: concat=4.2621, perbatch=4.2226±0.3211
+No improvement for 1 epochs. Best score: 4.2884
+Epoch 20/100, Train VAMP: 4.2359, Val VAMP: concat=4.2797, perbatch=4.2324±0.3301
+No improvement for 2 epochs. Best score: 4.2884
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_20.pt
+Epoch 21/100, Train VAMP: 4.2426, Val VAMP: concat=4.2835, perbatch=4.2201±0.3319
+No improvement for 3 epochs. Best score: 4.2884
+Epoch 22/100, Train VAMP: 4.2374, Val VAMP: concat=4.2623, perbatch=4.2243±0.3158
+No improvement for 4 epochs. Best score: 4.2884
+Epoch 23/100, Train VAMP: 4.2421, Val VAMP: concat=4.2806, perbatch=4.2357±0.3302
+No improvement for 5 epochs. Best score: 4.2884
+Epoch 24/100, Train VAMP: 4.2425, Val VAMP: concat=4.2839, perbatch=4.2392±0.3233
+No improvement for 6 epochs. Best score: 4.2884
+Epoch 25/100, Train VAMP: 4.2460, Val VAMP: concat=4.2790, perbatch=4.2294±0.3290
+No improvement for 7 epochs. Best score: 4.2884
+Epoch 26/100, Train VAMP: 4.2458, Val VAMP: concat=4.2978, perbatch=4.2421±0.3256
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.2978
+Epoch 27/100, Train VAMP: 4.2498, Val VAMP: concat=4.2856, perbatch=4.2380±0.3290
+No improvement for 1 epochs. Best score: 4.2978
+Epoch 28/100, Train VAMP: 4.2528, Val VAMP: concat=4.3003, perbatch=4.2500±0.3103
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3003
+Epoch 29/100, Train VAMP: 4.2513, Val VAMP: concat=4.2967, perbatch=4.2424±0.3219
+No improvement for 1 epochs. Best score: 4.3003
+Epoch 30/100, Train VAMP: 4.2554, Val VAMP: concat=4.2922, perbatch=4.2393±0.3287
+No improvement for 2 epochs. Best score: 4.3003
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_30.pt
+Epoch 31/100, Train VAMP: 4.2556, Val VAMP: concat=4.2876, perbatch=4.2396±0.3169
+No improvement for 3 epochs. Best score: 4.3003
+Epoch 32/100, Train VAMP: 4.2579, Val VAMP: concat=4.3009, perbatch=4.2485±0.3166
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3009
+Epoch 33/100, Train VAMP: 4.2612, Val VAMP: concat=4.2962, perbatch=4.2528±0.3149
+No improvement for 1 epochs. Best score: 4.3009
+Epoch 34/100, Train VAMP: 4.2615, Val VAMP: concat=4.3026, perbatch=4.2506±0.3212
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3026
+Epoch 35/100, Train VAMP: 4.2582, Val VAMP: concat=4.3013, perbatch=4.2548±0.3220
+No improvement for 1 epochs. Best score: 4.3026
+Epoch 36/100, Train VAMP: 4.2632, Val VAMP: concat=4.3083, perbatch=4.2490±0.3203
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3083
+Epoch 37/100, Train VAMP: 4.2625, Val VAMP: concat=4.2961, perbatch=4.2560±0.3118
+No improvement for 1 epochs. Best score: 4.3083
+Epoch 38/100, Train VAMP: 4.2647, Val VAMP: concat=4.2986, perbatch=4.2550±0.3176
+No improvement for 2 epochs. Best score: 4.3083
+Epoch 39/100, Train VAMP: 4.2672, Val VAMP: concat=4.3091, perbatch=4.2617±0.3104
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3091
+Epoch 40/100, Train VAMP: 4.2639, Val VAMP: concat=4.2903, perbatch=4.2506±0.3120
+No improvement for 1 epochs. Best score: 4.3091
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_40.pt
+Epoch 41/100, Train VAMP: 4.2674, Val VAMP: concat=4.3107, perbatch=4.2617±0.3180
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3107
+Epoch 42/100, Train VAMP: 4.2643, Val VAMP: concat=4.2998, perbatch=4.2533±0.3157
+No improvement for 1 epochs. Best score: 4.3107
+Epoch 43/100, Train VAMP: 4.2696, Val VAMP: concat=4.3048, perbatch=4.2513±0.3179
+No improvement for 2 epochs. Best score: 4.3107
+Epoch 44/100, Train VAMP: 4.2701, Val VAMP: concat=4.2891, perbatch=4.2488±0.3017
+No improvement for 3 epochs. Best score: 4.3107
+Epoch 45/100, Train VAMP: 4.2725, Val VAMP: concat=4.3088, perbatch=4.2584±0.3139
+No improvement for 4 epochs. Best score: 4.3107
+Epoch 46/100, Train VAMP: 4.2692, Val VAMP: concat=4.3096, perbatch=4.2576±0.3192
+No improvement for 5 epochs. Best score: 4.3107
+Epoch 47/100, Train VAMP: 4.2717, Val VAMP: concat=4.3120, perbatch=4.2634±0.3126
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3120
+Epoch 48/100, Train VAMP: 4.2722, Val VAMP: concat=4.3096, perbatch=4.2631±0.3165
+No improvement for 1 epochs. Best score: 4.3120
+Epoch 49/100, Train VAMP: 4.2724, Val VAMP: concat=4.3178, perbatch=4.2665±0.3036
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3178
+Epoch 50/100, Train VAMP: 4.2767, Val VAMP: concat=4.3067, perbatch=4.2566±0.3177
+No improvement for 1 epochs. Best score: 4.3178
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_50.pt
+Epoch 51/100, Train VAMP: 4.2755, Val VAMP: concat=4.3036, perbatch=4.2636±0.3094
+No improvement for 2 epochs. Best score: 4.3178
+Epoch 52/100, Train VAMP: 4.2782, Val VAMP: concat=4.2972, perbatch=4.2581±0.3046
+No improvement for 3 epochs. Best score: 4.3178
+Epoch 53/100, Train VAMP: 4.2778, Val VAMP: concat=4.3066, perbatch=4.2620±0.3096
+No improvement for 4 epochs. Best score: 4.3178
+Epoch 54/100, Train VAMP: 4.2789, Val VAMP: concat=4.3187, perbatch=4.2660±0.3284
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3187
+Epoch 55/100, Train VAMP: 4.2784, Val VAMP: concat=4.3120, perbatch=4.2689±0.3015
+No improvement for 1 epochs. Best score: 4.3187
+Epoch 56/100, Train VAMP: 4.2766, Val VAMP: concat=4.3185, perbatch=4.2618±0.3209
+No improvement for 2 epochs. Best score: 4.3187
+Epoch 57/100, Train VAMP: 4.2803, Val VAMP: concat=4.3149, perbatch=4.2622±0.3231
+No improvement for 3 epochs. Best score: 4.3187
+Epoch 58/100, Train VAMP: 4.2823, Val VAMP: concat=4.3110, perbatch=4.2614±0.3182
+No improvement for 4 epochs. Best score: 4.3187
+Epoch 59/100, Train VAMP: 4.2838, Val VAMP: concat=4.3263, perbatch=4.2727±0.3133
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/best_model.pt
+New best model with score: 4.3263
+Epoch 60/100, Train VAMP: 4.2840, Val VAMP: concat=4.3150, perbatch=4.2642±0.3113
+No improvement for 1 epochs. Best score: 4.3263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_60.pt
+Epoch 61/100, Train VAMP: 4.2858, Val VAMP: concat=4.2954, perbatch=4.2495±0.3183
+No improvement for 2 epochs. Best score: 4.3263
+Epoch 62/100, Train VAMP: 4.2800, Val VAMP: concat=4.3145, perbatch=4.2715±0.3097
+No improvement for 3 epochs. Best score: 4.3263
+Epoch 63/100, Train VAMP: 4.2863, Val VAMP: concat=4.3101, perbatch=4.2633±0.3207
+No improvement for 4 epochs. Best score: 4.3263
+Epoch 64/100, Train VAMP: 4.2830, Val VAMP: concat=4.2864, perbatch=4.2435±0.3205
+No improvement for 5 epochs. Best score: 4.3263
+Epoch 65/100, Train VAMP: 4.2836, Val VAMP: concat=4.3198, perbatch=4.2675±0.3131
+No improvement for 6 epochs. Best score: 4.3263
+Epoch 66/100, Train VAMP: 4.2828, Val VAMP: concat=4.3056, perbatch=4.2626±0.3071
+No improvement for 7 epochs. Best score: 4.3263
+Epoch 67/100, Train VAMP: 4.2856, Val VAMP: concat=4.3188, perbatch=4.2743±0.2999
+No improvement for 8 epochs. Best score: 4.3263
+Epoch 68/100, Train VAMP: 4.2827, Val VAMP: concat=4.3057, perbatch=4.2556±0.3148
+No improvement for 9 epochs. Best score: 4.3263
+Epoch 69/100, Train VAMP: 4.2860, Val VAMP: concat=4.3146, perbatch=4.2648±0.3154
+No improvement for 10 epochs. Best score: 4.3263
+Epoch 70/100, Train VAMP: 4.2874, Val VAMP: concat=4.3182, perbatch=4.2662±0.3201
+No improvement for 11 epochs. Best score: 4.3263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_70.pt
+Epoch 71/100, Train VAMP: 4.2864, Val VAMP: concat=4.3082, perbatch=4.2596±0.3093
+No improvement for 12 epochs. Best score: 4.3263
+Epoch 72/100, Train VAMP: 4.2889, Val VAMP: concat=4.3214, perbatch=4.2715±0.3134
+No improvement for 13 epochs. Best score: 4.3263
+Epoch 73/100, Train VAMP: 4.2896, Val VAMP: concat=4.3186, perbatch=4.2602±0.3202
+No improvement for 14 epochs. Best score: 4.3263
+Epoch 74/100, Train VAMP: 4.2850, Val VAMP: concat=4.3173, perbatch=4.2631±0.3166
+No improvement for 15 epochs. Best score: 4.3263
+Epoch 75/100, Train VAMP: 4.2887, Val VAMP: concat=4.3228, perbatch=4.2700±0.3213
+No improvement for 16 epochs. Best score: 4.3263
+Epoch 76/100, Train VAMP: 4.2907, Val VAMP: concat=4.3160, perbatch=4.2636±0.3133
+No improvement for 17 epochs. Best score: 4.3263
+Epoch 77/100, Train VAMP: 4.2915, Val VAMP: concat=4.3169, perbatch=4.2691±0.3169
+No improvement for 18 epochs. Best score: 4.3263
+Epoch 78/100, Train VAMP: 4.2871, Val VAMP: concat=4.3192, perbatch=4.2712±0.3108
+No improvement for 19 epochs. Best score: 4.3263
+Epoch 79/100, Train VAMP: 4.2897, Val VAMP: concat=4.3217, perbatch=4.2682±0.3130
+No improvement for 20 epochs. Best score: 4.3263
+Epoch 80/100, Train VAMP: 4.2896, Val VAMP: concat=4.3108, perbatch=4.2677±0.3124
+No improvement for 21 epochs. Best score: 4.3263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_80.pt
+Epoch 81/100, Train VAMP: 4.2898, Val VAMP: concat=4.3223, perbatch=4.2736±0.3107
+No improvement for 22 epochs. Best score: 4.3263
+Epoch 82/100, Train VAMP: 4.2921, Val VAMP: concat=4.3146, perbatch=4.2692±0.3089
+No improvement for 23 epochs. Best score: 4.3263
+Epoch 83/100, Train VAMP: 4.2954, Val VAMP: concat=4.3222, perbatch=4.2682±0.3144
+No improvement for 24 epochs. Best score: 4.3263
+Epoch 84/100, Train VAMP: 4.2940, Val VAMP: concat=4.3109, perbatch=4.2665±0.3105
+No improvement for 25 epochs. Best score: 4.3263
+Epoch 85/100, Train VAMP: 4.2948, Val VAMP: concat=4.3128, perbatch=4.2642±0.3160
+No improvement for 26 epochs. Best score: 4.3263
+Epoch 86/100, Train VAMP: 4.2941, Val VAMP: concat=4.3234, perbatch=4.2700±0.3202
+No improvement for 27 epochs. Best score: 4.3263
+Epoch 87/100, Train VAMP: 4.2931, Val VAMP: concat=4.3055, perbatch=4.2539±0.3220
+No improvement for 28 epochs. Best score: 4.3263
+Epoch 88/100, Train VAMP: 4.2928, Val VAMP: concat=4.3096, perbatch=4.2596±0.3126
+No improvement for 29 epochs. Best score: 4.3263
+Epoch 89/100, Train VAMP: 4.2937, Val VAMP: concat=4.3261, perbatch=4.2785±0.3108
+No improvement for 30 epochs. Best score: 4.3263
+Epoch 90/100, Train VAMP: 4.2969, Val VAMP: concat=4.3076, perbatch=4.2634±0.3167
+No improvement for 31 epochs. Best score: 4.3263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_90.pt
+Epoch 91/100, Train VAMP: 4.2945, Val VAMP: concat=4.3204, perbatch=4.2715±0.3159
+No improvement for 32 epochs. Best score: 4.3263
+Epoch 92/100, Train VAMP: 4.2975, Val VAMP: concat=4.3210, perbatch=4.2750±0.3079
+No improvement for 33 epochs. Best score: 4.3263
+Epoch 93/100, Train VAMP: 4.2943, Val VAMP: concat=4.3245, perbatch=4.2717±0.3087
+No improvement for 34 epochs. Best score: 4.3263
+Epoch 94/100, Train VAMP: 4.2956, Val VAMP: concat=4.3186, perbatch=4.2705±0.3126
+No improvement for 35 epochs. Best score: 4.3263
+Epoch 95/100, Train VAMP: 4.2937, Val VAMP: concat=4.3230, perbatch=4.2722±0.3203
+No improvement for 36 epochs. Best score: 4.3263
+Epoch 96/100, Train VAMP: 4.2963, Val VAMP: concat=4.3110, perbatch=4.2654±0.3185
+No improvement for 37 epochs. Best score: 4.3263
+Epoch 97/100, Train VAMP: 4.2983, Val VAMP: concat=4.3237, perbatch=4.2760±0.3128
+No improvement for 38 epochs. Best score: 4.3263
+Epoch 98/100, Train VAMP: 4.2975, Val VAMP: concat=4.3256, perbatch=4.2791±0.3072
+No improvement for 39 epochs. Best score: 4.3263
+Epoch 99/100, Train VAMP: 4.2980, Val VAMP: concat=4.3178, perbatch=4.2726±0.3080
+No improvement for 40 epochs. Best score: 4.3263
+Epoch 100/100, Train VAMP: 4.2981, Val VAMP: concat=4.3189, perbatch=4.2646±0.3152
+No improvement for 41 epochs. Best score: 4.3263
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/checkpoint_epoch_100.pt
+Complete model saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/models/final_model.pt
+Loaded best model with score: 4.3263
+Figure saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655/plots/vamp_scores.png
+Training completed successfully. Results saved to /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/training/lag200.0ns_5states/20260521_184655
+Found 149 trajectory files
+Examples:
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-018.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-010.dcd
+  - /mnt/hdd/data/ntl9/DESRES-Trajectory_NTL9-3-c-alpha/NTL9-3-c-alpha/NTL9-3-c-alpha-001.dcd
+  ... and 146 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/ntl9_repro_v2/seed_05/exp_ntl9_20260521_183810/preparation/prep_20260521_183810/vampnet_data_e36088ee_lag200.0_nn10_str1_cont.pkl
+Successfully loaded dataset from cache: 14755430 frames, 39 atoms
+Dataset created with 14754430 samples
+Training set: 11803544 samples
+Testing set: 2950886 samples
+============================================================
+Finished:   Mon May 25 04:35:21 AM CEST 2026    Exit: 137
+============================================================

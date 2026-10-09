@@ -1,0 +1,21 @@
+PYTHONPATH override active: /home/vi/PycharmProjects/PyGVAMP
+============================================================
+GTT (WW domain FiP35) lag sweep — task 11
+Seed: 1   Lag: 5.0 ns   (ladder: 1.0 2.0 5.0 10.0 20.0 50.0 100.0 200.0 500.0)
+Out:  /mnt/hdd/experiments/gtt_lagsweep_v1/seed_01/lag_5.0ns
+Data: 58 chunks x 20 us, 35 CA, 200 ps/frame, ~5.6M frames
+State discovery: ON (per-lag, so k* may vary with tau)
+Code: 6392da1
+Start: Thu Jul 30 07:26:26 AM CEST 2026   Node: hugin
+============================================================
+Using model: schnet
+Found 58 trajectory files
+Examples:
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-016.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-017.dcd
+  - /mnt/hdd/data/gtt/DESRES-Trajectory_GTT-1-c-alpha/GTT-1-c-alpha/GTT-1-c-alpha-014.dcd
+  ... and 55 more
+Using user-specified timestep: 0.2 ns (200 ps)
+============================================================
+Finished: Thu Jul 30 07:26:30 AM CEST 2026   Exit: 1
+============================================================

@@ -1,0 +1,10 @@
+{
+  "exp_name": "lag50.0ns_3states",
+  "model_path": "/mnt/hdd/experiments/a3d_encoder_v1/painn/exp_a3d_painn_s00/training/lag50.0ns_3states/20260823_210401/models/best_model.pt",
+  "completed_at": "2026-08-23T22:16:10.774371",
+  "diagnostic": {
+    "recommendation": "retrain",
+    "effective_n_states": 2,
+    "original_n_states": 3
+  }
+}

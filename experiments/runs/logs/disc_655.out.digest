@@ -1,0 +1,288 @@
+============================================================
+PyGVAMP — AT1R (d125d) State Discovery
+============================================================
+Trajectories: /mnt/hdd/data/julia_ATR  (pattern: d125d/cutted_dt_1ns.xtc, recursive)
+Topology:     /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selection:    chainid 0 and name CA
+Preset:       large_schnet
+Output:       /mnt/hdd/experiments/atr_d/discovery
+GPU:          NVIDIA GeForce RTX 5090
+Node:         hugin
+Start:        Tue Jun 16 01:17:48 PM CEST 2026
+============================================================
+Loading preset: large_schnet
+Found 40 trajectory files
+Examples:
+  - /mnt/hdd/data/julia_ATR/gmm5/r3/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r1/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r2/d125d/cutted_dt_1ns.xtc
+  ... and 37 more
+Lag time validation passed: [1.0] (timestep=1.0 ns, stride=1)
+Experiment directory created: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749
+============================================================
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: atr_d
+Model: schnet
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selected 319 atoms with selection: 'chainid 0 and name CA'
+Topology saved as PDB: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/julia_ATR/gmm0/r1/d125d/prot_chains.pdb
+Selected 5434 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/julia_ATR
+Found 40 trajectory files
+Examples:
+  - /mnt/hdd/data/julia_ATR/gmm5/r3/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r1/d125d/cutted_dt_1ns.xtc
+  - /mnt/hdd/data/julia_ATR/gmm5/r2/d125d/cutted_dt_1ns.xtc
+  ... and 37 more
+Creating dataset with 40 trajectory files
+No cache file found at /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/cache/vampnet_data_0dd19796_lag1.0_nn20_str1_cont.pkl
+Trajectory timestep: 1000.000 ps
+Effective timestep with stride 1: 1000.000 ps
+Lag time: 1.000 ns (1000.0 ps, 1 frames)
+Processing 40 trajectory files...
+Selected 319 atoms with selection: 'chainid 0 and name CA'
+Loaded 40 trajectories with frames: [501, 501, 501, 502, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501, 502, 501, 501, 501, 501, 501, 501, 501, 501, 501, 501]
+Total frames: 20042, Atoms per frame: 319
+Calculating distance range from data samples...
+Distance range: 0.33 to 10.69 Å
+Created 20041 time-lagged pairs with lag time 1.0 and 1 lag frames. 1 lag frame == 1.0 ns
+Saving dataset to cache: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/cache/vampnet_data_0dd19796_lag1.0_nn20_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/cache/vampnet_data_0dd19796_lag1.0_nn20_str1_cont.pkl
+Dataset created with 20041 samples
+=== STATE DISCOVERY ===  [repeated 2 times]
+--- Training Graph2Vec ---
+Training on 20042 graphs
+Extracting subgraphs and building vocabulary...
+  Uniform min_count=10 for all degrees
+Building vocabulary from dataset...
+Vocabulary per degree: d0: 2/2 (min_count=10), d1: 138/148 (min_count=10), d2: 0/6386601 (min_count=10), d3: 0/6387383 (min_count=10)
+Created vocabulary with 140 subgraphs
+Pre-extracting and caching subgraphs...
+Converting graphs to Doc2Vec documents...
+Created 20042 documents for Doc2Vec training
+Training Doc2Vec model...
+Starting Doc2Vec training with 50 epochs...
+Vocabulary size: 140
+Vector size: 512
+Loss computation: Enabled
+Epoch 1 started...
+Epoch 1 completed in 1.79s (Total: 2.19s, LR: 0.025000, Loss: 0.000000)
+Epoch 2 started...
+Epoch 2 completed in 3.51s (Total: 5.70s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 3 started...
+Epoch 3 completed in 3.77s (Total: 9.47s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 4 started...
+Epoch 4 completed in 4.10s (Total: 13.57s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 5 started...
+Epoch 5 completed in 4.06s (Total: 17.63s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 6 started...
+Epoch 6 completed in 4.20s (Total: 21.83s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 7 started...
+Epoch 7 completed in 3.76s (Total: 25.59s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 8 started...
+Epoch 8 completed in 4.17s (Total: 29.76s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 9 started...
+Epoch 9 completed in 4.19s (Total: 33.95s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 10 started...
+Epoch 10 completed in 4.07s (Total: 38.01s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 11 started...
+Epoch 11 completed in 4.21s (Total: 42.22s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 12 started...
+Epoch 12 completed in 4.15s (Total: 46.37s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 13 started...
+Epoch 13 completed in 4.23s (Total: 50.60s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 14 started...
+Epoch 14 completed in 4.18s (Total: 54.78s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 15 started...
+Epoch 15 completed in 4.13s (Total: 58.91s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 16 started...
+Epoch 16 completed in 4.26s (Total: 63.17s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 17 started...
+Epoch 17 completed in 4.14s (Total: 67.31s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 18 started...
+Epoch 18 completed in 4.21s (Total: 71.51s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 19 started...
+Epoch 19 completed in 4.05s (Total: 75.56s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 20 started...
+Epoch 20 completed in 4.25s (Total: 79.81s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 21 started...
+Epoch 21 completed in 4.28s (Total: 84.09s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 22 started...
+Epoch 22 completed in 4.24s (Total: 88.33s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 23 started...
+Epoch 23 completed in 4.26s (Total: 92.59s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 24 started...
+Epoch 24 completed in 4.16s (Total: 96.75s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 25 started...
+Epoch 25 completed in 4.17s (Total: 100.92s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 26 started...
+Epoch 26 completed in 4.19s (Total: 105.12s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 27 started...
+Epoch 27 completed in 4.12s (Total: 109.23s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 28 started...
+Epoch 28 completed in 4.23s (Total: 113.47s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 29 started...
+Epoch 29 completed in 4.24s (Total: 117.71s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 30 started...
+Epoch 30 completed in 4.19s (Total: 121.90s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 31 started...
+Epoch 31 completed in 4.24s (Total: 126.14s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 32 started...
+Epoch 32 completed in 4.26s (Total: 130.40s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 33 started...
+Epoch 33 completed in 4.31s (Total: 134.71s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 34 started...
+Epoch 34 completed in 4.23s (Total: 138.94s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 35 started...
+Epoch 35 completed in 4.07s (Total: 143.01s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 36 started...
+Epoch 36 completed in 4.20s (Total: 147.21s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 37 started...
+Epoch 37 completed in 4.30s (Total: 151.51s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 38 started...
+Epoch 38 completed in 4.24s (Total: 155.75s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 39 started...
+Epoch 39 completed in 4.22s (Total: 159.97s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 40 started...
+Epoch 40 completed in 4.24s (Total: 164.21s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 41 started...
+Epoch 41 completed in 4.22s (Total: 168.43s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 42 started...
+Epoch 42 completed in 4.29s (Total: 172.72s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 43 started...
+Epoch 43 completed in 4.28s (Total: 177.00s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 44 started...
+Epoch 44 completed in 4.24s (Total: 181.24s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 45 started...
+Epoch 45 completed in 4.19s (Total: 185.43s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 46 started...
+Epoch 46 completed in 4.18s (Total: 189.60s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 47 started...
+Epoch 47 completed in 4.28s (Total: 193.88s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 48 started...
+Epoch 48 completed in 4.25s (Total: 198.13s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 49 started...
+Epoch 49 completed in 4.26s (Total: 202.40s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Epoch 50 started...
+Epoch 50 completed in 4.21s (Total: 206.60s, LR: 0.025000, Loss: 0.000000 (Δ: +0.000000))
+Doc2Vec training completed in 206.60s
+Loss progression: 0.000000 → 0.000000
+Total loss reduction: 0.000000
+============================================================
+GRAPH2VEC MODEL QUALITY ASSESSMENT
+============================================================
+1. VOCABULARY QUALITY:
+------------------------------
+Subgraph vocabulary size: 140
+Doc2Vec vocabulary size: 140
+Vocabulary utilization: 100.0%
+Most frequent subgraph appears 6373356 times
+Least frequent subgraph appears 10 times
+Average subgraph frequency: 91333.96
+Subgraph frequency std: 544126.87
+2. EMBEDDING QUALITY:
+------------------------------
+Embedding dimension: 512
+Number of graph embeddings: 20042
+Embedding mean: 0.001182
+Embedding std: 0.122946
+Embedding range: [-0.987057, 1.080407]
+Average pairwise cosine similarity: 0.163272
+Similarity std: 0.145374
+3. SIMILARITY PATTERNS:
+------------------------------
+Graph 15875 most similar to: [('graph_15876', 0.6358383893966675), ('graph_15860', 0.6131600141525269), ('graph_15808', 0.6081034541130066)]
+Graph 9566 most similar to: [('graph_9631', 0.61774742603302), ('graph_9497', 0.6080737709999084), ('graph_8641', 0.6043547987937927)]
+Graph 14084 most similar to: [('graph_14086', 0.6295092701911926), ('graph_14063', 0.6197245121002197), ('graph_14066', 0.608391284942627)]
+Graph 1325 most similar to: [('graph_1267', 0.6763237118721008), ('graph_1423', 0.6696349382400513), ('graph_7600', 0.6672106981277466)]
+Graph 15566 most similar to: [('graph_19795', 0.654746949672699), ('graph_15609', 0.6103148460388184), ('graph_20035', 0.5791641473770142)]
+Training completed. Vocabulary size: 140
+--- Extracting embeddings ---
+Embeddings shape: (20042, 512)
+--- Clustering sweep ---
+    raw: silhouette_k=2 (score=0.079), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=2)...
+    umap_2: silhouette_k=3 (score=0.557), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=3)...
+    umap_3: silhouette_k=9 (score=0.488), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=5)...
+    umap_5: silhouette_k=3 (score=0.486), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=6)...
+    umap_6: silhouette_k=8 (score=0.484), elbow_k=3, bic_k=10, aic_k=10
+  UMAP reduction (dim=7)...
+    umap_7: silhouette_k=3 (score=0.485), elbow_k=3, bic_k=10, aic_k=10
+  t-SNE reduction (dim=2)...
+    tsne_2: silhouette_k=3 (score=0.442), elbow_k=3, bic_k=10, aic_k=10
+  t-SNE reduction (dim=3)...
+    tsne_3: silhouette_k=6 (score=0.296), elbow_k=3, bic_k=10, aic_k=10
+--- Sweep Summary ---
+  raw: silhouette_k=2 (0.079), elbow=3, bic=10, aic=10
+  umap_2: silhouette_k=3 (0.557), elbow=3, bic=10, aic=10  << BEST SOURCE
+  umap_3: silhouette_k=9 (0.488), elbow=3, bic=10, aic=10
+  umap_5: silhouette_k=3 (0.486), elbow=3, bic=10, aic=10
+  umap_6: silhouette_k=8 (0.484), elbow=3, bic=10, aic=10
+  umap_7: silhouette_k=3 (0.485), elbow=3, bic=10, aic=10
+  tsne_2: silhouette_k=3 (0.442), elbow=3, bic=10, aic=10
+  tsne_3: silhouette_k=6 (0.296), elbow=3, bic=10, aic=10
+--- Metric Recommendations (source=umap_2) ---
+  silhouette: k=3
+  elbow: k=3
+  bic: k=10
+  aic: k=10
+  >> Recommended n_states: 10 (max across metrics)
+--- Generating Plots ---
+Saving to: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/state_discovery
+  - elbow_plot.png
+  - silhouette_plot.png
+  - bic_aic_plot.png
+  - metric_recommendations.png
+  - cluster_sizes.png
+  - sweep_comparison.png
+  Computing t-SNE 2D projection...
+  - tsne_embeddings.png
+  Computing UMAP 2D projection...
+  - umap_embeddings.png
+  Computing t-SNE 2D for temporal visualization...
+  - tsne_temporal.png
+  - tsne_temporal_3d.png
+  - state_timeline.png
+  Computing UMAP 2D for temporal visualization...
+  - umap_temporal_3d.png
+  - discovery_summary.json
+All plots generated successfully
+Recommended n_states: 10
+Dataset statistics saved to /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749
+Topology PDB (training): /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/preparation/prep_20260616_131749/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/cache
+State discovery recommended n_states = 10
+Using discovered n_states = 10
+Skipping training phase.
+No trained models found. Run training first.
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749
+Log file: /mnt/hdd/experiments/atr_d/discovery/exp_atr_d_20260616_131749/logs/log_20260616_131749.txt
+============================================================
+Finished:     Tue Jun 16 01:44:54 PM CEST 2026
+Exit code:    0
+Next steps:
+  grep 'Recommended n_states' /mnt/hdd/experiments/logs/disc_655.out
+  grep 'Selected'             /mnt/hdd/experiments/logs/disc_655.out
+  sbatch cluster_scripts/atr_d_experiment.sh --n_states <N>
+============================================================

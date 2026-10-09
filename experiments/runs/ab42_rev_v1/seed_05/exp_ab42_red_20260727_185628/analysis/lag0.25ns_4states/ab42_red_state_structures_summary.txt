@@ -1,0 +1,67 @@
+State structure analysis for ab42_red
+Total states: 4
+
+State 1:
+  - Frame count (max probability): 13492 (26.98%)
+State 2:
+  - Frame count (max probability): 5797 (11.59%)
+State 3:
+  - Frame count (max probability): 25607 (51.21%)
+State 4:
+  - Frame count (max probability): 5104 (10.21%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: ab42_red_state_1_average.pdb
+  - Representative structures:
+    - ab42_red_state_1_rank_1_frame_1883_rmsd_0.571_prob_1.000.pdb
+    - ab42_red_state_1_rank_2_frame_1953_rmsd_0.585_prob_1.000.pdb
+    - ab42_red_state_1_rank_3_frame_1882_rmsd_0.594_prob_1.000.pdb
+    - ab42_red_state_1_rank_4_frame_1350_rmsd_0.662_prob_1.000.pdb
+    - ab42_red_state_1_rank_5_frame_2944_rmsd_0.669_prob_1.000.pdb
+    - ab42_red_state_1_rank_6_frame_2942_rmsd_0.690_prob_1.000.pdb
+    - ab42_red_state_1_rank_7_frame_2170_rmsd_0.704_prob_1.000.pdb
+    - ab42_red_state_1_rank_8_frame_1429_rmsd_0.731_prob_1.000.pdb
+    - ab42_red_state_1_rank_9_frame_2315_rmsd_0.773_prob_1.000.pdb
+    - ab42_red_state_1_rank_10_frame_2477_rmsd_0.834_prob_1.000.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ab42_red_state_2_average.pdb
+  - Representative structures:
+    - ab42_red_state_2_rank_1_frame_848_rmsd_0.375_prob_1.000.pdb
+    - ab42_red_state_2_rank_2_frame_849_rmsd_0.383_prob_1.000.pdb
+    - ab42_red_state_2_rank_3_frame_850_rmsd_0.407_prob_1.000.pdb
+    - ab42_red_state_2_rank_4_frame_847_rmsd_0.420_prob_1.000.pdb
+    - ab42_red_state_2_rank_5_frame_845_rmsd_0.431_prob_1.000.pdb
+    - ab42_red_state_2_rank_6_frame_846_rmsd_0.444_prob_1.000.pdb
+    - ab42_red_state_2_rank_7_frame_996_rmsd_0.763_prob_1.000.pdb
+    - ab42_red_state_2_rank_8_frame_94_rmsd_0.777_prob_1.000.pdb
+    - ab42_red_state_2_rank_9_frame_1359_rmsd_0.948_prob_1.000.pdb
+    - ab42_red_state_2_rank_10_frame_1358_rmsd_1.005_prob_1.000.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ab42_red_state_3_average.pdb
+  - Representative structures:
+    - ab42_red_state_3_rank_1_frame_353_rmsd_0.458_prob_1.000.pdb
+    - ab42_red_state_3_rank_2_frame_354_rmsd_0.489_prob_1.000.pdb
+    - ab42_red_state_3_rank_3_frame_352_rmsd_0.492_prob_1.000.pdb
+    - ab42_red_state_3_rank_4_frame_344_rmsd_0.525_prob_1.000.pdb
+    - ab42_red_state_3_rank_5_frame_428_rmsd_0.526_prob_1.000.pdb
+    - ab42_red_state_3_rank_6_frame_409_rmsd_0.539_prob_1.000.pdb
+    - ab42_red_state_3_rank_7_frame_322_rmsd_0.598_prob_1.000.pdb
+    - ab42_red_state_3_rank_8_frame_406_rmsd_0.604_prob_1.000.pdb
+    - ab42_red_state_3_rank_9_frame_247_rmsd_1.049_prob_1.000.pdb
+    - ab42_red_state_3_rank_10_frame_4_rmsd_1.077_prob_1.000.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: ab42_red_state_4_average.pdb
+  - Representative structures:
+    - ab42_red_state_4_rank_1_frame_678_rmsd_0.217_prob_1.000.pdb
+    - ab42_red_state_4_rank_2_frame_675_rmsd_0.226_prob_1.000.pdb
+    - ab42_red_state_4_rank_3_frame_679_rmsd_0.228_prob_1.000.pdb
+    - ab42_red_state_4_rank_4_frame_676_rmsd_0.240_prob_1.000.pdb
+    - ab42_red_state_4_rank_5_frame_673_rmsd_0.242_prob_1.000.pdb
+    - ab42_red_state_4_rank_6_frame_674_rmsd_0.242_prob_1.000.pdb
+    - ab42_red_state_4_rank_7_frame_677_rmsd_0.252_prob_1.000.pdb
+    - ab42_red_state_4_rank_8_frame_672_rmsd_0.269_prob_1.000.pdb
+    - ab42_red_state_4_rank_9_frame_1945_rmsd_0.808_prob_1.000.pdb
+    - ab42_red_state_4_rank_10_frame_1944_rmsd_0.824_prob_1.000.pdb
+

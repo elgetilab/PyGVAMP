@@ -1,0 +1,46 @@
+Implied Timescales Analysis for gtt
+==================================================
+
+Number of processes analyzed: 24
+Lag times analyzed: [50.0, 322.22222222222223, 594.4444444444445, 866.6666666666667, 1138.888888888889, 1411.111111111111, 1683.3333333333335, 1955.5555555555557, 2227.777777777778, 2500.0] ns
+
+Process Summary:
+Process 2: Mean ITS = 9508.84 ns, Max ITS = 12851.90 ns
+Process 3: Mean ITS = 1069.15 ns, Max ITS = 1390.77 ns
+Process 4: Mean ITS = 646.54 ns, Max ITS = 1043.87 ns
+Process 5: Mean ITS = 573.19 ns, Max ITS = 862.65 ns
+Process 6: Mean ITS = 541.29 ns, Max ITS = 862.65 ns
+Process 7: Mean ITS = 522.72 ns, Max ITS = 852.41 ns
+Process 8: Mean ITS = 487.42 ns, Max ITS = 852.41 ns
+Process 9: Mean ITS = 465.55 ns, Max ITS = 845.33 ns
+Process 10: Mean ITS = 452.90 ns, Max ITS = 834.15 ns
+Process 11: Mean ITS = 433.09 ns, Max ITS = 834.15 ns
+Process 12: Mean ITS = 419.33 ns, Max ITS = 814.39 ns
+Process 13: Mean ITS = 417.75 ns, Max ITS = 814.39 ns
+Process 14: Mean ITS = 404.51 ns, Max ITS = 773.13 ns
+Process 15: Mean ITS = 397.45 ns, Max ITS = 773.13 ns
+Process 16: Mean ITS = 378.58 ns, Max ITS = 721.87 ns
+Process 17: Mean ITS = 372.15 ns, Max ITS = 706.58 ns
+Process 18: Mean ITS = 364.80 ns, Max ITS = 706.58 ns
+Process 19: Mean ITS = 355.92 ns, Max ITS = 704.89 ns
+Process 20: Mean ITS = 341.08 ns, Max ITS = 658.21 ns
+Process 21: Mean ITS = 333.70 ns, Max ITS = 622.07 ns
+Process 22: Mean ITS = 320.63 ns, Max ITS = 622.07 ns
+Process 23: Mean ITS = 305.33 ns, Max ITS = 565.31 ns
+Process 24: Mean ITS = 252.54 ns, Max ITS = 509.87 ns
+Process 25: Mean ITS = 232.91 ns, Max ITS = 496.89 ns
+
+Detailed ITS for each lag time:
+
+Lag Time (ns) | Process 2 | Process 3 | Process 4 | Process 5 | Process 6
+------------------------------------------------------------------------
+      50.00 |   1264.00 |    576.48 |     33.23 |     33.23 |     29.87
+     322.22 |   5568.83 |   1277.16 |    190.40 |    190.40 |    168.45
+     594.44 |   7820.96 |   1364.63 |    550.96 |    381.06 |    381.06
+     866.67 |   9543.26 |   1390.77 |    626.68 |    626.68 |    468.40
+    1138.89 |  10471.96 |   1313.39 |    486.83 |    486.83 |    450.80
+    1411.11 |  11211.30 |   1043.87 |   1043.87 |    785.12 |    699.15
+    1683.33 |  11682.69 |   1090.78 |    898.99 |    753.56 |    753.56
+    1955.56 |  12223.46 |    801.62 |    801.62 |    782.53 |    782.53
+    2227.78 |  12450.01 |    886.98 |    886.98 |    829.85 |    816.46
+    2500.00 |  12851.90 |    945.83 |    945.83 |    862.65 |    862.65

@@ -1,0 +1,6 @@
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+/var/spool/slurm/d/job00346/slurm_script: line 134: 1363086 Killed                  pygvamp --traj_dir /mnt/hdd/data/ab42/trajectories/red/ --top /mnt/hdd/data/ab42/trajectories/red/topol.pdb --lag_times 1 --protein_name ab42_red --output_dir /mnt/hdd/experiments/ab42_red_std/lag1/run_99 --preset medium_schnet --n_states 10 --no_discover_states --epochs 5 --batch_size 2048 --stride 1 --selection 'name CA' --cache
+slurmstepd-hugin: error: Detected 1 oom_kill event in StepId=346.batch. Some of the step tasks have been OOM Killed.

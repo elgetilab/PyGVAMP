@@ -1,0 +1,3 @@
+ERROR: the pygvamp on PATH has no --angular_features.
+       Redeploy the module, or rerun with:
+         PYGVAMP_SRC_OVERRIDE=/home/vi/PycharmProjects/PyGVAMP sbatch ... /var/spool/slurm/d/job00904/slurm_script

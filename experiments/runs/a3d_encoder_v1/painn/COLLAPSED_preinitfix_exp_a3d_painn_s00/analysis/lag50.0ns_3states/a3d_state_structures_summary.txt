@@ -1,0 +1,51 @@
+State structure analysis for a3d
+Total states: 3
+
+State 1:
+  - Frame count (max probability): 5000 (100.00%)
+State 2:
+  - Frame count (max probability): 0 (0.00%)
+State 3:
+  - Frame count (max probability): 0 (0.00%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: a3d_state_1_average.pdb
+  - Representative structures:
+    - a3d_state_1_rank_1_frame_60_rmsd_0.093_prob_0.000.pdb
+    - a3d_state_1_rank_2_frame_30_rmsd_0.143_prob_0.000.pdb
+    - a3d_state_1_rank_3_frame_50_rmsd_0.150_prob_0.000.pdb
+    - a3d_state_1_rank_4_frame_20_rmsd_0.153_prob_0.000.pdb
+    - a3d_state_1_rank_5_frame_40_rmsd_0.154_prob_0.000.pdb
+    - a3d_state_1_rank_6_frame_80_rmsd_0.162_prob_0.000.pdb
+    - a3d_state_1_rank_7_frame_70_rmsd_0.180_prob_0.000.pdb
+    - a3d_state_1_rank_8_frame_10_rmsd_0.195_prob_0.000.pdb
+    - a3d_state_1_rank_9_frame_90_rmsd_0.203_prob_0.000.pdb
+    - a3d_state_1_rank_10_frame_0_rmsd_0.215_prob_0.000.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: a3d_state_2_average.pdb
+  - Representative structures:
+    - a3d_state_2_rank_1_frame_60_rmsd_0.093_prob_0.000.pdb
+    - a3d_state_2_rank_2_frame_30_rmsd_0.143_prob_0.000.pdb
+    - a3d_state_2_rank_3_frame_50_rmsd_0.150_prob_0.000.pdb
+    - a3d_state_2_rank_4_frame_20_rmsd_0.153_prob_0.000.pdb
+    - a3d_state_2_rank_5_frame_40_rmsd_0.154_prob_0.000.pdb
+    - a3d_state_2_rank_6_frame_80_rmsd_0.162_prob_0.000.pdb
+    - a3d_state_2_rank_7_frame_70_rmsd_0.180_prob_0.000.pdb
+    - a3d_state_2_rank_8_frame_10_rmsd_0.195_prob_0.000.pdb
+    - a3d_state_2_rank_9_frame_90_rmsd_0.203_prob_0.000.pdb
+    - a3d_state_2_rank_10_frame_0_rmsd_0.215_prob_0.000.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: a3d_state_3_average.pdb
+  - Representative structures:
+    - a3d_state_3_rank_1_frame_60_rmsd_0.093_prob_0.000.pdb
+    - a3d_state_3_rank_2_frame_30_rmsd_0.143_prob_0.000.pdb
+    - a3d_state_3_rank_3_frame_50_rmsd_0.150_prob_0.000.pdb
+    - a3d_state_3_rank_4_frame_20_rmsd_0.153_prob_0.000.pdb
+    - a3d_state_3_rank_5_frame_40_rmsd_0.154_prob_0.000.pdb
+    - a3d_state_3_rank_6_frame_80_rmsd_0.162_prob_0.000.pdb
+    - a3d_state_3_rank_7_frame_70_rmsd_0.180_prob_0.000.pdb
+    - a3d_state_3_rank_8_frame_10_rmsd_0.195_prob_0.000.pdb
+    - a3d_state_3_rank_9_frame_90_rmsd_0.203_prob_0.000.pdb
+    - a3d_state_3_rank_10_frame_0_rmsd_0.215_prob_0.000.pdb
+

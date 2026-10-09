@@ -1,0 +1,1063 @@
+PyGVAMP Log - 2026-06-23 01:50:31
+Command: /opt/software/pygvamp/1.0.0/conda_env/bin/pygvamp --traj_dir /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/ --top /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb --file_pattern 2JOF-0-c-alpha-*.dcd --protein_name trpcage --output_dir /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08 --timestep 0.2 --seed 8 --model gin --selection name CA --stride 1 --lag_times 20.0 --n_states 5 --no_discover_states --max_retrains 0 --no_warm_start_retrains --n_neighbors 7 --epochs 100 --batch_size 1000 --val_split 0.3 --cache
+============================================================  [repeated 2 times]
+STARTING PYGVAMP PIPELINE
+============================================================
+Protein: trpcage
+Model: gin
+Preset: custom
+Cache: True
+Hurry mode: False
+============================================================
+PHASE 1: DATA PREPARATION
+============================================================
+Configuration saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/prep_config.json
+=== TOPOLOGY CONVERSION ===
+Loading topology from /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb
+Selected 20 atoms with selection: 'name CA'
+Topology saved as PDB: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/topology.pdb
+=== VISUALIZATION TOPOLOGY ===
+Loading topology from /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/topol.pdb
+Selected 20 atoms with selection: 'protein'
+Topology saved as PDB: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/visualization_topology.pdb
+Looking for trajectory files in /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset with 11 trajectory files
+No cache file found at /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 11 trajectory files...
+Loaded 11 trajectories with frames: [100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 44000]
+Total frames: 1044000, Atoms per frame: 20
+Calculating distance range from data samples...
+Distance range: 0.33 to 5.74 Å
+Created 1043900 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset created with 1043900 samples
+Dataset statistics saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/dataset_stats.json
+Data preparation completed successfully!
+Output directory: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031
+Topology PDB (training): /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/topology.pdb
+Topology PDB (visualization): /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/visualization_topology.pdb
+Cache directory: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/cache
+============================================================
+PHASE 2: TRAINING
+============================================================
+Training 1 models:
+  Lag times: [20.0]
+  N states: [5]
+--- Experiment 1/1 ---
+Lag time: 20.0 ns, N states: 5
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+No cache file found at /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Processing 11 trajectory files...
+Total frames: 1044000, Atoms per frame: 20
+Calculating distance range from data samples...
+Distance range: 0.33 to 5.74 Å
+Created 1043900 time-lagged pairs with lag time 20.0 and 100 lag frames. 1 lag frame == 0.2 ns
+Saving dataset to cache: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset successfully cached to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Dataset created with 1043900 samples
+Training set: 730730 samples
+Testing set: 313170 samples
+Auto-inferred node_dim=20 from dataset (was 16)
+Weight Initialization Report (kaiming_normal):
+----------------------------------------
+BatchNorm parameters: 8
+Linear parameters: 4,928
+----------------------------------------
+Total params: 4,928
+Total tensors: 7
+----------------------------------------
+/opt/software/pygvamp/1.0.0/source/pygv/utils/nn_utils.py:244: UserWarning: std(): degrees of freedom is <= 0. Correction should be strictly less than the reduction factor (input numel divided by output numel). (Triggered internally at /pytorch/aten/src/ATen/native/ReduceOps.cpp:1858.)
+  if param.requires_grad and (param.std() < 1e-6 or param.min() == param.max()):
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.0.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.1.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.gin_conv.eps, shape: torch.Size([1])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.interactions.2.output_layer.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.weight, shape: torch.Size([128])
+WARNING: Parameter possibly uninitialized: encoder.output_network.norms.0.module.bias, shape: torch.Size([128])
+WARNING: Found 11/59 parameters that may not be properly initialized.
+Created VAMPNet model with 76328 parameters
+Parameters captured by optimizer:
+  ✓ encoder.interactions.0.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.0.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.0.gin_conv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.0.gin_conv.edge_projection.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.0.gin_conv.edge_projection.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.0.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.0.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.0.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.0.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.0.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.1.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.1.gin_conv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.1.gin_conv.edge_projection.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.1.gin_conv.edge_projection.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.1.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.1.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.1.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.1.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.1.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.initial_dense.weight: shape=torch.Size([32, 32]), size=1024
+  ✓ encoder.interactions.2.gin_conv.eps: shape=torch.Size([1]), size=1
+  ✓ encoder.interactions.2.gin_conv.attention_vector: shape=torch.Size([32, 1]), size=32
+  ✓ encoder.interactions.2.gin_conv.edge_projection.weight: shape=torch.Size([32, 16]), size=512
+  ✓ encoder.interactions.2.gin_conv.edge_projection.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.2.gin_conv.update_mlp.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.interactions.2.output_layer.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.output_layer.lins.1.weight: shape=torch.Size([32, 128]), size=4096
+  ✓ encoder.interactions.2.output_layer.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ encoder.interactions.2.output_layer.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.interactions.2.output_layer.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.lins.0.weight: shape=torch.Size([128, 32]), size=4096
+  ✓ encoder.output_network.lins.0.bias: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.lins.1.weight: shape=torch.Size([64, 128]), size=8192
+  ✓ encoder.output_network.lins.1.bias: shape=torch.Size([64]), size=64
+  ✓ encoder.output_network.norms.0.module.weight: shape=torch.Size([128]), size=128
+  ✓ encoder.output_network.norms.0.module.bias: shape=torch.Size([128]), size=128
+  ✓ embedding_module.lins.0.weight: shape=torch.Size([64, 20]), size=1280
+  ✓ embedding_module.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ embedding_module.lins.1.weight: shape=torch.Size([32, 64]), size=2048
+  ✓ embedding_module.lins.1.bias: shape=torch.Size([32]), size=32
+  ✓ classifier_module.mlp.lins.0.weight: shape=torch.Size([64, 64]), size=4096
+  ✓ classifier_module.mlp.lins.0.bias: shape=torch.Size([64]), size=64
+  ✓ classifier_module.final_layer.0.weight: shape=torch.Size([5, 64]), size=320
+  ✓ classifier_module.final_layer.0.bias: shape=torch.Size([5]), size=5
+Total parameters in optimizer: 76,328 in 59 tensors
+Total model parameters: 76,328
+Training model on cuda...
+Starting training for 100 epochs on cuda
+Using quick validation every 100 batches
+Performing full validation after each epoch
+Epoch 1/100, Train VAMP: 4.1909, Val VAMP: concat=4.1969, perbatch=4.1972±0.1289
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.1969
+Epoch 2/100, Train VAMP: 4.4021, Val VAMP: concat=4.4082, perbatch=4.4041±0.1460
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.4082
+Epoch 3/100, Train VAMP: 4.4517, Val VAMP: concat=4.3959, perbatch=4.3909±0.1575
+No improvement for 1 epochs. Best score: 4.4082
+Epoch 4/100, Train VAMP: 4.4667, Val VAMP: concat=4.2093, perbatch=4.2486±0.2044
+No improvement for 2 epochs. Best score: 4.4082
+Epoch 5/100, Train VAMP: 4.4994, Val VAMP: concat=4.1771, perbatch=4.1826±0.1856
+No improvement for 3 epochs. Best score: 4.4082
+Epoch 6/100, Train VAMP: 4.5150, Val VAMP: concat=4.4948, perbatch=4.4939±0.1577
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.4948
+Epoch 7/100, Train VAMP: 4.5158, Val VAMP: concat=4.2684, perbatch=4.2663±0.1651
+No improvement for 1 epochs. Best score: 4.4948
+Epoch 8/100, Train VAMP: 4.5299, Val VAMP: concat=4.4088, perbatch=4.4084±0.1506
+No improvement for 2 epochs. Best score: 4.4948
+Epoch 9/100, Train VAMP: 4.5314, Val VAMP: concat=4.4543, perbatch=4.4588±0.1686
+No improvement for 3 epochs. Best score: 4.4948
+Epoch 10/100, Train VAMP: 4.5456, Val VAMP: concat=4.4762, perbatch=4.4756±0.1799
+No improvement for 4 epochs. Best score: 4.4948
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_10.pt
+Epoch 11/100, Train VAMP: 4.5463, Val VAMP: concat=4.3544, perbatch=4.3716±0.1939
+No improvement for 5 epochs. Best score: 4.4948
+Epoch 12/100, Train VAMP: 4.5491, Val VAMP: concat=4.2547, perbatch=4.2663±0.1997
+No improvement for 6 epochs. Best score: 4.4948
+Epoch 13/100, Train VAMP: 4.5689, Val VAMP: concat=4.4991, perbatch=4.5027±0.1773
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.4991
+Epoch 14/100, Train VAMP: 4.5605, Val VAMP: concat=4.5292, perbatch=4.5279±0.1634
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5292
+Epoch 15/100, Train VAMP: 4.5384, Val VAMP: concat=4.5396, perbatch=4.5379±0.1677
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5396
+Epoch 16/100, Train VAMP: 4.5663, Val VAMP: concat=4.4613, perbatch=4.4615±0.2035
+No improvement for 1 epochs. Best score: 4.5396
+Epoch 17/100, Train VAMP: 4.5745, Val VAMP: concat=4.5491, perbatch=4.5497±0.1836
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5491
+Epoch 18/100, Train VAMP: 4.5746, Val VAMP: concat=4.5420, perbatch=4.5391±0.1864
+No improvement for 1 epochs. Best score: 4.5491
+Epoch 19/100, Train VAMP: 4.5583, Val VAMP: concat=4.5097, perbatch=4.5018±0.1924
+No improvement for 2 epochs. Best score: 4.5491
+Epoch 20/100, Train VAMP: 4.5773, Val VAMP: concat=4.4963, perbatch=4.4868±0.1968
+No improvement for 3 epochs. Best score: 4.5491
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_20.pt
+Epoch 21/100, Train VAMP: 4.5806, Val VAMP: concat=4.5728, perbatch=4.5696±0.1707
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5728
+Epoch 22/100, Train VAMP: 4.5887, Val VAMP: concat=4.5495, perbatch=4.5477±0.1691
+No improvement for 1 epochs. Best score: 4.5728
+Epoch 23/100, Train VAMP: 4.5732, Val VAMP: concat=4.5208, perbatch=4.5243±0.1916
+No improvement for 2 epochs. Best score: 4.5728
+Epoch 24/100, Train VAMP: 4.5854, Val VAMP: concat=4.5714, perbatch=4.5699±0.1767
+No improvement for 3 epochs. Best score: 4.5728
+Epoch 25/100, Train VAMP: 4.5998, Val VAMP: concat=4.5843, perbatch=4.5863±0.1846
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5843
+Epoch 26/100, Train VAMP: 4.5924, Val VAMP: concat=4.5446, perbatch=4.5480±0.1868
+No improvement for 1 epochs. Best score: 4.5843
+Epoch 27/100, Train VAMP: 4.5947, Val VAMP: concat=4.5105, perbatch=4.5233±0.1942
+No improvement for 2 epochs. Best score: 4.5843
+Epoch 28/100, Train VAMP: 4.6042, Val VAMP: concat=4.4997, perbatch=4.4957±0.1766
+No improvement for 3 epochs. Best score: 4.5843
+Epoch 29/100, Train VAMP: 4.5860, Val VAMP: concat=3.8787, perbatch=3.9143±0.2323
+No improvement for 4 epochs. Best score: 4.5843
+Epoch 30/100, Train VAMP: 4.5897, Val VAMP: concat=4.5798, perbatch=4.5775±0.1822
+No improvement for 5 epochs. Best score: 4.5843
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_30.pt
+Epoch 31/100, Train VAMP: 4.6065, Val VAMP: concat=3.9684, perbatch=4.0345±0.2453
+No improvement for 6 epochs. Best score: 4.5843
+Epoch 32/100, Train VAMP: 4.5952, Val VAMP: concat=4.5771, perbatch=4.5780±0.1802
+No improvement for 7 epochs. Best score: 4.5843
+Epoch 33/100, Train VAMP: 4.6027, Val VAMP: concat=4.5885, perbatch=4.5872±0.1730
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5885
+Epoch 34/100, Train VAMP: 4.6020, Val VAMP: concat=4.5756, perbatch=4.5768±0.1876
+No improvement for 1 epochs. Best score: 4.5885
+Epoch 35/100, Train VAMP: 4.5975, Val VAMP: concat=4.5888, perbatch=4.5855±0.1837
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.5888
+Epoch 36/100, Train VAMP: 4.5989, Val VAMP: concat=4.2609, perbatch=4.2829±0.1936
+No improvement for 1 epochs. Best score: 4.5888
+Epoch 37/100, Train VAMP: 4.6078, Val VAMP: concat=4.5828, perbatch=4.5726±0.2016
+No improvement for 2 epochs. Best score: 4.5888
+Epoch 38/100, Train VAMP: 4.6215, Val VAMP: concat=4.4348, perbatch=4.4461±0.2104
+No improvement for 3 epochs. Best score: 4.5888
+Epoch 39/100, Train VAMP: 4.6014, Val VAMP: concat=4.5306, perbatch=4.5245±0.1812
+No improvement for 4 epochs. Best score: 4.5888
+Epoch 40/100, Train VAMP: 4.6078, Val VAMP: concat=4.6017, perbatch=4.6021±0.1805
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.6017
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_40.pt
+Epoch 41/100, Train VAMP: 4.6189, Val VAMP: concat=4.6037, perbatch=4.6001±0.1628
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.6037
+Epoch 42/100, Train VAMP: 4.6079, Val VAMP: concat=4.5026, perbatch=4.5070±0.1866
+No improvement for 1 epochs. Best score: 4.6037
+Epoch 43/100, Train VAMP: 4.6201, Val VAMP: concat=4.5525, perbatch=4.5541±0.1637
+No improvement for 2 epochs. Best score: 4.6037
+Epoch 44/100, Train VAMP: 4.6201, Val VAMP: concat=4.5737, perbatch=4.5655±0.1831
+No improvement for 3 epochs. Best score: 4.6037
+Epoch 45/100, Train VAMP: 4.6233, Val VAMP: concat=4.5619, perbatch=4.5618±0.1767
+No improvement for 4 epochs. Best score: 4.6037
+Epoch 46/100, Train VAMP: 4.6224, Val VAMP: concat=4.5832, perbatch=4.5731±0.1882
+No improvement for 5 epochs. Best score: 4.6037
+Epoch 47/100, Train VAMP: 4.6278, Val VAMP: concat=4.5924, perbatch=4.5891±0.1949
+No improvement for 6 epochs. Best score: 4.6037
+Epoch 48/100, Train VAMP: 4.6207, Val VAMP: concat=4.5884, perbatch=4.5805±0.1931
+No improvement for 7 epochs. Best score: 4.6037
+Epoch 49/100, Train VAMP: 4.6215, Val VAMP: concat=4.5458, perbatch=4.5387±0.1778
+No improvement for 8 epochs. Best score: 4.6037
+Epoch 50/100, Train VAMP: 4.6190, Val VAMP: concat=4.5902, perbatch=4.5875±0.1689
+No improvement for 9 epochs. Best score: 4.6037
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_50.pt
+Epoch 51/100, Train VAMP: 4.6327, Val VAMP: concat=4.6072, perbatch=4.6072±0.1759
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.6072
+Epoch 52/100, Train VAMP: 4.6217, Val VAMP: concat=4.4763, perbatch=4.4863±0.2048
+No improvement for 1 epochs. Best score: 4.6072
+Epoch 53/100, Train VAMP: 4.6269, Val VAMP: concat=4.5992, perbatch=4.5959±0.1623
+No improvement for 2 epochs. Best score: 4.6072
+Epoch 54/100, Train VAMP: 4.6335, Val VAMP: concat=4.5893, perbatch=4.5857±0.1678
+No improvement for 3 epochs. Best score: 4.6072
+Epoch 55/100, Train VAMP: 4.6276, Val VAMP: concat=4.5661, perbatch=4.5645±0.1621
+No improvement for 4 epochs. Best score: 4.6072
+Epoch 56/100, Train VAMP: 4.6310, Val VAMP: concat=4.5958, perbatch=4.5993±0.1763
+No improvement for 5 epochs. Best score: 4.6072
+Epoch 57/100, Train VAMP: 4.6275, Val VAMP: concat=4.6220, perbatch=4.6185±0.1755
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.6220
+Epoch 58/100, Train VAMP: 4.6347, Val VAMP: concat=4.4503, perbatch=4.4412±0.1925
+No improvement for 1 epochs. Best score: 4.6220
+Epoch 59/100, Train VAMP: 4.6331, Val VAMP: concat=4.4876, perbatch=4.4951±0.1938
+No improvement for 2 epochs. Best score: 4.6220
+Epoch 60/100, Train VAMP: 4.6409, Val VAMP: concat=4.5876, perbatch=4.5872±0.1812
+No improvement for 3 epochs. Best score: 4.6220
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_60.pt
+Epoch 61/100, Train VAMP: 4.6310, Val VAMP: concat=4.5979, perbatch=4.5974±0.1628
+No improvement for 4 epochs. Best score: 4.6220
+Epoch 62/100, Train VAMP: 4.6355, Val VAMP: concat=4.5847, perbatch=4.5817±0.1785
+No improvement for 5 epochs. Best score: 4.6220
+Epoch 63/100, Train VAMP: 4.6342, Val VAMP: concat=4.6108, perbatch=4.6058±0.1717
+No improvement for 6 epochs. Best score: 4.6220
+Epoch 64/100, Train VAMP: 4.6401, Val VAMP: concat=4.5524, perbatch=4.5476±0.1731
+No improvement for 7 epochs. Best score: 4.6220
+Epoch 65/100, Train VAMP: 4.6259, Val VAMP: concat=4.6030, perbatch=4.6048±0.1749
+No improvement for 8 epochs. Best score: 4.6220
+Epoch 66/100, Train VAMP: 4.6329, Val VAMP: concat=4.5637, perbatch=4.5627±0.1707
+No improvement for 9 epochs. Best score: 4.6220
+Epoch 67/100, Train VAMP: 4.6374, Val VAMP: concat=4.5939, perbatch=4.5931±0.1876
+No improvement for 10 epochs. Best score: 4.6220
+Epoch 68/100, Train VAMP: 4.6411, Val VAMP: concat=4.6147, perbatch=4.6179±0.1742
+No improvement for 11 epochs. Best score: 4.6220
+Epoch 69/100, Train VAMP: 4.6399, Val VAMP: concat=4.6007, perbatch=4.5975±0.1809
+No improvement for 12 epochs. Best score: 4.6220
+Epoch 70/100, Train VAMP: 4.6402, Val VAMP: concat=4.6005, perbatch=4.6019±0.1741
+No improvement for 13 epochs. Best score: 4.6220
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_70.pt
+Epoch 71/100, Train VAMP: 4.6297, Val VAMP: concat=4.6053, perbatch=4.5990±0.1683
+No improvement for 14 epochs. Best score: 4.6220
+Epoch 72/100, Train VAMP: 4.6304, Val VAMP: concat=4.6055, perbatch=4.6044±0.1760
+No improvement for 15 epochs. Best score: 4.6220
+Epoch 73/100, Train VAMP: 4.6378, Val VAMP: concat=4.6047, perbatch=4.6007±0.1750
+No improvement for 16 epochs. Best score: 4.6220
+Epoch 74/100, Train VAMP: 4.6398, Val VAMP: concat=4.6308, perbatch=4.6293±0.1592
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+New best model with score: 4.6308
+Epoch 75/100, Train VAMP: 4.6476, Val VAMP: concat=4.6200, perbatch=4.6174±0.1694
+No improvement for 1 epochs. Best score: 4.6308
+Epoch 76/100, Train VAMP: 4.6483, Val VAMP: concat=4.5628, perbatch=4.5596±0.1806
+No improvement for 2 epochs. Best score: 4.6308
+Epoch 77/100, Train VAMP: 4.6455, Val VAMP: concat=4.6189, perbatch=4.6196±0.1627
+No improvement for 3 epochs. Best score: 4.6308
+Epoch 78/100, Train VAMP: 4.6519, Val VAMP: concat=4.6233, perbatch=4.6182±0.1790
+No improvement for 4 epochs. Best score: 4.6308
+Epoch 79/100, Train VAMP: 4.6534, Val VAMP: concat=4.5896, perbatch=4.5920±0.1635
+No improvement for 5 epochs. Best score: 4.6308
+Epoch 80/100, Train VAMP: 4.6492, Val VAMP: concat=4.6149, perbatch=4.6138±0.1484
+No improvement for 6 epochs. Best score: 4.6308
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_80.pt
+Epoch 81/100, Train VAMP: 4.6443, Val VAMP: concat=4.6187, perbatch=4.6134±0.1888
+No improvement for 7 epochs. Best score: 4.6308
+Epoch 82/100, Train VAMP: 4.6528, Val VAMP: concat=4.6120, perbatch=4.6160±0.1568
+No improvement for 8 epochs. Best score: 4.6308
+Epoch 83/100, Train VAMP: 4.6441, Val VAMP: concat=4.6238, perbatch=4.6248±0.1619
+No improvement for 9 epochs. Best score: 4.6308
+Epoch 84/100, Train VAMP: 4.6506, Val VAMP: concat=4.6245, perbatch=4.6229±0.1817
+No improvement for 10 epochs. Best score: 4.6308
+Epoch 85/100, Train VAMP: 4.6509, Val VAMP: concat=4.6128, perbatch=4.6134±0.1668
+No improvement for 11 epochs. Best score: 4.6308
+Epoch 86/100, Train VAMP: 4.6465, Val VAMP: concat=4.6163, perbatch=4.6175±0.1632
+No improvement for 12 epochs. Best score: 4.6308
+Epoch 87/100, Train VAMP: 4.6609, Val VAMP: concat=4.6231, perbatch=4.6195±0.1622
+No improvement for 13 epochs. Best score: 4.6308
+Epoch 88/100, Train VAMP: 4.6563, Val VAMP: concat=4.6160, perbatch=4.6121±0.1676
+No improvement for 14 epochs. Best score: 4.6308
+Epoch 89/100, Train VAMP: 4.6495, Val VAMP: concat=4.6062, perbatch=4.5973±0.1640
+No improvement for 15 epochs. Best score: 4.6308
+Epoch 90/100, Train VAMP: 4.6518, Val VAMP: concat=4.6180, perbatch=4.6144±0.1586
+No improvement for 16 epochs. Best score: 4.6308
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_90.pt
+Epoch 91/100, Train VAMP: 4.6381, Val VAMP: concat=4.6243, perbatch=4.6283±0.1669
+No improvement for 17 epochs. Best score: 4.6308
+Epoch 92/100, Train VAMP: 4.6485, Val VAMP: concat=4.6230, perbatch=4.6212±0.1613
+No improvement for 18 epochs. Best score: 4.6308
+Epoch 93/100, Train VAMP: 4.6532, Val VAMP: concat=4.6043, perbatch=4.6026±0.1614
+No improvement for 19 epochs. Best score: 4.6308
+Epoch 94/100, Train VAMP: 4.6516, Val VAMP: concat=4.6300, perbatch=4.6192±0.1671
+No improvement for 20 epochs. Best score: 4.6308
+Epoch 95/100, Train VAMP: 4.6573, Val VAMP: concat=4.6046, perbatch=4.6022±0.1807
+No improvement for 21 epochs. Best score: 4.6308
+Epoch 96/100, Train VAMP: 4.6535, Val VAMP: concat=4.6096, perbatch=4.6139±0.1494
+No improvement for 22 epochs. Best score: 4.6308
+Epoch 97/100, Train VAMP: 4.6526, Val VAMP: concat=4.5996, perbatch=4.5978±0.1594
+No improvement for 23 epochs. Best score: 4.6308
+Epoch 98/100, Train VAMP: 4.6585, Val VAMP: concat=4.6133, perbatch=4.6076±0.1548
+No improvement for 24 epochs. Best score: 4.6308
+Epoch 99/100, Train VAMP: 4.6538, Val VAMP: concat=4.5961, perbatch=4.5972±0.1777
+No improvement for 25 epochs. Best score: 4.6308
+Epoch 100/100, Train VAMP: 4.6548, Val VAMP: concat=4.6115, perbatch=4.6124±0.1747
+No improvement for 26 epochs. Best score: 4.6308
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/checkpoint_epoch_100.pt
+Complete model saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/final_model.pt
+Loaded best model with score: 4.6308
+Figure saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/plots/vamp_scores.png
+Training completed successfully. Results saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/preparation/prep_20260623_015031/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Dataset created with 1043900 samples
+Training set: 835120 samples
+Testing set: 208780 samples
+Subsampling 1044000 → 50000 frames for analysis
+Analysis complete. Results saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models
+State probabilities shape: (50000, 5)
+Embeddings shape: (50000, 64)
+Number of edge attention arrays: 50000
+Number of edge index arrays: 50000
+Number of samples processed: 50000
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Trajectory timestep: 0.2 ns
+Stride: 1
+Effective timestep: 0.2 ns
+Running Chapman-Kolmogorov test with lag time 20.0 ns...
+Lag time 20.0 ns corresponds to 100 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/plots/chapman_kolmogorov/trpcage_ck_test_lag20.0ns.png
+Lag time 20.0 ns: MSE = 0.0061, MAE = 0.0419
+CK test complete
+Analyzing implied timescales for trpcage with lag times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200] ns
+Calculating ITS for 5 states with 200 lag times
+Trajectory timestep: 0.2 ns, Stride: 1, Effective timestep: 0.2 ns
+Lag time 1 ns corresponds to 5 frames
+Lag time 2 ns corresponds to 10 frames
+Lag time 3 ns corresponds to 15 frames
+Lag time 4 ns corresponds to 20 frames
+Lag time 5 ns corresponds to 25 frames
+Lag time 6 ns corresponds to 30 frames
+Lag time 7 ns corresponds to 35 frames
+Lag time 8 ns corresponds to 40 frames
+Lag time 9 ns corresponds to 45 frames
+Lag time 10 ns corresponds to 50 frames
+Lag time 11 ns corresponds to 55 frames
+Lag time 12 ns corresponds to 60 frames
+Lag time 13 ns corresponds to 65 frames
+Lag time 14 ns corresponds to 70 frames
+Lag time 15 ns corresponds to 75 frames
+Lag time 16 ns corresponds to 80 frames
+Lag time 17 ns corresponds to 85 frames
+Lag time 18 ns corresponds to 90 frames
+Lag time 19 ns corresponds to 95 frames
+Lag time 20 ns corresponds to 100 frames
+Lag time 21 ns corresponds to 105 frames
+Lag time 22 ns corresponds to 110 frames
+Lag time 23 ns corresponds to 115 frames
+Lag time 24 ns corresponds to 120 frames
+Lag time 25 ns corresponds to 125 frames
+Lag time 26 ns corresponds to 130 frames
+Lag time 27 ns corresponds to 135 frames
+Lag time 28 ns corresponds to 140 frames
+Lag time 29 ns corresponds to 145 frames
+Lag time 30 ns corresponds to 150 frames
+Lag time 31 ns corresponds to 155 frames
+Lag time 32 ns corresponds to 160 frames
+Lag time 33 ns corresponds to 165 frames
+Lag time 34 ns corresponds to 170 frames
+Lag time 35 ns corresponds to 175 frames
+Lag time 36 ns corresponds to 180 frames
+Lag time 37 ns corresponds to 185 frames
+Lag time 38 ns corresponds to 190 frames
+Lag time 39 ns corresponds to 195 frames
+Lag time 40 ns corresponds to 200 frames
+Lag time 41 ns corresponds to 205 frames
+Lag time 42 ns corresponds to 210 frames
+Lag time 43 ns corresponds to 215 frames
+Lag time 44 ns corresponds to 220 frames
+Lag time 45 ns corresponds to 225 frames
+Lag time 46 ns corresponds to 230 frames
+Lag time 47 ns corresponds to 235 frames
+Lag time 48 ns corresponds to 240 frames
+Lag time 49 ns corresponds to 245 frames
+Lag time 50 ns corresponds to 250 frames
+Lag time 51 ns corresponds to 255 frames
+Lag time 52 ns corresponds to 260 frames
+Lag time 53 ns corresponds to 265 frames
+Lag time 54 ns corresponds to 270 frames
+Lag time 55 ns corresponds to 275 frames
+Lag time 56 ns corresponds to 280 frames
+Lag time 57 ns corresponds to 285 frames
+Lag time 58 ns corresponds to 290 frames
+Lag time 59 ns corresponds to 295 frames
+Lag time 60 ns corresponds to 300 frames
+Lag time 61 ns corresponds to 305 frames
+Lag time 62 ns corresponds to 310 frames
+Lag time 63 ns corresponds to 315 frames
+Lag time 64 ns corresponds to 320 frames
+Lag time 65 ns corresponds to 325 frames
+Lag time 66 ns corresponds to 330 frames
+Lag time 67 ns corresponds to 335 frames
+Lag time 68 ns corresponds to 340 frames
+Lag time 69 ns corresponds to 345 frames
+Lag time 70 ns corresponds to 350 frames
+Lag time 71 ns corresponds to 355 frames
+Lag time 72 ns corresponds to 360 frames
+Lag time 73 ns corresponds to 365 frames
+Lag time 74 ns corresponds to 370 frames
+Lag time 75 ns corresponds to 375 frames
+Lag time 76 ns corresponds to 380 frames
+Lag time 77 ns corresponds to 385 frames
+Lag time 78 ns corresponds to 390 frames
+Lag time 79 ns corresponds to 395 frames
+Lag time 80 ns corresponds to 400 frames
+Lag time 81 ns corresponds to 405 frames
+Lag time 82 ns corresponds to 410 frames
+Lag time 83 ns corresponds to 415 frames
+Lag time 84 ns corresponds to 420 frames
+Lag time 85 ns corresponds to 425 frames
+Lag time 86 ns corresponds to 430 frames
+Lag time 87 ns corresponds to 435 frames
+Lag time 88 ns corresponds to 440 frames
+Lag time 89 ns corresponds to 445 frames
+Lag time 90 ns corresponds to 450 frames
+Lag time 91 ns corresponds to 455 frames
+Lag time 92 ns corresponds to 460 frames
+Lag time 93 ns corresponds to 465 frames
+Lag time 94 ns corresponds to 470 frames
+Lag time 95 ns corresponds to 475 frames
+Lag time 96 ns corresponds to 480 frames
+Lag time 97 ns corresponds to 485 frames
+Lag time 98 ns corresponds to 490 frames
+Lag time 99 ns corresponds to 495 frames
+Lag time 100 ns corresponds to 500 frames
+Lag time 101 ns corresponds to 505 frames
+Lag time 102 ns corresponds to 510 frames
+Lag time 103 ns corresponds to 515 frames
+Lag time 104 ns corresponds to 520 frames
+Lag time 105 ns corresponds to 525 frames
+Lag time 106 ns corresponds to 530 frames
+Lag time 107 ns corresponds to 535 frames
+Lag time 108 ns corresponds to 540 frames
+Lag time 109 ns corresponds to 545 frames
+Lag time 110 ns corresponds to 550 frames
+Lag time 111 ns corresponds to 555 frames
+Lag time 112 ns corresponds to 560 frames
+Lag time 113 ns corresponds to 565 frames
+Lag time 114 ns corresponds to 570 frames
+Lag time 115 ns corresponds to 575 frames
+Lag time 116 ns corresponds to 580 frames
+Lag time 117 ns corresponds to 585 frames
+Lag time 118 ns corresponds to 590 frames
+Lag time 119 ns corresponds to 595 frames
+Lag time 120 ns corresponds to 600 frames
+Lag time 121 ns corresponds to 605 frames
+Lag time 122 ns corresponds to 610 frames
+Lag time 123 ns corresponds to 615 frames
+Lag time 124 ns corresponds to 620 frames
+Lag time 125 ns corresponds to 625 frames
+Lag time 126 ns corresponds to 630 frames
+Lag time 127 ns corresponds to 635 frames
+Lag time 128 ns corresponds to 640 frames
+Lag time 129 ns corresponds to 645 frames
+Lag time 130 ns corresponds to 650 frames
+Lag time 131 ns corresponds to 655 frames
+Lag time 132 ns corresponds to 660 frames
+Lag time 133 ns corresponds to 665 frames
+Lag time 134 ns corresponds to 670 frames
+Lag time 135 ns corresponds to 675 frames
+Lag time 136 ns corresponds to 680 frames
+Lag time 137 ns corresponds to 685 frames
+Lag time 138 ns corresponds to 690 frames
+Lag time 139 ns corresponds to 695 frames
+Lag time 140 ns corresponds to 700 frames
+Lag time 141 ns corresponds to 705 frames
+Lag time 142 ns corresponds to 710 frames
+Lag time 143 ns corresponds to 715 frames
+Lag time 144 ns corresponds to 720 frames
+Lag time 145 ns corresponds to 725 frames
+Lag time 146 ns corresponds to 730 frames
+Lag time 147 ns corresponds to 735 frames
+Lag time 148 ns corresponds to 740 frames
+Lag time 149 ns corresponds to 745 frames
+Lag time 150 ns corresponds to 750 frames
+Lag time 151 ns corresponds to 755 frames
+Lag time 152 ns corresponds to 760 frames
+Lag time 153 ns corresponds to 765 frames
+Lag time 154 ns corresponds to 770 frames
+Lag time 155 ns corresponds to 775 frames
+Lag time 156 ns corresponds to 780 frames
+Lag time 157 ns corresponds to 785 frames
+Lag time 158 ns corresponds to 790 frames
+Lag time 159 ns corresponds to 795 frames
+Lag time 160 ns corresponds to 800 frames
+Lag time 161 ns corresponds to 805 frames
+Lag time 162 ns corresponds to 810 frames
+Lag time 163 ns corresponds to 815 frames
+Lag time 164 ns corresponds to 820 frames
+Lag time 165 ns corresponds to 825 frames
+Lag time 166 ns corresponds to 830 frames
+Lag time 167 ns corresponds to 835 frames
+Lag time 168 ns corresponds to 840 frames
+Lag time 169 ns corresponds to 845 frames
+Lag time 170 ns corresponds to 850 frames
+Lag time 171 ns corresponds to 855 frames
+Lag time 172 ns corresponds to 860 frames
+Lag time 173 ns corresponds to 865 frames
+Lag time 174 ns corresponds to 870 frames
+Lag time 175 ns corresponds to 875 frames
+Lag time 176 ns corresponds to 880 frames
+Lag time 177 ns corresponds to 885 frames
+Lag time 178 ns corresponds to 890 frames
+Lag time 179 ns corresponds to 895 frames
+Lag time 180 ns corresponds to 900 frames
+Lag time 181 ns corresponds to 905 frames
+Lag time 182 ns corresponds to 910 frames
+Lag time 183 ns corresponds to 915 frames
+Lag time 184 ns corresponds to 920 frames
+Lag time 185 ns corresponds to 925 frames
+Lag time 186 ns corresponds to 930 frames
+Lag time 187 ns corresponds to 935 frames
+Lag time 188 ns corresponds to 940 frames
+Lag time 189 ns corresponds to 945 frames
+Lag time 190 ns corresponds to 950 frames
+Lag time 191 ns corresponds to 955 frames
+Lag time 192 ns corresponds to 960 frames
+Lag time 193 ns corresponds to 965 frames
+Lag time 194 ns corresponds to 970 frames
+Lag time 195 ns corresponds to 975 frames
+Lag time 196 ns corresponds to 980 frames
+Lag time 197 ns corresponds to 985 frames
+Lag time 198 ns corresponds to 990 frames
+Lag time 199 ns corresponds to 995 frames
+Lag time 200 ns corresponds to 1000 frames
+Saved ITS data to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/plots/implied_timescales/trpcage_its_data.npz
+Saved implied timescales plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/plots/implied_timescales/trpcage_implied_timescales.png
+Saved ITS summary to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/plots/implied_timescales/trpcage_its_summary.txt
+ITS calculation complete
+Training completed: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/training/lag20.0ns_5states/20260623_015046/models/best_model.pt
+============================================================
+PHASE 3: ANALYSIS
+============================================================
+Analyzing: lag20.0ns_5states
+Model loaded to cuda (type: VAMPNet)
+Loaded model: VAMPNet
+Total parameters: 76328
+Model component overview:
+Embedding type: MLP
+Encoder type: GINEncoder
+Classifier type: SoftmaxMLP
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Creating dataset...
+Loading dataset from cache: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/cache/vampnet_data_d41f7a00_lag20.0_nn7_str1_cont.pkl
+Successfully loaded dataset from cache: 1044000 frames, 20 atoms
+Subsampling 1044000 → 50000 frames for analysis
+Dataset created with 50000 frames for analysis
+Analysis complete. Results saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states
+State probabilities shape: (50000, 5)
+Embeddings shape: (50000, 64)
+Number of edge attention arrays: 50000
+Number of edge index arrays: 50000
+Number of samples processed: 50000
+Using user-specified timestep: 0.2 ns (200.000 ps)
+Trajectory timestep: 200.000 ps
+Effective timestep with stride 1: 200.000 ps
+Lag time: 20.000 ns (20000.0 ps, 100 frames)
+Calculating transition matrix with lag time 20.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 100
+Transition counts:
+[[7.315e+03 1.460e+02 0.000e+00 5.000e+00 8.540e+02]
+ [3.500e+01 8.600e+01 0.000e+00 6.200e+01 8.600e+01]
+ [0.000e+00 0.000e+00 3.560e+02 1.000e+00 4.430e+02]
+ [3.800e+01 0.000e+00 0.000e+00 1.456e+03 2.297e+03]
+ [9.320e+02 3.700e+01 4.440e+02 2.267e+03 3.304e+04]]
+Transition matrix shape: (5, 5)
+Calculating transition matrix with lag time 20.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 100
+Transition counts:
+[[7.315e+03 1.460e+02 0.000e+00 5.000e+00 8.540e+02]
+ [3.500e+01 8.600e+01 0.000e+00 6.200e+01 8.600e+01]
+ [0.000e+00 0.000e+00 3.560e+02 1.000e+00 4.430e+02]
+ [3.800e+01 0.000e+00 0.000e+00 1.456e+03 2.297e+03]
+ [9.320e+02 3.700e+01 4.440e+02 2.267e+03 3.304e+04]]
+Transition matrix shape: (5, 5)
+Saved all transition matrix plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_transition_matrix_all_lag20.0ns.png
+Saved all transition matrix to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_transition_matrix_all_lag20.0ns.csv
+Saved no_self transition matrix plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_transition_matrix_no_self_lag20.0ns.png
+Saved no_self transition matrix to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_transition_matrix_no_self_lag20.0ns.csv
+============================================================
+STATE QUALITY DIAGNOSTICS
+============================================================
+State Reduction Diagnostics (original: 5 states)
+============================================================
+Eigenvalue gap suggests: 2 states
+  Eigenvalues: [1.    , 0.8593, 0.4389, 0.3149, 0.3149]
+  Gap ratios:  [1.164, 1.958, 1.394, 1.   ]
+Underpopulated states: [1, 2]
+  Populations: [0.1684, 0.0054, 0.016 , 0.0758, 0.7344]
+  Entropy:     0.817 (max=1.609)
+Merge groups (JSD-based): none
+Effective n_states: 3
+Confidence: low
+Recommendation: retrain
+Recommendation: RETRAIN with ~3 states (reduction from 5).
+Diagnostic report saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_diagnostics.json
+Saved eigenvalue spectrum to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_eigenvalue_spectrum.png
+Saved JSD heatmap to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_jsd_heatmap.png
+Saved diagnostic summary to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_diagnostic_summary.png
+Diagnostic plots saved.
+Calculating state attention maps for 5 states...
+State populations:
+State 1: 16.84%
+State 2: 0.54%
+State 3: 1.60%
+State 4: 7.58%
+State 5: 73.44%
+Saved state attention maps to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_attention_maps.npy
+Saved state populations to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_populations.npy
+Saved state counts to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_counts.txt
+Saved state 5 attention map to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_5_attention.png
+Saved state 1 attention map to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_1_attention.png
+Saved state 4 attention map to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_4_attention.png
+Saved state 3 attention map to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_3_attention.png
+Saved state 2 attention map to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_2_attention.png
+/opt/software/pygvamp/1.0.0/source/pygv/utils/plotting.py:653: UserWarning: This figure includes Axes that are not compatible with tight_layout, so results might be incorrect.
+  plt.tight_layout(rect=[0, 0, 0.9, 0.95])
+Saved combined attention maps to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_all_states_attention.png
+Processing attention maps: 5 states, 20 selected atoms
+Selected 20 atoms using selection: 'name CA'
+Using atom-level attention with residue labels for 20 atoms
+Saved residue attention plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_residue_attention_target.png
+Attention analysis complete
+Generating state structures
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+Found 11 trajectory files matching '2JOF-0-c-alpha-*.dcd' under /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/ (recursive)
+Total trajectory files found: 11
+Applying selection 'protein': 20 atoms
+Found probabilities for 50000 frames with 5 states
+Processing trajectories with stride 1...
+Original frames: 50000, Strided frames: 50000
+Loading trajectories...
+Combining trajectories...
+Combined trajectory has 1044000 frames
+Warning: Fewer probability entries (50000) than trajectory frames (1044000)
+State assignment statistics (from most probable state):
+State 1: 8420 frames (16.84%)
+State 2: 269 frames (0.54%)
+State 3: 800 frames (1.60%)
+State 4: 3791 frames (7.58%)
+State 5: 36720 frames (73.44%)
+Processing states...
+Found 50000 frames for state 1 with probability >= 0.0
+State 1: Saved average structure and 10 representative structures
+Found 50000 frames for state 2 with probability >= 0.0
+State 2: Saved average structure and 10 representative structures
+Found 50000 frames for state 3 with probability >= 0.0
+State 3: Saved average structure and 10 representative structures
+Found 50000 frames for state 4 with probability >= 0.0
+State 4: Saved average structure and 10 representative structures
+Found 50000 frames for state 5 with probability >= 0.0
+State 5: Saved average structure and 10 representative structures
+Summary saved to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_structures_summary.txt
+PyMOL failed to start, dumping diagnostics...
+pymol-3.1.7.2-py312hc70acc6_0.json
+conda build: py312hc70acc6_0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-bundle-3.1.6.1-0.json
+conda build: 0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-web-examples-2.4-1.json
+conda build: 1 https://conda.anaconda.org/schrodinger/noarch
+Operating System:
+Linux-6.17.0-35-generic-x86_64-with-glibc2.39
+#35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2
+PyQt5 5.15.11 (Qt 5.15.2)
+Python:
+3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+prefix=/opt/software/pygvamp/1.0.0/conda_env
+executable=/opt/software/pygvamp/1.0.0/conda_env/bin/python3.12
+filesystemencoding=utf-8
+Qt, Python and PyMOL Environment Variables:
+LANG=en_US.UTF-8
+PYGVAMP_ROOT=/opt/software/pygvamp/1.0.0
+PYGVAMP_VERSION=1.0.0
+PYMOL_DATA=/opt/software/pygvamp/1.0.0/conda_env/share/pymol/data
+PYMOL_PATH=/opt/software/pygvamp/1.0.0/conda_env/share/pymol
+PYTHONPATH=/opt/software/pygvamp/1.0.0/source
+QT_ACCESSIBILITY=1
+QT_API=pyqt5
+QT_IM_MODULE=ibus
+QT_XKB_CONFIG_ROOT=/opt/software/pygvamp/1.0.0/conda_env/lib
+PATH:
+/opt/software/pygvamp/1.0.0/conda_env/bin:/opt/cuda/12.8/bin:/home/vi/.nvm/ver
+sions/node/v24.15.0/bin:/opt/anaconda/2024.10-1/bin:/opt/anaconda/2024.10-
+1/condabin:/home/vi/.local/bin:/home/vi/.local/bin:/usr/local/sbin:/usr/local/
+bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/
+bin
+WARNING: Could not import PyMOL Python module.
+Will attempt to run PyMOL via command line instead.
+Using command-line approach for PyMOL visualization
+Created PyMOL script at /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_pymol_script.py
+Warning: PyMOL visualization skipped: name 'pymol_executable' is not defined
+Processing state 1 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_1_frame_19977_rmsd_0.284_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_1_frame_19977_rmsd_0.284_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_2_frame_34959_rmsd_0.340_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_2_frame_34959_rmsd_0.340_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_3_frame_49543_rmsd_0.358_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_3_frame_49543_rmsd_0.358_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_4_frame_33187_rmsd_0.375_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_4_frame_33187_rmsd_0.375_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_5_frame_34884_rmsd_0.408_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_5_frame_34884_rmsd_0.408_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_6_frame_33539_rmsd_0.409_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_6_frame_33539_rmsd_0.409_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_7_frame_5176_rmsd_0.447_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_7_frame_5176_rmsd_0.447_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_8_frame_20067_rmsd_0.470_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_8_frame_20067_rmsd_0.470_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_9_frame_14840_rmsd_0.524_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_9_frame_14840_rmsd_0.524_prob_0.998_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_10_frame_18992_rmsd_0.603_prob_0.998_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_rank_10_frame_18992_rmsd_0.603_prob_0.998_attention_view.pml
+Processing state 2 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_1_frame_33722_rmsd_0.158_prob_0.902_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_1_frame_33722_rmsd_0.158_prob_0.902_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_2_frame_33831_rmsd_0.160_prob_0.893_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_2_frame_33831_rmsd_0.160_prob_0.893_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_3_frame_33773_rmsd_0.170_prob_0.892_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_3_frame_33773_rmsd_0.170_prob_0.892_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_4_frame_33854_rmsd_0.178_prob_0.891_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_4_frame_33854_rmsd_0.178_prob_0.891_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_5_frame_33755_rmsd_0.186_prob_0.894_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_5_frame_33755_rmsd_0.186_prob_0.894_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_6_frame_33774_rmsd_0.193_prob_0.902_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_6_frame_33774_rmsd_0.193_prob_0.902_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_7_frame_33775_rmsd_0.220_prob_0.895_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_7_frame_33775_rmsd_0.220_prob_0.895_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_8_frame_37758_rmsd_0.433_prob_0.893_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_8_frame_37758_rmsd_0.433_prob_0.893_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_9_frame_37764_rmsd_0.489_prob_0.895_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_9_frame_37764_rmsd_0.489_prob_0.895_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_10_frame_6279_rmsd_0.615_prob_0.891_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_rank_10_frame_6279_rmsd_0.615_prob_0.891_attention_view.pml
+Processing state 3 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_1_frame_10616_rmsd_0.391_prob_0.981_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_1_frame_10616_rmsd_0.391_prob_0.981_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_2_frame_27169_rmsd_0.391_prob_0.982_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_2_frame_27169_rmsd_0.391_prob_0.982_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_3_frame_10536_rmsd_0.407_prob_0.982_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_3_frame_10536_rmsd_0.407_prob_0.982_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_4_frame_10507_rmsd_0.411_prob_0.980_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_4_frame_10507_rmsd_0.411_prob_0.980_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_5_frame_10504_rmsd_0.413_prob_0.980_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_5_frame_10504_rmsd_0.413_prob_0.980_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_6_frame_26262_rmsd_0.430_prob_0.980_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_6_frame_26262_rmsd_0.430_prob_0.980_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_7_frame_27194_rmsd_0.538_prob_0.982_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_7_frame_27194_rmsd_0.538_prob_0.982_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_8_frame_26399_rmsd_0.566_prob_0.981_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_8_frame_26399_rmsd_0.566_prob_0.981_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_9_frame_26431_rmsd_0.615_prob_0.981_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_9_frame_26431_rmsd_0.615_prob_0.981_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_10_frame_26409_rmsd_0.714_prob_0.980_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_rank_10_frame_26409_rmsd_0.714_prob_0.980_attention_view.pml
+Processing state 4 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_1_frame_12518_rmsd_0.280_prob_0.933_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_1_frame_12518_rmsd_0.280_prob_0.933_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_2_frame_2730_rmsd_0.296_prob_0.947_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_2_frame_2730_rmsd_0.296_prob_0.947_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_3_frame_12506_rmsd_0.316_prob_0.935_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_3_frame_12506_rmsd_0.316_prob_0.935_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_4_frame_12529_rmsd_0.326_prob_0.935_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_4_frame_12529_rmsd_0.326_prob_0.935_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_5_frame_12413_rmsd_0.326_prob_0.932_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_5_frame_12413_rmsd_0.326_prob_0.932_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_6_frame_40610_rmsd_0.389_prob_0.932_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_6_frame_40610_rmsd_0.389_prob_0.932_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_7_frame_48515_rmsd_0.419_prob_0.937_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_7_frame_48515_rmsd_0.419_prob_0.937_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_8_frame_29936_rmsd_0.435_prob_0.936_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_8_frame_29936_rmsd_0.435_prob_0.936_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_9_frame_40616_rmsd_0.454_prob_0.933_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_9_frame_40616_rmsd_0.454_prob_0.933_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_10_frame_12426_rmsd_0.504_prob_0.932_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_rank_10_frame_12426_rmsd_0.504_prob_0.932_attention_view.pml
+Processing state 5 structures...
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_average_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_average_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_1_frame_45489_rmsd_0.316_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_1_frame_45489_rmsd_0.316_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_2_frame_41269_rmsd_0.344_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_2_frame_41269_rmsd_0.344_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_3_frame_30234_rmsd_0.385_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_3_frame_30234_rmsd_0.385_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_4_frame_12093_rmsd_0.396_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_4_frame_12093_rmsd_0.396_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_5_frame_45486_rmsd_0.399_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_5_frame_45486_rmsd_0.399_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_6_frame_27067_rmsd_0.401_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_6_frame_27067_rmsd_0.401_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_7_frame_1913_rmsd_0.445_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_7_frame_1913_rmsd_0.445_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_8_frame_15282_rmsd_0.446_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_8_frame_15282_rmsd_0.446_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_9_frame_23123_rmsd_0.486_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_9_frame_23123_rmsd_0.486_prob_1.000_attention_view.pml
+Saved attention-colored structure to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_10_frame_36484_rmsd_0.617_prob_1.000_attention.pdb
+Saved PyMOL script to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_rank_10_frame_36484_rmsd_0.617_prob_1.000_attention_view.pml
+PyMOL failed to start, dumping diagnostics...
+pymol-3.1.7.2-py312hc70acc6_0.json
+conda build: py312hc70acc6_0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-bundle-3.1.6.1-0.json
+conda build: 0 https://conda.anaconda.org/schrodinger/linux-64
+pymol-web-examples-2.4-1.json
+conda build: 1 https://conda.anaconda.org/schrodinger/noarch
+Operating System:
+Linux-6.17.0-35-generic-x86_64-with-glibc2.39
+#35~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue May 26 19:30:42 UTC 2
+PyQt5 5.15.11 (Qt 5.15.2)
+Python:
+3.12.13 | packaged by Anaconda, Inc. | (main, Mar 19 2026, 20:20:58) [GCC 14.3.0]
+prefix=/opt/software/pygvamp/1.0.0/conda_env
+executable=/opt/software/pygvamp/1.0.0/conda_env/bin/python3.12
+filesystemencoding=utf-8
+Qt, Python and PyMOL Environment Variables:
+LANG=en_US.UTF-8
+PYGVAMP_ROOT=/opt/software/pygvamp/1.0.0
+PYGVAMP_VERSION=1.0.0
+PYMOL_DATA=/opt/software/pygvamp/1.0.0/conda_env/share/pymol/data
+PYMOL_PATH=/opt/software/pygvamp/1.0.0/conda_env/share/pymol
+PYTHONPATH=/opt/software/pygvamp/1.0.0/source
+QT_ACCESSIBILITY=1
+QT_API=pyqt5
+QT_IM_MODULE=ibus
+QT_XKB_CONFIG_ROOT=/opt/software/pygvamp/1.0.0/conda_env/lib
+PATH:
+/opt/software/pygvamp/1.0.0/conda_env/bin:/opt/cuda/12.8/bin:/home/vi/.nvm/ver
+sions/node/v24.15.0/bin:/opt/anaconda/2024.10-1/bin:/opt/anaconda/2024.10-
+1/condabin:/home/vi/.local/bin:/home/vi/.local/bin:/usr/local/sbin:/usr/local/
+bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/
+bin
+WARNING: Could not import PyMOL Python API.
+Will create PyMOL script files instead that you can run manually.
+Processing state 1 with attention coloring...
+Generated PyMOL script for state 1: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1_attention/trpcage_state_1_attention_view.pml
+Processing state 2 with attention coloring...
+Generated PyMOL script for state 2: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2_attention/trpcage_state_2_attention_view.pml
+Processing state 3 with attention coloring...
+Generated PyMOL script for state 3: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3_attention/trpcage_state_3_attention_view.pml
+Processing state 4 with attention coloring...
+Generated PyMOL script for state 4: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4_attention/trpcage_state_4_attention_view.pml
+Processing state 5 with attention coloring...
+Generated PyMOL script for state 5: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5_attention/trpcage_state_5_attention_view.pml
+Created master PyMOL script: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_run_all_attention_visualizations.pml
+To visualize all states, run PyMOL and execute:
+    @/mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_run_all_attention_visualizations.pml
+Attention-colored visualizations generated
+Calculating transition matrix with lag time 20.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 100
+Transition counts:
+[[7.315e+03 1.460e+02 0.000e+00 5.000e+00 8.540e+02]
+ [3.500e+01 8.600e+01 0.000e+00 6.200e+01 8.600e+01]
+ [0.000e+00 0.000e+00 3.560e+02 1.000e+00 4.430e+02]
+ [3.800e+01 0.000e+00 0.000e+00 1.456e+03 2.297e+03]
+ [9.320e+02 3.700e+01 4.440e+02 2.267e+03 3.304e+04]]
+Transition matrix shape: (5, 5)
+Warning: Image file not found: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_1/images/trpcage_state_1_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_2/images/trpcage_state_2_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_3/images/trpcage_state_3_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_4/images/trpcage_state_4_iso.png
+Warning: Image file not found: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/state_5/images/trpcage_state_5_iso.png
+Saved state network plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/trpcage_state_network_lag20.0.png with 5 non-empty states.
+Original states included: S1, S2, S3, S4, S5
+State network plotted
+Running implied timescales analysis...
+Analyzing implied timescales for trpcage with lag times: [0.2, 11.288888888888888, 22.377777777777776, 33.46666666666667, 44.55555555555556, 55.644444444444446, 66.73333333333333, 77.82222222222222, 88.91111111111111, 100.0] ns
+Calculating ITS for 5 states with 10 lag times
+Trajectory timestep: 0.2 ns, Stride: 1, Effective timestep: 0.2 ns
+Lag time 0.2 ns corresponds to 1 frames
+Lag time 11.288888888888888 ns corresponds to 56 frames
+Lag time 22.377777777777776 ns corresponds to 112 frames
+Lag time 33.46666666666667 ns corresponds to 167 frames
+Lag time 44.55555555555556 ns corresponds to 223 frames
+Lag time 55.644444444444446 ns corresponds to 278 frames
+Lag time 66.73333333333333 ns corresponds to 334 frames
+Lag time 77.82222222222222 ns corresponds to 389 frames
+Lag time 88.91111111111111 ns corresponds to 445 frames
+Lag time 100.0 ns corresponds to 500 frames
+Saved ITS data to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/implied_timescales/trpcage_its_data.npz
+Saved implied timescales plot to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/implied_timescales/trpcage_implied_timescales.png
+Saved ITS summary to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/implied_timescales/trpcage_its_summary.txt
+Running Chapman-Kolmogorov test...
+Trajectory timestep: 0.2 ns
+Stride: 1
+Effective timestep: 0.2 ns
+Running Chapman-Kolmogorov test with lag time 10.0 ns...
+Lag time 10.0 ns corresponds to 50 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/chapman_kolmogorov/trpcage_ck_test_lag10.0ns.png
+Lag time 10.0 ns: MSE = 0.0009, MAE = 0.0135
+Running Chapman-Kolmogorov test with lag time 20.0 ns...
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/chapman_kolmogorov/trpcage_ck_test_lag20.0ns.png
+Lag time 20.0 ns: MSE = 0.0029, MAE = 0.0248
+Running Chapman-Kolmogorov test with lag time 40.0 ns...
+Lag time 40.0 ns corresponds to 200 frames
+Chapman-Kolmogorov test plot saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/chapman_kolmogorov/trpcage_ck_test_lag40.0ns.png
+Lag time 40.0 ns: MSE = 0.0033, MAE = 0.0281
+Saved lag time comparison plot to /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states/chapman_kolmogorov/trpcage_ck_test_comparison.png
+Generating merged interactive report...
+  Residue mapping: 20 training residues → resSeq values
+Found 11 trajectory files
+Examples:
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-003.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-008.dcd
+  - /mnt/hdd/data/trpcage/DESRES-Trajectory_2JOF-0-c-alpha/2JOF-0-c-alpha/2JOF-0-c-alpha-004.dcd
+  ... and 8 more
+  Large dataset (1100000 est. frames) — loading with stride=220 (target ≤5000)
+  Loaded trajectory: 4750 frames, 20 atoms for per-frame structures.
+  Loading artifacts from lag20.0ns_5states...
+/opt/software/pygvamp/1.0.0/conda_env/lib/python3.12/site-packages/umap/umap_.py:1952: UserWarning: n_jobs value 1 overridden to 1 by setting random_state. Use no seed for parallelism.
+  warn(
+Calculating transition matrix with lag time 20.0 ns
+Effective timestep: 0.2 ns
+Lag frames: 100
+Transition counts:
+[[1.040e+02 1.000e+00 3.100e+01 2.300e+01 6.270e+02]
+ [1.400e+01 0.000e+00 0.000e+00 1.000e+00 1.200e+01]
+ [0.000e+00 0.000e+00 0.000e+00 0.000e+00 8.000e+01]
+ [6.500e+01 0.000e+00 9.000e+00 2.000e+01 2.820e+02]
+ [5.980e+02 2.400e+01 4.000e+01 3.340e+02 2.635e+03]]
+Transition matrix shape: (5, 5)
+    Loaded edge attention maps: 5 states, 20x20 matrix
+    Added timescale: lag=20.0ns, 5000 frames (subsampled), 5/5 state structures, 3 diagnostic plots.
+Visualization saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/trpcage_interactive_report.html
+Merged interactive report: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/trpcage_interactive_report.html
+Results saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states
+Analysis completed: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/analysis/lag20.0ns_5states
+============================================================
+PIPELINE COMPLETED
+============================================================
+Results saved to: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031
+Log file: /mnt/hdd/experiments/trpcage_gin_native_v1/seed_08/exp_trpcage_20260623_015031/logs/log_20260623_015031.txt
+============================================================
+Log ended: 2026-06-23 05:47:41

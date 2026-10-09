@@ -1,0 +1,51 @@
+State structure analysis for gtt
+Total states: 3
+
+State 1:
+  - Frame count (max probability): 21 (0.42%)
+State 2:
+  - Frame count (max probability): 3860 (77.20%)
+State 3:
+  - Frame count (max probability): 1119 (22.38%)
+  - High probability frames (>= 0.0): 10
+  - Average structure: gtt_state_1_average.pdb
+  - Representative structures:
+    - gtt_state_1_rank_1_frame_990_rmsd_0.467_prob_0.990.pdb
+    - gtt_state_1_rank_2_frame_1070_rmsd_0.519_prob_0.989.pdb
+    - gtt_state_1_rank_3_frame_1080_rmsd_0.587_prob_0.987.pdb
+    - gtt_state_1_rank_4_frame_1040_rmsd_0.596_prob_0.987.pdb
+    - gtt_state_1_rank_5_frame_1000_rmsd_0.632_prob_0.987.pdb
+    - gtt_state_1_rank_6_frame_980_rmsd_0.633_prob_0.989.pdb
+    - gtt_state_1_rank_7_frame_1020_rmsd_0.655_prob_0.989.pdb
+    - gtt_state_1_rank_8_frame_1030_rmsd_0.683_prob_0.987.pdb
+    - gtt_state_1_rank_9_frame_5640_rmsd_0.721_prob_0.987.pdb
+    - gtt_state_1_rank_10_frame_5580_rmsd_0.815_prob_0.988.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: gtt_state_2_average.pdb
+  - Representative structures:
+    - gtt_state_2_rank_1_frame_8410_rmsd_0.451_prob_0.997.pdb
+    - gtt_state_2_rank_2_frame_17840_rmsd_0.707_prob_0.997.pdb
+    - gtt_state_2_rank_3_frame_39330_rmsd_0.714_prob_0.997.pdb
+    - gtt_state_2_rank_4_frame_15760_rmsd_0.730_prob_0.997.pdb
+    - gtt_state_2_rank_5_frame_36310_rmsd_0.840_prob_0.997.pdb
+    - gtt_state_2_rank_6_frame_30050_rmsd_0.865_prob_0.997.pdb
+    - gtt_state_2_rank_7_frame_10360_rmsd_0.879_prob_0.997.pdb
+    - gtt_state_2_rank_8_frame_30520_rmsd_0.906_prob_0.997.pdb
+    - gtt_state_2_rank_9_frame_8600_rmsd_1.019_prob_0.997.pdb
+    - gtt_state_2_rank_10_frame_22820_rmsd_1.114_prob_0.997.pdb
+
+  - High probability frames (>= 0.0): 10
+  - Average structure: gtt_state_3_average.pdb
+  - Representative structures:
+    - gtt_state_3_rank_1_frame_28170_rmsd_0.551_prob_0.962.pdb
+    - gtt_state_3_rank_2_frame_25530_rmsd_0.561_prob_0.962.pdb
+    - gtt_state_3_rank_3_frame_2710_rmsd_0.638_prob_0.962.pdb
+    - gtt_state_3_rank_4_frame_25510_rmsd_0.641_prob_0.962.pdb
+    - gtt_state_3_rank_5_frame_2420_rmsd_0.642_prob_0.960.pdb
+    - gtt_state_3_rank_6_frame_47670_rmsd_0.750_prob_0.961.pdb
+    - gtt_state_3_rank_7_frame_32320_rmsd_0.755_prob_0.978.pdb
+    - gtt_state_3_rank_8_frame_47660_rmsd_0.775_prob_0.969.pdb
+    - gtt_state_3_rank_9_frame_1360_rmsd_0.996_prob_0.960.pdb
+    - gtt_state_3_rank_10_frame_32110_rmsd_1.013_prob_0.961.pdb
+
